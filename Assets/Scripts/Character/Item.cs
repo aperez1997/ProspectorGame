@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Character
+public class Item
 {
-    
+    public enum ItemType { Ration }
+
+    public ItemType type;
 }

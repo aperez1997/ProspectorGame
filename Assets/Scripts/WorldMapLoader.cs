@@ -5,44 +5,27 @@ using UnityEngine.Tilemaps;
 
 public class WorldMapLoader : MonoBehaviour
 {
-    public static WorldMapLoader instance;
+    public static WorldMapLoader Instance { get; private set; }
 
     public Tilemap tileMap;
-
-    public Tile waterTile;
-    public Tile grassTile;
-    public Tile forestTile;
-    public Tile hillsTile;
-    public Tile mountainTile;
-    public Tile townTile;
 
     private List<DataTile> dataTiles = new List<DataTile>(0);
     private Dictionary<Vector3Int, DataTile> dataTilesDict = new Dictionary<Vector3Int, DataTile>(0);
 
     private void Awake()
     {
-        // copied this part, dunno if this is correct or not
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
+    }
 
+    // Start is called before the first frame update
+    void Start()
+    {
         // Also load world map, so it exists before other "starts" are called
         LoadWorldMap();
         foreach (DataTile dTile in dataTiles)
         {
             tileMap.SetTile(dTile.WorldLocation, dTile.TileBase);
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
     }
 
     public DataTile GetDataTileAtLocation(Vector3Int location)
@@ -85,17 +68,17 @@ public class WorldMapLoader : MonoBehaviour
         switch (tt)
         {
             case TerrainType.Grass:
-                return instance.grassTile;
+                return TileAssets.Instance.grassTile;
             case TerrainType.Forest:
-                return instance.forestTile;
+                return TileAssets.Instance.forestTile;
             case TerrainType.Hills:
-                return instance.hillsTile;
+                return TileAssets.Instance.hillsTile;
             case TerrainType.Mountains:
-                return instance.mountainTile;
+                return TileAssets.Instance.mountainTile;
             case TerrainType.Water:
-                return instance.waterTile;
+                return TileAssets.Instance.waterTile;
             case TerrainType.Town:
-                return instance.townTile;
+                return TileAssets.Instance.townTile;
         }
         Debug.LogError("Unmapped terrain type " + tt.ToString());
         return null;

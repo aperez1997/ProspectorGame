@@ -115,7 +115,7 @@ public class Movement_Controller : MonoBehaviour
     public void UpdateMovementCosts(HexDirection lastDirection)
     {
         Vector3Int posAt = tilemap.WorldToCell(transform.position);
-        DataTile dataTileAt = WorldMapLoader.instance.GetDataTileAtLocation(posAt);
+        DataTile dataTileAt = WorldMapLoader.Instance.GetDataTileAtLocation(posAt);
         if (dataTileAt == null){
             throw new System.Exception("Could not find dateTile for pos " + posAt.ToString());
         }
@@ -129,7 +129,7 @@ public class Movement_Controller : MonoBehaviour
         {
             HexDirection hdeNeighbor = neighborPair.Key;
             Vector3Int posNeighbor = neighborPair.Value;
-            DataTile dataTileNeighbor = WorldMapLoader.instance.GetDataTileAtLocation(posNeighbor);
+            DataTile dataTileNeighbor = WorldMapLoader.Instance.GetDataTileAtLocation(posNeighbor);
             if (dataTileNeighbor == null)
             {
                 Debug.LogError("Missing datatile at going pos " + posNeighbor.ToString());

@@ -121,6 +121,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &73932295
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 73932296}
+  - component: {fileID: 73932297}
+  m_Layer: 0
+  m_Name: WorldMapLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &73932296
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 73932295}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 780441194}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &73932297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 73932295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 084802a6507ef63479e37533c9088b6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileMap: {fileID: 1933218274}
 --- !u!1 &396629296
 GameObject:
   m_ObjectHideFlags: 0
@@ -727,7 +771,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Sleep
+  m_Text: Rest
 --- !u!222 &744631444
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -777,6 +821,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1933218272}
+  - {fileID: 1229758373}
+  - {fileID: 73932296}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1166,8 +1212,8 @@ RectTransform:
   - {fileID: 1386959149}
   - {fileID: 1607947411}
   - {fileID: 546723372}
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_Father: {fileID: 1752524824}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1304,6 +1350,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1188538405}
   m_CullTransparentMesh: 0
+--- !u!1 &1229758372
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1229758373}
+  - component: {fileID: 1229758374}
+  m_Layer: 0
+  m_Name: TileAssets
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1229758373
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229758372}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 780441194}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1229758374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229758372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c7c297acd001ec458e484ea04eacccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waterTile: {fileID: 11400000, guid: 7e7f67fdd393ac544a98bd24ff8f14d4, type: 2}
+  grassTile: {fileID: 11400000, guid: 0f7be247a798aed4e8f4f4b80d53e196, type: 2}
+  forestTile: {fileID: 11400000, guid: 89372a8eda8c78e4ab9778b277dd611e, type: 2}
+  hillsTile: {fileID: 11400000, guid: fde271316ec1933499fdf2f5c8193a70, type: 2}
+  mountainTile: {fileID: 11400000, guid: 64d247b2bc4e78d4fb6a5268c4c4e930, type: 2}
+  townTile: {fileID: 11400000, guid: 57ef125d103b7a149a183d4149a538c5, type: 2}
 --- !u!1 &1329803454
 GameObject:
   m_ObjectHideFlags: 0
@@ -1368,7 +1463,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1386959148
 GameObject:
@@ -1591,7 +1686,7 @@ GameObject:
   - component: {fileID: 1607947412}
   - component: {fileID: 1607947414}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Panel-TileMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2136,6 +2231,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1719615141}
   m_CullTransparentMesh: 0
+--- !u!1 &1752524823
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1752524824}
+  m_Layer: 0
+  m_Name: UI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1752524824
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752524823}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1026620539}
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1921689214
 GameObject:
   m_ObjectHideFlags: 0
@@ -2225,7 +2351,6 @@ GameObject:
   - component: {fileID: 1933218272}
   - component: {fileID: 1933218274}
   - component: {fileID: 1933218273}
-  - component: {fileID: 1933218275}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Untagged
@@ -2381,25 +2506,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!114 &1933218275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1933218271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 084802a6507ef63479e37533c9088b6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileMap: {fileID: 1933218274}
-  waterTile: {fileID: 11400000, guid: 7e7f67fdd393ac544a98bd24ff8f14d4, type: 2}
-  grassTile: {fileID: 11400000, guid: 0f7be247a798aed4e8f4f4b80d53e196, type: 2}
-  forestTile: {fileID: 11400000, guid: 89372a8eda8c78e4ab9778b277dd611e, type: 2}
-  hillsTile: {fileID: 11400000, guid: 71be31d7bce3ed441971c7f80862ad6a, type: 2}
-  mountainTile: {fileID: 11400000, guid: 5e43fee120a26db45a78e780f9d0bf0a, type: 2}
-  townTile: {fileID: 11400000, guid: 2ce586f732854a9418012b73c4033288, type: 2}
 --- !u!1 &1934960513
 GameObject:
   m_ObjectHideFlags: 0
