@@ -6,6 +6,8 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
 
+    [SerializeField] private InventoryController UIInventory;
+
     private Inventory inventory;
 
 
@@ -14,6 +16,7 @@ public class Player : MonoBehaviour
         Instance = this;
 
         inventory = new Inventory();
+        UIInventory.SetInventory(inventory);
     }
 
     // Start is called before the first frame update
