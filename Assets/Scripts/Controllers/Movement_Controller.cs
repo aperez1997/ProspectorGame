@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -9,8 +10,6 @@ using UnityEngine.UI;
 // Cost resolution should come from some world map class
 public class Movement_Controller : MonoBehaviour
 {
-    const int ActionPointMax = 12;
-
     // World
     public Tilemap tilemap;
 
@@ -24,7 +23,7 @@ public class Movement_Controller : MonoBehaviour
     public Button upRightBtn;
 
     private MovementUIHelper helper;
-    private int actionPoints;
+    private Player player;   
     private HexDirection lastDirection; // last direction we moved. Not used yet, but will be in the future when we have rivers and roads
 
     int GetCost(HexDirection direction) { return helper.GetMovementCost(direction); }
@@ -33,8 +32,9 @@ public class Movement_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameData.Instance.Player;
+        player.OnActionPointsChanged += Player_OnActionPointsChanged;
         helper = new MovementUIHelper(rightBtn, downRightBtn, downLeftBtn, leftBtn, upLeftBtn, upRightBtn);
-        actionPoints = ActionPointMax;
         UpdateMovementCosts(HexDirection.None);
     }
 
@@ -48,13 +48,6 @@ public class Movement_Controller : MonoBehaviour
     public void MoveNorthEast() { HandleMovement(HexDirection.NorthEast); }
     public void MoveNorthWest() { HandleMovement(HexDirection.NorthWest); }
 
-    public void Rest()
-    {
-        // TODO: This logic should probably be somewhere else. Rest the action might need to be moved into a "tileActionController" or "playerController" or something
-        actionPoints = ActionPointMax;
-        UpdateMovementUI();
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -64,7 +57,7 @@ public class Movement_Controller : MonoBehaviour
     // Updates the movement button text and action point display
     void UpdateMovementUI()
     {
-        actionPointTxt.text = actionPoints.ToString();
+        actionPointTxt.text = player.ActionPoints.ToString();
 
         foreach (MovementUIData data in helper.data)
         {
@@ -80,7 +73,7 @@ public class Movement_Controller : MonoBehaviour
         if (cost < 0){
             costStr = "X";
             enabled = false;
-        } else if (cost > actionPoints){
+        } else if (cost > player.ActionPoints){
             enabled = false;
         }
         button.GetComponentInChildren<Text>().text = costStr;
@@ -93,7 +86,7 @@ public class Movement_Controller : MonoBehaviour
         // get cost
         int cost = GetCost(direction);
         Debug.Log("Button direction "+ direction.ToString() +" was pressed! Cost is " + cost);
-        if (cost > actionPoints)
+        if (cost > player.ActionPoints)
         {
             Debug.LogWarning("Cannot move because not enough AP");
             return;
@@ -104,7 +97,7 @@ public class Movement_Controller : MonoBehaviour
         transform.Translate(movement);
 
         // Bookkeeping
-        actionPoints -= cost;
+        player.UseActionPoints(cost);
         lastDirection = direction;
 
         // update internal costs matrix and UI 
@@ -141,6 +134,11 @@ public class Movement_Controller : MonoBehaviour
             SetCost(hdeNeighbor, costNeighbor);            
         }
 
+        UpdateMovementUI();
+    }
+
+    private void Player_OnActionPointsChanged(object sender, EventArgs e)
+    {
         UpdateMovementUI();
     }
 }

@@ -16,12 +16,15 @@ public class InventoryController : MonoBehaviour
 
     private void Start()
     {
+        // get inventory from singleton. Is this the right way?
+        SetInventory(GameData.Instance.Inventory);
         UpdateInventoryUI();
     }
 
     public void SetInventory(Inventory inventory)
     {
-        this.inventory = inventory; 
+        this.inventory = inventory;
+        // subscribe to changes.
         inventory.OnItemListChanged += Inventory_OnItemListChanged;
     }
 
@@ -53,10 +56,5 @@ public class InventoryController : MonoBehaviour
     private void Inventory_OnItemListChanged(object sender, EventArgs e)
     {
         UpdateInventoryUI();
-    }
-
-    public void TestItemAdd()
-    {
-        inventory.AddItem(new Item { amount = 1, type = Item.ItemType.Ration }); 
     }
 }
