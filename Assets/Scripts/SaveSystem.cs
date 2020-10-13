@@ -17,6 +17,12 @@ public static class SaveSystem
         File.WriteAllText(path, json);
     }
 
+    public static bool HasGame()
+    {
+        string path = GetSaveFilePath();
+        return File.Exists(path);
+    }
+
     public static GameState LoadData()
     {
         string path = GetSaveFilePath();
@@ -34,7 +40,6 @@ public static class SaveSystem
     // TODO: what about multiple saves?
     private static string GetSaveFilePath()
     {
-        Debug.LogError("Save file is" + Application.persistentDataPath );
         string ext = GetExtension();
         return Application.persistentDataPath + "/miner." + ext;
     }

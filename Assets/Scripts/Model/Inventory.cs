@@ -8,8 +8,7 @@ public class Inventory
     // This is how we emit that the Items have changed. UI will catch this and update
     public event EventHandler OnItemListChanged;
 
-    [SerializeField] private List<Item> _itemList;
-    public List<Item> ItemList { get => _itemList; private set => _itemList = value; }
+    [field:SerializeField] public List<Item> ItemList { get; private set; }
 
     public Inventory()
     {

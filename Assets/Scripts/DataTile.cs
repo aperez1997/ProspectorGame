@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class DataTile
 {
-    public Vector3Int CellLocation;
+    public Vector3Int CellLoc;
 
     public TerrainType Type;
 
@@ -13,13 +13,13 @@ public class DataTile
 
     public DataTile(Vector3Int cellLocationIn, TerrainType type, int cost)
     {
-        CellLocation = cellLocationIn;
+        CellLoc = cellLocationIn;
         Type = type;
         Cost = cost;
     }
 
     public override string ToString()
     {
-        return "DT[loc" + CellLocation.ToString() + "t(" + Type.ToString() + ")c:" + Cost + "]";
+        return "DT[loc" + CellLoc.ToString() + "t(" + Type.ToString() + ")c:" + Cost + "]";
     }
 }

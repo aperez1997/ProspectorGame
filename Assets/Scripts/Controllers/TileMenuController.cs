@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TileMenuController : MonoBehaviour
 {
@@ -37,6 +38,11 @@ public class TileMenuController : MonoBehaviour
 
     public void SaveGame()
     {
-        GameStateController.SaveGame();
+        SaveSystem.SaveData(GameState.Instance);
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("MainMenuScene");
     }
 }

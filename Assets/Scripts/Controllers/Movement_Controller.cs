@@ -122,7 +122,6 @@ public class Movement_Controller : MonoBehaviour
         if (dataTileAt == null){
             throw new System.Exception("Could not find dateTile for pos " + posAt.ToString());
         }
-        Debug.Log("Found a datatile at " + posAt.ToString() + "! It is " + dataTileAt.ToString());
 
         // get neighbor vectors
         Dictionary<HexDirection, Vector3Int> neighbors = HexDirectionUtil.GetNeighborWorldVectors(posAt);
@@ -141,7 +140,6 @@ public class Movement_Controller : MonoBehaviour
             }
             // TODO: cost should probably come from a "cost engine". It should eventually be more than the raw terrain cost
             int costNeighbor = dataTileNeighbor.Cost; 
-            Debug.Log("Neighbor facing " + hdeNeighbor.ToString() + " is " + dataTileNeighbor.ToString());
             SetCost(hdeNeighbor, costNeighbor);            
         }
 

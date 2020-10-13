@@ -4,8 +4,7 @@ using UnityEngine;
 [Serializable]
 public class Player
 {
-    [SerializeField] private Inventory _inventory;
-    public Inventory Inventory { get => _inventory; private set => _inventory = value; }
+    [field:SerializeField] public Inventory Inventory { get; private set; }
 
     [SerializeField] private CellPositionStruct _location;
     public CellPositionStruct Location { get => _location; private set => _location = value; }

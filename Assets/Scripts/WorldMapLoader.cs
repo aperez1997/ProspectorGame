@@ -18,13 +18,21 @@ public class WorldMapLoader : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {       
+    {
+        // Hack to auto-load game if we get here and there isn't something loaded yet
+        // this should only be for the editor
+        if (GameState.Instance == null)
+        {
+            Debug.Log("No Gamestate, loading game as an editor hack");
+            GameStateManager.LoadGame();
+        }
+
         List<DataTile> dataTileList = GameState.Instance.DataTileList;
         foreach (DataTile dataTile in dataTileList)
         {
             Tile tile = GetTileFromTerrainType(dataTile.Type);
-            tileMap.SetTile(dataTile.CellLocation, tile);
-            DataTileDict.Add(dataTile.CellLocation, dataTile);
+            tileMap.SetTile(dataTile.CellLoc, tile);
+            DataTileDict.Add(dataTile.CellLoc, dataTile);
         }
     }
 
@@ -55,11 +63,9 @@ public class WorldMapLoader : MonoBehaviour
                 // always start in town
                 else if (x == 0 && y == 0) { tt = TerrainType.Town; }
 
-                Tile tile = GetTileFromTerrainType(tt);
                 int cost = GetCostFromTerrainType(tt);
 
                 DataTile dTile = new DataTile(loc, tt, cost);
-
                 dTileList.Add(dTile);               
             }
         }
@@ -126,5 +132,5 @@ struct WorldBuilderTile
         TileBase = tileBase;
     }
 
-    public Vector3Int CellLocation { get => DataTile.CellLocation; }
+    public Vector3Int CellLocation { get => DataTile.CellLoc; }
 }
