@@ -17,7 +17,7 @@ public class InventoryController : MonoBehaviour
     private void Start()
     {
         // get inventory from singleton. Is this the right way?
-        SetInventory(GameData.Instance.Inventory);
+        SetInventory(GameState.Instance.Inventory);
         UpdateInventoryUI();
     }
 

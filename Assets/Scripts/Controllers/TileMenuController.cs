@@ -8,7 +8,7 @@ public class TileMenuController : MonoBehaviour
     void Start()
     {
         Hide();
-        player = GameData.Instance.Player;
+        player = GameState.Instance.Player;
     }
 
     // Update is called once per frame
@@ -33,5 +33,10 @@ public class TileMenuController : MonoBehaviour
     public void TestAddItem()
     {
         player.Inventory.AddItem(new Item { amount = 1, type = Item.ItemType.Ration });
+    }
+
+    public void SaveGame()
+    {
+        GameStateController.SaveGame();
     }
 }

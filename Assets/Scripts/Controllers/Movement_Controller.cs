@@ -23,8 +23,7 @@ public class Movement_Controller : MonoBehaviour
     public Button upRightBtn;
 
     private MovementUIHelper helper;
-    private Player player;   
-    private HexDirection lastDirection; // last direction we moved. Not used yet, but will be in the future when we have rivers and roads
+    private Player player;
 
     int GetCost(HexDirection direction) { return helper.GetMovementCost(direction); }
     void SetCost(HexDirection direction, int cost) { helper.SetMovementCost(direction, cost); }
@@ -32,8 +31,11 @@ public class Movement_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameData.Instance.Player;
+        player = GameState.Instance.Player;
         player.OnActionPointsChanged += Player_OnActionPointsChanged;
+        player.OnLocationChanged += Player_OnLocationChanged;
+
+        UpdatePosition();
         helper = new MovementUIHelper(rightBtn, downRightBtn, downLeftBtn, leftBtn, upLeftBtn, upRightBtn);
         UpdateMovementCosts(HexDirection.None);
     }
@@ -52,6 +54,14 @@ public class Movement_Controller : MonoBehaviour
     void Update()
     {
 
+    }
+
+    void UpdatePosition()
+    {
+        // move player transform to the world position that corresponds to their cell position
+        Vector3Int cellPos = player.GetCellPosition();
+        Vector3 worldPos = tilemap.CellToWorld(cellPos);
+        transform.position = worldPos;
     }
 
     // Updates the movement button text and action point display
@@ -92,13 +102,12 @@ public class Movement_Controller : MonoBehaviour
             return;
         }
 
-        // move player
-        Vector3 movement = HexDirectionUtil.HexDirectionEnumToVector3(direction);
-        transform.Translate(movement);
+        // change the player's position. This will cause an event to update UI
+        Vector3Int newCellPos = HexDirectionUtil.TranslateVector3Int(player.GetCellPosition(), direction);
+        player.SetLocation(newCellPos, direction);
 
         // Bookkeeping
-        player.UseActionPoints(cost);
-        lastDirection = direction;
+        player.UseActionPoints(cost);        
 
         // update internal costs matrix and UI 
         UpdateMovementCosts(direction);
@@ -107,7 +116,8 @@ public class Movement_Controller : MonoBehaviour
     // Update movement costs for the buttons based on the current location and lastDirection moved
     public void UpdateMovementCosts(HexDirection lastDirection)
     {
-        Vector3Int posAt = tilemap.WorldToCell(transform.position);
+        Vector3Int posAt = player.GetCellPosition();
+
         DataTile dataTileAt = WorldMapLoader.Instance.GetDataTileAtLocation(posAt);
         if (dataTileAt == null){
             throw new System.Exception("Could not find dateTile for pos " + posAt.ToString());
@@ -117,6 +127,7 @@ public class Movement_Controller : MonoBehaviour
         // get neighbor vectors
         Dictionary<HexDirection, Vector3Int> neighbors = HexDirectionUtil.GetNeighborWorldVectors(posAt);
 
+        // TODO Set all this up during map load as a property
         // lookup each neighbor and set it's cost
         foreach (KeyValuePair<HexDirection, Vector3Int> neighborPair in neighbors)
         {
@@ -135,6 +146,11 @@ public class Movement_Controller : MonoBehaviour
         }
 
         UpdateMovementUI();
+    }
+
+    private void Player_OnLocationChanged(object sender, EventArgs e)
+    {
+        UpdatePosition();
     }
 
     private void Player_OnActionPointsChanged(object sender, EventArgs e)

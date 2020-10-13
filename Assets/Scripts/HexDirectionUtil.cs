@@ -23,7 +23,7 @@ public class HexDirectionUtil
 
     // Turns a direction enum into a move vector for the player.
     // TODO: this probably only works for the scale I'm currently using. Should have a float scale param
-    public static Vector3 HexDirectionEnumToVector3(HexDirection hde)
+    public static Vector3 HexDirectionEnumToWorldVector3(HexDirection hde)
     {
         float x = 0, y = 0;
         // check north/south for y = += .75
@@ -31,7 +31,7 @@ public class HexDirectionUtil
         {
             y = -.75f;
         }
-        else if (hde == HexDirection.NorthEast|| hde == HexDirection.NorthWest)
+        else if (hde == HexDirection.NorthEast || hde == HexDirection.NorthWest)
         {
             y = .75f;
         }
@@ -59,6 +59,20 @@ public class HexDirectionUtil
         return vector;
     }
 
+    // create a new vector3Int (cellPos) that is the given cellPos moved in the corresponding direction
+    public static Vector3Int TranslateVector3Int(Vector3Int currentCellPos, HexDirection hde)
+    {
+        // determine which hash to use
+        bool isEvenRow = currentCellPos.y % 2 == 0;
+        Dictionary<HexDirection, (int, int)> neighborSet = isEvenRow ? NeighborHashEven : NeighborHashOdd;
+        // lookup direction in our hash, value is x/y offsets
+        neighborSet.TryGetValue(hde, out (int, int) offset);
+        int xOffset = offset.Item1, yOffset = offset.Item2;
+        // create new vector that is current vector + offsets
+        return new Vector3Int(currentCellPos.x + xOffset, currentCellPos.y + yOffset, currentCellPos.z);
+    }
+
+    // TODO: Use the hashes instead of the lists
     // Get all neighbors of currentPos as WorldLocation Vectors, hashed by the corresponding direction
     public static Dictionary<HexDirection, Vector3Int> GetNeighborWorldVectors(Vector3Int currentPos)
     {
@@ -78,6 +92,12 @@ public class HexDirectionUtil
         }
         return dict;
     }
+
+    private static readonly Dictionary<HexDirection, (int, int)> NeighborHashEven = new Dictionary<HexDirection, (int, int)>
+        {{HexDirection.East,(1,0)},{HexDirection.West,(-1,0)},{HexDirection.NorthEast,(0,1)}, {HexDirection.NorthWest,(-1,1)}, {HexDirection.SouthEast,(0,-1)}, {HexDirection.SouthWest,(-1,-1)}};
+
+    private static readonly Dictionary<HexDirection, ValueTuple<int, int>> NeighborHashOdd = new Dictionary<HexDirection, (int, int)>
+        {{HexDirection.East,(1,0)}, {HexDirection.West,(-1,0)}, {HexDirection.NorthEast,(1,1)}, {HexDirection.NorthWest,(0,1)}, {HexDirection.SouthEast,(1,-1)}, {HexDirection.SouthWest,(0,-1)} };
 
     /**
      * Unity uses odd-r convention. On Even rows (y) we want x=-1 and x=0 for the above/below spots, on Odd rows we want x=0 and x=1

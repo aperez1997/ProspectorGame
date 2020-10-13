@@ -9,8 +9,7 @@ public class WorldMapLoader : MonoBehaviour
 
     public Tilemap tileMap;
 
-    private List<DataTile> dataTiles = new List<DataTile>(0);
-    private Dictionary<Vector3Int, DataTile> dataTilesDict = new Dictionary<Vector3Int, DataTile>(0);
+    private Dictionary<Vector3Int, DataTile> DataTileDict = new Dictionary<Vector3Int, DataTile>(0);
 
     private void Awake()
     {
@@ -19,24 +18,27 @@ public class WorldMapLoader : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        // Also load world map, so it exists before other "starts" are called
-        LoadWorldMap();
-        foreach (DataTile dTile in dataTiles)
+    {       
+        List<DataTile> dataTileList = GameState.Instance.DataTileList;
+        foreach (DataTile dataTile in dataTileList)
         {
-            tileMap.SetTile(dTile.WorldLocation, dTile.TileBase);
+            Tile tile = GetTileFromTerrainType(dataTile.Type);
+            tileMap.SetTile(dataTile.CellLocation, tile);
+            DataTileDict.Add(dataTile.CellLocation, dataTile);
         }
     }
 
     public DataTile GetDataTileAtLocation(Vector3Int location)
     {
-        DataTile dataTile = null;
-        bool rv = dataTilesDict.TryGetValue(location, out dataTile);       
+        DataTile dataTile;
+        bool rv = DataTileDict.TryGetValue(location, out dataTile);
         return dataTile;
     }
 
-    private void LoadWorldMap()
+    public static List<DataTile> CreateRandomWorldMap()
     {
+        List<DataTile> dTileList = new List<DataTile>();
+
         int maxX = 5;
         int maxY = 5;
 
@@ -56,11 +58,12 @@ public class WorldMapLoader : MonoBehaviour
                 Tile tile = GetTileFromTerrainType(tt);
                 int cost = GetCostFromTerrainType(tt);
 
-                DataTile dTile = new DataTile(loc, tile, tt, cost);
-                dataTiles.Add(dTile);
-                dataTilesDict.Add(loc, dTile);
+                DataTile dTile = new DataTile(loc, tt, cost);
+
+                dTileList.Add(dTile);               
             }
-        }        
+        }
+        return dTileList;
     }
 
     public static Tile GetTileFromTerrainType(TerrainType tt)
@@ -110,4 +113,18 @@ public class WorldMapLoader : MonoBehaviour
     {
         
     }
+}
+
+struct WorldBuilderTile
+{
+    public DataTile DataTile;
+    public TileBase TileBase;
+
+    public WorldBuilderTile(DataTile dataTile, TileBase tileBase)
+    {
+        DataTile = dataTile;
+        TileBase = tileBase;
+    }
+
+    public Vector3Int CellLocation { get => DataTile.CellLocation; }
 }

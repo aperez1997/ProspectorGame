@@ -1,19 +1,23 @@
 ﻿
 using System.IO;
-// for later binary serialization
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 public static class SaveSystem 
 {
-    public static void SaveData(GameData data)
+    enum SaveMode { JSON, Binary };
+    const SaveMode CurrentMode = SaveMode.JSON;
+
+    public static void SaveData(GameState state)
     {
-        string json = JsonUtility.ToJson(data);
+        Debug.Log("State is " + state.ToString());
+
+        string json = JsonUtility.ToJson(state);
         string path = GetSaveFilePath();
+        Debug.Log("serialized data is " + json);
         File.WriteAllText(path, json);
     }
 
-    public static GameData LoadData()
+    public static GameState LoadData()
     {
         string path = GetSaveFilePath();
         if (!File.Exists(path))
@@ -23,13 +27,25 @@ public static class SaveSystem
         }
 
         string rawData = File.ReadAllText(path);
-        GameData data = JsonUtility.FromJson<GameData>(rawData);
-        return data;
+        GameState state = JsonUtility.FromJson<GameState>(rawData);
+        return state;
     }
 
     // TODO: what about multiple saves?
     private static string GetSaveFilePath()
     {
-        return Application.persistentDataPath + "/miner.save";
+        Debug.LogError("Save file is" + Application.persistentDataPath );
+        string ext = GetExtension();
+        return Application.persistentDataPath + "/miner." + ext;
+    }
+    private static string GetExtension()
+    {
+        switch (CurrentMode)
+        {
+            case SaveMode.JSON:
+                return "json";
+            case SaveMode.Binary:
+                //return "bin";
+        }
     }
 }

@@ -1,26 +1,25 @@
-﻿using UnityEngine;
-using UnityEngine.Tilemaps;
+﻿using System;
+using UnityEngine;
 
+// Contains data about the terrain tiles
+[Serializable]
 public class DataTile
 {
-    public Vector3Int WorldLocation { get; }
+    public Vector3Int CellLocation;
 
-    public TileBase TileBase { get; }
+    public TerrainType Type;
 
-    public TerrainType Type { get; }
+    public int Cost;
 
-    public int Cost { get; }
-
-    public DataTile(Vector3Int worldLocation, TileBase tileBase, TerrainType type, int cost)
+    public DataTile(Vector3Int cellLocationIn, TerrainType type, int cost)
     {
-        WorldLocation = worldLocation;
-        TileBase = tileBase;
+        CellLocation = cellLocationIn;
         Type = type;
         Cost = cost;
     }
 
     public override string ToString()
     {
-        return "DataTile[loc" + WorldLocation.ToString() + "t(" + Type.ToString() + ")c:" + Cost + "]";
+        return "DT[loc" + CellLocation.ToString() + "t(" + Type.ToString() + ")c:" + Cost + "]";
     }
 }

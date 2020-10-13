@@ -1,6 +1,8 @@
 ﻿
+using System;
 using UnityEngine;
 
+[Serializable]
 public class Item
 {
     public enum ItemType { Ration }
@@ -18,5 +20,10 @@ public class Item
             default:
                 return null;
         }
+    }
+
+    public override string ToString()
+    {
+        return "I:"+type+":"+amount;
     }
 }
