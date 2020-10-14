@@ -26,17 +26,25 @@ public class Player
         Location = new CellPositionStruct(0, 0, 0, HexDirection.None);
     }
 
+    public bool HasEnoughActionPoints(int desired)
+    {
+        return ActionPoints >= desired;
+    }
+
+    public int UseActionPoints(int used)
+    {
+        if (HasEnoughActionPoints(used))
+        {
+            ActionPoints -= used;            
+        }
+        return ActionPoints;
+    }
+
     public void ResetActionPoints()
     {
         ActionPoints = this.ActionPointsMax;
     }
 
-    public int UseActionPoints(int used)
-    {
-        ActionPoints -= used;
-        return ActionPoints;
-    }
-    
     public void SetLocation(Vector3Int vector3int, HexDirection direction)
     {
         Location.FromVector3IntAndPosition(vector3int, direction);

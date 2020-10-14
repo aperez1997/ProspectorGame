@@ -33,7 +33,11 @@ public class TileMenuController : MonoBehaviour
 
     public void TestAddItem()
     {
-        player.Inventory.AddItem(new Item { amount = 1, type = Item.ItemType.Ration });
+        if (player.HasEnoughActionPoints(1))
+        {
+            player.UseActionPoints(1);
+            player.Inventory.AddItem(new InventoryItem(ItemType.GoldNugget, 1));
+        }        
     }
 
     public void SaveGame()

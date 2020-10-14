@@ -37,14 +37,14 @@ public class InventoryController : MonoBehaviour
         }
 
         // display items   
-        foreach (Item item in inventory.ItemList)
+        foreach (InventoryItem item in inventory.ItemList)
         {
             GameObject goItem = Instantiate(ItemTemplate, ItemContainer);
             goItem.SetActive(true);
 
             // find sprit
             Image image = goItem.GetComponentInChildren<Image>();
-            image.sprite = item.GetSprite();
+            image.sprite = item.Sprite;
 
             // find text and adjust
             Text itemAmountText = goItem.GetComponentInChildren<Text>();

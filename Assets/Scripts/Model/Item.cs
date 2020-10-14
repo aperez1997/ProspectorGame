@@ -1,29 +1,15 @@
-﻿
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-[Serializable]
-public class Item
+[CreateAssetMenu(fileName = "New Item", menuName = "Item")]
+public class Item : ScriptableObject
 {
-    public enum ItemType { Ration }
-
     public ItemType type;
 
-    public int amount;
+    public new string name;
 
-    public Sprite GetSprite()
-    {
-        switch (type)
-        {
-            case ItemType.Ration:
-                return ItemAssets.Instance.rationSprite;
-            default:
-                return null;
-        }
-    }
+    public string description;
 
-    public override string ToString()
-    {
-        return "I:"+type+":"+amount;
-    }
+    public Sprite sprite;
 }
+
+public enum ItemType { Ration = 1, GoldNugget = 2 }

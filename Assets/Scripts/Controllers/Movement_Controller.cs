@@ -96,7 +96,7 @@ public class Movement_Controller : MonoBehaviour
         // get cost
         int cost = GetCost(direction);
         Debug.Log("Button direction "+ direction.ToString() +" was pressed! Cost is " + cost);
-        if (cost > player.ActionPoints)
+        if (!player.HasEnoughActionPoints(cost))
         {
             Debug.LogWarning("Cannot move because not enough AP");
             return;
