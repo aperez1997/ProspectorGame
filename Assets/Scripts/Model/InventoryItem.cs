@@ -11,8 +11,8 @@ public class InventoryItem
 
     public Sprite Sprite { get
         {
-            Item item = ItemLoader.LoadItemByType(type);
-            if (item is Item){ return item.sprite; }
+            ItemData item = ItemDataLoader.LoadItemByType(type);
+            if (item is ItemData){ return item.sprite; }
             return null;
         }       
     }

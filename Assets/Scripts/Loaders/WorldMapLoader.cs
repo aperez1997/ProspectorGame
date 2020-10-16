@@ -24,13 +24,23 @@ public class WorldMapLoader : MonoBehaviour
         if (GameState.Instance == null)
         {
             Debug.Log("No Gamestate, loading game as an editor hack");
-            GameStateManager.LoadGame();
+            if (!GameStateManager.LoadGame())
+            {
+                Debug.Log("No saved game. Creating new game as an editor hack");
+                GameStateManager.CreateNewGame();
+            }
         }
 
+        LoadMapDataIntoTileMap();
+    }
+
+    public void LoadMapDataIntoTileMap()
+    {
         List<DataTile> dataTileList = GameState.Instance.DataTileList;
+        Debug.Log("Loading World Map with " + dataTileList.Count + " tiles");
         foreach (DataTile dataTile in dataTileList)
         {
-            Tile tile = GetTileFromTerrainType(dataTile.Type);
+            Tile tile = dataTile.Tile;
             tileMap.SetTile(dataTile.CellLoc, tile);
             DataTileDict.Add(dataTile.CellLoc, dataTile);
         }
@@ -57,61 +67,17 @@ public class WorldMapLoader : MonoBehaviour
             {
                 Vector3Int loc = new Vector3Int(x, y, 0);
 
-                TerrainType tt = TerrainTypeUtil.GetRandomTypeForRandoMap();
+                BiomeType tt = BiomeData.GetRandomTypeForRandoMap();
                 // surround the edges of the map with water
-                if (Math.Abs(x) == maxX || Math.Abs(y) == maxY) { tt = TerrainType.Water; }
+                if (Math.Abs(x) == maxX || Math.Abs(y) == maxY) { tt = BiomeType.Water; }
                 // always start in town
-                else if (x == 0 && y == 0) { tt = TerrainType.Town; }
+                else if (x == 0 && y == 0) { tt = BiomeType.Town; }
 
-                int cost = GetCostFromTerrainType(tt);
-
-                DataTile dTile = new DataTile(loc, tt, cost);
+                DataTile dTile = new DataTile(loc, tt);
                 dTileList.Add(dTile);               
             }
         }
         return dTileList;
-    }
-
-    public static Tile GetTileFromTerrainType(TerrainType tt)
-    {
-        switch (tt)
-        {
-            case TerrainType.Grass:
-                return TileAssets.Instance.grassTile;
-            case TerrainType.Forest:
-                return TileAssets.Instance.forestTile;
-            case TerrainType.Hills:
-                return TileAssets.Instance.hillsTile;
-            case TerrainType.Mountains:
-                return TileAssets.Instance.mountainTile;
-            case TerrainType.Water:
-                return TileAssets.Instance.waterTile;
-            case TerrainType.Town:
-                return TileAssets.Instance.townTile;
-        }
-        Debug.LogError("Unmapped terrain type " + tt.ToString());
-        return null;
-    }
-
-    public static int GetCostFromTerrainType(TerrainType tt)
-    {
-        switch (tt)
-        {
-            case TerrainType.Grass:
-                return 1;
-            case TerrainType.Forest:
-                return 2;
-            case TerrainType.Hills:
-                return 3;
-            case TerrainType.Mountains:
-                return 4;
-            case TerrainType.Water:
-                return -1;
-            case TerrainType.Town:
-                return 2;
-        }
-        Debug.LogError("Unmapped terrain type " + tt.ToString());
-        return -1;
     }
 
     // Update is called once per frame

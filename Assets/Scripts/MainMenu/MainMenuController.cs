@@ -26,7 +26,7 @@ public class MainMenuController : MonoBehaviour
     }
 
    public void CreateNewGame()
-    {
+    {       
         GameStateManager.CreateNewGame();
         LoadMainScene();
     }

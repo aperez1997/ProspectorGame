@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -31,11 +30,13 @@ public class Movement_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("Momvent Controller starting");
         player = GameState.Instance.Player;
         player.OnActionPointsChanged += Player_OnActionPointsChanged;
         player.OnLocationChanged += Player_OnLocationChanged;
 
-        UpdatePosition();
+        //Debug.Log("Moving player to " + player.Location);
+        UpdatePosition();       
         helper = new MovementUIHelper(rightBtn, downRightBtn, downLeftBtn, leftBtn, upLeftBtn, upRightBtn);
         UpdateMovementCosts(HexDirection.None);
     }
@@ -122,6 +123,7 @@ public class Movement_Controller : MonoBehaviour
         if (dataTileAt == null){
             throw new System.Exception("Could not find dateTile for pos " + posAt.ToString());
         }
+        //Debug.Log("New position " + dataTileAt);
 
         // get neighbor vectors
         Dictionary<HexDirection, Vector3Int> neighbors = HexDirectionUtil.GetNeighborWorldVectors(posAt);
@@ -138,8 +140,10 @@ public class Movement_Controller : MonoBehaviour
                 Debug.LogError("Missing datatile at going pos " + posNeighbor.ToString());
                 continue;
             }
+            //Debug.Log("Found neighbor " + hdeNeighbor + "=" + dataTileNeighbor);
+
             // TODO: cost should probably come from a "cost engine". It should eventually be more than the raw terrain cost
-            int costNeighbor = dataTileNeighbor.Cost; 
+            int costNeighbor = dataTileNeighbor.BaseMoveCost; 
             SetCost(hdeNeighbor, costNeighbor);            
         }
 
