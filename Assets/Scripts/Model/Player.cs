@@ -11,18 +11,18 @@ public class Player
     public int Health
     {
         get { return _health; }
-        private set { _health = value; OnHealthChanged?.Invoke(this, EventArgs.Empty); }
+        set { _health = value; OnHealthChanged?.Invoke(this, EventArgs.Empty); }
     }
     public event EventHandler OnHealthChanged;
 
     // AP MAX
-    [field: SerializeField] public int ActionPointsMax { get; }
+    [field:SerializeField] public int ActionPointsMax { get; private set; }
 
     // AP
     [SerializeField] private int _actionPoints;
     public int ActionPoints { 
         get { return _actionPoints; }
-        private set { _actionPoints = value; OnActionPointsChanged?.Invoke(this, EventArgs.Empty); }
+        set { _actionPoints = value; OnActionPointsChanged?.Invoke(this, EventArgs.Empty); }
     }
     public event EventHandler OnActionPointsChanged;
 
@@ -48,30 +48,7 @@ public class Player
         return ActionPoints >= desired;
     }
 
-    public int UseActionPoints(int used)
-    {
-        if (HasEnoughActionPoints(used))
-        {
-            ActionPoints -= used;            
-        }
-        return ActionPoints;
-    }
-
-    public void Sleep()
-    {
-        const ItemType ration = ItemType.Ration;
-        bool hasFood = Inventory.HasItem(ration);
-        if (hasFood){
-            Debug.Log("Eating a ration");
-            Inventory.RemoveItem(ration);
-        } else { 
-            Debug.Log("Health loss due to no food");
-            Health -= 1;            
-        }
-        ResetActionPoints();
-    }
-
-    private void ResetActionPoints()
+    public void ResetActionPoints()
     {
         // AP reduced by health loss.
         int healthLossAPRedux = (MAX_HEALTH - Health);

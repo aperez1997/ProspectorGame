@@ -12,6 +12,9 @@ public class DataTile : ISerializationCallbackReceiver
     
     // Derived field that come from TerrainData
     public int BaseMoveCost { get; private set; }
+    public bool CanCamp { get; private set; }
+    public int ForagingChance { get; private set; }
+    public int HuntingChance { get; private set; }
 
     public Tile Tile { get; private set; }
 
@@ -36,12 +39,22 @@ public class DataTile : ISerializationCallbackReceiver
 
     private void LoadBiomeData()
     {
-        BaseMoveCost = -1; Tile = null;
+        BaseMoveCost = -1;
+        CanCamp = false;
+        ForagingChance = 0;
+        HuntingChance = 0;
+        Tile = null; 
         BiomeData data = BiomeDataLoader.LoadBiomeDataByType(Type);
         if (data is BiomeData)
         {
             BaseMoveCost = data.baseMoveCost;
+            CanCamp = data.canCamp;
+            ForagingChance = data.foragingBaseChance;
+            HuntingChance = data.huntingBaseChance;
             Tile = data.hexTile;
+        } else
+        {
+            throw new Exception("No biome data for type " + Type.ToString());
         }
     }
 }

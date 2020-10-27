@@ -14,6 +14,12 @@ public class BiomeData : ScriptableObject
 
     public int baseMoveCost;
 
+    public bool canCamp;
+
+    public int foragingBaseChance;
+
+    public int huntingBaseChance;
+
     public static BiomeType GetRandomTypeForRandoMap()
     {
         System.Array values = System.Enum.GetValues(typeof(BiomeType));

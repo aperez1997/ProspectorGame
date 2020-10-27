@@ -7,7 +7,7 @@ using UnityEngine.UI;
 // player movement controller. Handles updating button UI based on costs, moving player, and managing remaining APs
 // APs should probably move into some sort of "player state" object
 // Cost resolution should come from some world map class
-public class Movement_Controller : PlayerController
+public class Movement_Controller : MonoBehaviour
 {
     // World
     public Tilemap tilemap;
@@ -21,15 +21,16 @@ public class Movement_Controller : PlayerController
     public Button upLeftBtn;
     public Button upRightBtn;
 
+    private Player player;
     private MovementUIHelper helper;
 
     int GetCost(HexDirection direction) { return helper.GetMovementCost(direction); }
     void SetCost(HexDirection direction, int cost) { helper.SetMovementCost(direction, cost); }
 
     // Start is called before the first frame update
-    new void Start()
+    void Start()
     {
-        base.Start();
+        player = GameState.Instance.Player;
         player.OnActionPointsChanged += Player_OnActionPointsChanged;
         player.OnLocationChanged += Player_OnLocationChanged;
 
@@ -106,7 +107,7 @@ public class Movement_Controller : PlayerController
         player.SetLocation(newCellPos, direction);
 
         // Bookkeeping
-        player.UseActionPoints(cost);        
+        player.ActionPoints -= cost;
 
         // update internal costs matrix and UI 
         UpdateMovementCosts(direction);
@@ -115,16 +116,11 @@ public class Movement_Controller : PlayerController
     // Update movement costs for the buttons based on the current location and lastDirection moved
     public void UpdateMovementCosts(HexDirection lastDirection)
     {
-        Vector3Int posAt = player.GetCellPosition();
-
-        DataTile dataTileAt = WorldMapLoader.Instance.GetDataTileAtLocation(posAt);
-        if (dataTileAt == null){
-            throw new System.Exception("Could not find dateTile for pos " + posAt.ToString());
-        }
+        DataTile dataTileAt = LoadPlayerDataTile();
         //Debug.Log("New position " + dataTileAt);
 
         // get neighbor vectors
-        Dictionary<HexDirection, Vector3Int> neighbors = HexDirectionUtil.GetNeighborWorldVectors(posAt);
+        Dictionary<HexDirection, Vector3Int> neighbors = HexDirectionUtil.GetNeighborWorldVectors(player.GetCellPosition());
 
         // TODO Set all this up during map load as a property
         // lookup each neighbor and set it's cost
@@ -132,7 +128,7 @@ public class Movement_Controller : PlayerController
         {
             HexDirection hdeNeighbor = neighborPair.Key;
             Vector3Int posNeighbor = neighborPair.Value;
-            DataTile dataTileNeighbor = WorldMapLoader.Instance.GetDataTileAtLocation(posNeighbor);
+            DataTile dataTileNeighbor = GameState.Instance.GetDataTileAtLocation(posNeighbor);
             if (dataTileNeighbor == null)
             {
                 Debug.LogError("Missing datatile at going pos " + posNeighbor.ToString());
@@ -141,11 +137,16 @@ public class Movement_Controller : PlayerController
             //Debug.Log("Found neighbor " + hdeNeighbor + "=" + dataTileNeighbor);
 
             // TODO: cost should probably come from a "cost engine". It should eventually be more than the raw terrain cost
-            int costNeighbor = dataTileNeighbor.BaseMoveCost; 
-            SetCost(hdeNeighbor, costNeighbor);            
+            int costNeighbor = dataTileNeighbor.BaseMoveCost;
+            SetCost(hdeNeighbor, costNeighbor);
         }
 
         UpdateMovementUI();
+    }
+
+    protected DataTile LoadPlayerDataTile()
+    {
+        return GameState.Instance.GetTileForPlayerLocation(player);
     }
 
     private void Player_OnLocationChanged(object sender, EventArgs e)

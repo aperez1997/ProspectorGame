@@ -9,8 +9,6 @@ public class WorldMapLoader : MonoBehaviour
 
     public Tilemap tileMap;
 
-    private Dictionary<Vector3Int, DataTile> DataTileDict = new Dictionary<Vector3Int, DataTile>(0);
-
     private void Awake()
     {
         Instance = this;
@@ -42,17 +40,10 @@ public class WorldMapLoader : MonoBehaviour
         {
             Tile tile = dataTile.Tile;
             tileMap.SetTile(dataTile.CellLoc, tile);
-            DataTileDict.Add(dataTile.CellLoc, dataTile);
         }
     }
 
-    public DataTile GetDataTileAtLocation(Vector3Int location)
-    {
-        DataTile dataTile;
-        bool rv = DataTileDict.TryGetValue(location, out dataTile);
-        return dataTile;
-    }
-
+    // TODO: should probably be moved into gameLogic, once I figure out a way to do that
     public static List<DataTile> CreateRandomWorldMap()
     {
         /**
@@ -90,18 +81,4 @@ public class WorldMapLoader : MonoBehaviour
     {
         
     }
-}
-
-struct WorldBuilderTile
-{
-    public DataTile DataTile;
-    public TileBase TileBase;
-
-    public WorldBuilderTile(DataTile dataTile, TileBase tileBase)
-    {
-        DataTile = dataTile;
-        TileBase = tileBase;
-    }
-
-    public Vector3Int CellLocation { get => DataTile.CellLoc; }
 }

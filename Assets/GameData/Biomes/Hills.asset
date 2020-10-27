@@ -17,3 +17,6 @@ MonoBehaviour:
   description: Maybe there's gold here
   hexTile: {fileID: 11400000, guid: fde271316ec1933499fdf2f5c8193a70, type: 2}
   baseMoveCost: 4
+  canCamp: 1
+  foragingBaseChance: 15
+  huntingBaseChance: 15

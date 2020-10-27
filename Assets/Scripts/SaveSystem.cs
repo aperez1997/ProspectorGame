@@ -41,7 +41,8 @@ public static class SaveSystem
     private static string GetSaveFilePath()
     {
         string ext = GetExtension();
-        return Application.persistentDataPath + "/miner." + ext;
+        string path = Application.persistentDataPath + "/miner." + ext;
+        return path;
     }
     private static string GetExtension()
     {
