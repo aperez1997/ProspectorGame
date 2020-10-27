@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd4bf576ead293445a69c336385bc6e0, type: 3}
-  m_Name: GoldNuggets
+  m_Name: Gold Nugget
   m_EditorClassIdentifier: 
   type: 2
   name: Gold Nugget

@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TileMenuController : MonoBehaviour
+// Game menu is for loading, saving, quiting, etc
+public class GameMenuController : MonoBehaviour
 {
-    private Player player;
-
     // Start is called before the first frame update
     void Start()
     {
         Hide();
-        player = GameState.Instance.Player;
     }
 
     // Update is called once per frame
@@ -26,19 +24,6 @@ public class TileMenuController : MonoBehaviour
         gameObject.SetActive(!gameObject.activeSelf);
     }
 
-    public void Rest()
-    {       
-        player.ResetActionPoints();
-    }
-
-    public void TestAddItem()
-    {
-        if (player.HasEnoughActionPoints(1))
-        {
-            player.UseActionPoints(1);
-            player.Inventory.AddItem(new InventoryItem(ItemType.GoldNugget, 1));
-        }        
-    }
 
     public void SaveGame()
     {

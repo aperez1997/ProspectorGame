@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3a1996ef89f04f4ea21a77c0eb93a90, type: 3}
-  m_Name: Forest
+  m_Script: {fileID: 11500000, guid: cd4bf576ead293445a69c336385bc6e0, type: 3}
+  m_Name: Money
   m_EditorClassIdentifier: 
-  type: 3
-  name: Forest
-  description: Lots of trees here!
-  hexTile: {fileID: 11400000, guid: 89372a8eda8c78e4ab9778b277dd611e, type: 2}
-  baseMoveCost: 3
+  type: 0
+  name: Money
+  description: Pays for stuff
+  sprite: {fileID: 21300122, guid: 14aefffd3622c7347aad64f2bed35801, type: 3}

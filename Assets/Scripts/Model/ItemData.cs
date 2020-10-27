@@ -12,4 +12,4 @@ public class ItemData : ScriptableObject
     public Sprite sprite;
 }
 
-public enum ItemType { Ration = 1, GoldNugget = 2 }
+public enum ItemType { Money, Ration, GoldNugget, Pan }

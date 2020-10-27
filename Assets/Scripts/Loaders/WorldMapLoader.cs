@@ -55,6 +55,11 @@ public class WorldMapLoader : MonoBehaviour
 
     public static List<DataTile> CreateRandomWorldMap()
     {
+        /**
+         * consider using data-struct (this many mountains, this height of water)
+         * that can be made into a hash, and hash always generates the same level
+         */ 
+
         List<DataTile> dTileList = new List<DataTile>();
 
         int maxX = 5;

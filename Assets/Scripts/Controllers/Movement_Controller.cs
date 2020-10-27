@@ -7,7 +7,7 @@ using UnityEngine.UI;
 // player movement controller. Handles updating button UI based on costs, moving player, and managing remaining APs
 // APs should probably move into some sort of "player state" object
 // Cost resolution should come from some world map class
-public class Movement_Controller : MonoBehaviour
+public class Movement_Controller : PlayerController
 {
     // World
     public Tilemap tilemap;
@@ -22,16 +22,14 @@ public class Movement_Controller : MonoBehaviour
     public Button upRightBtn;
 
     private MovementUIHelper helper;
-    private Player player;
 
     int GetCost(HexDirection direction) { return helper.GetMovementCost(direction); }
     void SetCost(HexDirection direction, int cost) { helper.SetMovementCost(direction, cost); }
 
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
-        Debug.Log("Momvent Controller starting");
-        player = GameState.Instance.Player;
+        base.Start();
         player.OnActionPointsChanged += Player_OnActionPointsChanged;
         player.OnLocationChanged += Player_OnLocationChanged;
 
@@ -68,7 +66,7 @@ public class Movement_Controller : MonoBehaviour
     // Updates the movement button text and action point display
     void UpdateMovementUI()
     {
-        actionPointTxt.text = player.ActionPoints.ToString();
+        actionPointTxt.text = player.ActionPoints.ToString() + "/" + player.ActionPointsMax.ToString();
 
         foreach (MovementUIData data in helper.data)
         {

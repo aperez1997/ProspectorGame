@@ -4,12 +4,21 @@ using UnityEngine;
 [Serializable]
 public class Player
 {
-    [field:SerializeField] public Inventory Inventory { get; private set; }
+    public const int MAX_HEALTH = 4;
 
-    [SerializeField] private CellPositionStruct _location;
-    public CellPositionStruct Location { get => _location; private set => _location = value; }
-    public event EventHandler OnLocationChanged;
+    // Health
+    [SerializeField] private int _health;
+    public int Health
+    {
+        get { return _health; }
+        private set { _health = value; OnHealthChanged?.Invoke(this, EventArgs.Empty); }
+    }
+    public event EventHandler OnHealthChanged;
 
+    // AP MAX
+    [field: SerializeField] public int ActionPointsMax { get; }
+
+    // AP
     [SerializeField] private int _actionPoints;
     public int ActionPoints { 
         get { return _actionPoints; }
@@ -17,13 +26,21 @@ public class Player
     }
     public event EventHandler OnActionPointsChanged;
 
-    [SerializeField] private int ActionPointsMax;
+    // Inventory
+    [field:SerializeField] public Inventory Inventory { get; private set; }
+
+    // Location
+    [SerializeField] private CellPositionStruct _location;
+    public CellPositionStruct Location { get => _location; private set => _location = value; }
+    public event EventHandler OnLocationChanged;
 
     public Player(int actionPointsMax)
     {
-        Inventory = new Inventory();
+        Health = MAX_HEALTH;
         ActionPointsMax = actionPointsMax;
+        Inventory = new Inventory();
         Location = new CellPositionStruct(0, 0, 0, HexDirection.None);
+        ResetActionPoints();
     }
 
     public bool HasEnoughActionPoints(int desired)
@@ -40,9 +57,25 @@ public class Player
         return ActionPoints;
     }
 
-    public void ResetActionPoints()
+    public void Sleep()
     {
-        ActionPoints = this.ActionPointsMax;
+        const ItemType ration = ItemType.Ration;
+        bool hasFood = Inventory.HasItem(ration);
+        if (hasFood){
+            Debug.Log("Eating a ration");
+            Inventory.RemoveItem(ration);
+        } else { 
+            Debug.Log("Health loss due to no food");
+            Health -= 1;            
+        }
+        ResetActionPoints();
+    }
+
+    private void ResetActionPoints()
+    {
+        // AP reduced by health loss.
+        int healthLossAPRedux = (MAX_HEALTH - Health);
+        ActionPoints = this.ActionPointsMax - healthLossAPRedux;
     }
 
     public void SetLocation(Vector3Int vector3int, HexDirection direction)

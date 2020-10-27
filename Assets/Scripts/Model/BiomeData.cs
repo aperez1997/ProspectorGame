@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[CreateAssetMenu(fileName = "Terrain", menuName = "TerrainData")]
+[CreateAssetMenu(fileName = "Biome", menuName = "BiomeData")]
 public class BiomeData : ScriptableObject
 {
     public BiomeType type;
