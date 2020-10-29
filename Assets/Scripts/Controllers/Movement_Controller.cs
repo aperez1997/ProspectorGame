@@ -119,21 +119,11 @@ public class Movement_Controller : MonoBehaviour
         DataTile dataTileAt = LoadPlayerDataTile();
         //Debug.Log("New position " + dataTileAt);
 
-        // get neighbor vectors
-        Dictionary<HexDirection, Vector3Int> neighbors = HexDirectionUtil.GetNeighborWorldVectors(player.GetCellPosition());
-
-        // TODO Set all this up during map load as a property
-        // lookup each neighbor and set it's cost
-        foreach (KeyValuePair<HexDirection, Vector3Int> neighborPair in neighbors)
+        // lookup each neighbor and it's cost
+        foreach (KeyValuePair<HexDirection, DataTile> neighborPair in dataTileAt.Neighbors)
         {
             HexDirection hdeNeighbor = neighborPair.Key;
-            Vector3Int posNeighbor = neighborPair.Value;
-            DataTile dataTileNeighbor = GameState.Instance.GetDataTileAtLocation(posNeighbor);
-            if (dataTileNeighbor == null)
-            {
-                Debug.LogError("Missing datatile at going pos " + posNeighbor.ToString());
-                continue;
-            }
+            DataTile dataTileNeighbor = neighborPair.Value;
             //Debug.Log("Found neighbor " + hdeNeighbor + "=" + dataTileNeighbor);
 
             // TODO: cost should probably come from a "cost engine". It should eventually be more than the raw terrain cost

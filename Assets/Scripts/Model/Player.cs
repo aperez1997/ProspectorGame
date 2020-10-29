@@ -14,7 +14,7 @@ public class Player
         set { _health = value; OnHealthChanged?.Invoke(this, EventArgs.Empty); }
     }
     public event EventHandler OnHealthChanged;
-
+    
     // AP MAX
     [field:SerializeField] public int ActionPointsMax { get; private set; }
 

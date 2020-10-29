@@ -29,12 +29,11 @@ public class WorldMapLoader : MonoBehaviour
             }
         }
 
-        LoadMapDataIntoTileMap();
+        LoadMapDataIntoTileMap(GameState.Instance.DataTileList);
     }
 
-    public void LoadMapDataIntoTileMap()
+    public void LoadMapDataIntoTileMap(List<DataTile> dataTileList)
     {
-        List<DataTile> dataTileList = GameState.Instance.DataTileList;
         Debug.Log("Loading World Map with " + dataTileList.Count + " tiles");
         foreach (DataTile dataTile in dataTileList)
         {

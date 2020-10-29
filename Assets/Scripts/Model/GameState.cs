@@ -37,6 +37,29 @@ public class GameState : ISerializationCallbackReceiver
         }
         //Debug.Log("Dictionary has " + DataTileDict.Count + " keys");
 
+        // Set Neighbors for all dataTiles
+        foreach (DataTile dataTile in DataTileList){ 
+            Dictionary<HexDirection, Vector3Int> neighborVectors = 
+                HexDirectionUtil.GetNeighborWorldVectors(dataTile.CellLoc);
+
+            // lookup each neighbor and set it in a dictionary
+            Dictionary<HexDirection, DataTile> neighborTiles = new Dictionary<HexDirection, DataTile>();
+            foreach (var item in neighborVectors)
+            {
+                HexDirection hdeNeighbor = item.Key;
+                Vector3Int posNeighbor = item.Value;
+                DataTile dataTileNeighbor = GetDataTileAtLocation(posNeighbor);
+                if (!(dataTileNeighbor is DataTile))
+                {
+                    Debug.LogError("Missing datatile at pos " + posNeighbor.ToString());
+                    continue;
+                }
+                //Debug.Log("Found neighbor " + hdeNeighbor + "=" + dataTileNeighbor);
+                neighborTiles.Add(hdeNeighbor, dataTileNeighbor);
+            }
+            dataTile.Neighbors = neighborTiles;
+        }
+
         /*
          * At some point, this could be injectable. The idea is that this class could be interchanged
          * depending on some conditions, like the type of game being played or add-ons

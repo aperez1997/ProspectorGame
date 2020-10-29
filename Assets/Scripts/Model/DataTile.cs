@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -15,8 +16,9 @@ public class DataTile : ISerializationCallbackReceiver
     public bool CanCamp { get; private set; }
     public int ForagingChance { get; private set; }
     public int HuntingChance { get; private set; }
-
     public Tile Tile { get; private set; }
+
+    public Dictionary<HexDirection, DataTile> Neighbors { get; set; }
 
     public DataTile(Vector3Int cellLocationIn, BiomeType type)
     {
