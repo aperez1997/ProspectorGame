@@ -255,7 +255,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -24.200012, y: -22.512}
+  m_AnchoredPosition: {x: -24.200073, y: -22.512}
   m_SizeDelta: {x: 48.28129, y: 44.97616}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &63709374
@@ -730,7 +730,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 8.34256, y: -21.300018}
+  m_AnchoredPosition: {x: 8.34256, y: -21.300049}
   m_SizeDelta: {x: 232.39497, y: -55.645752}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &223711262
@@ -881,6 +881,131 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 240943089}
   m_CullTransparentMesh: 0
+--- !u!1001 &251867140
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 430251304}
+    m_Modifications:
+    - target: {fileID: 7234535261962749139, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_Name
+      value: pfToolTip
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 23926357795f50d4d9161f5d6de0905a, type: 3}
+--- !u!224 &251867141 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7234535261962749140, guid: 23926357795f50d4d9161f5d6de0905a,
+    type: 3}
+  m_PrefabInstance: {fileID: 251867140}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &360017871
 GameObject:
   m_ObjectHideFlags: 0
@@ -1141,6 +1266,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 396629296}
   m_CullTransparentMesh: 0
+--- !u!1 &430251303
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 430251304}
+  - component: {fileID: 430251305}
+  m_Layer: 5
+  m_Name: ToolTipV2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &430251304
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430251303}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 251867141}
+  m_Father: {fileID: 1026620539}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
+--- !u!114 &430251305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430251303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33c592ae0b63d9847b70b6bcec9daca6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasTransform: {fileID: 1026620539}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1522,7 +1697,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -22.5}
+  m_AnchoredPosition: {x: 0, y: -22.50003}
   m_SizeDelta: {x: 250, y: -45}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &690090805
@@ -1702,10 +1877,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 690166534}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33c592ae0b63d9847b70b6bcec9daca6, type: 3}
+  m_Script: {fileID: 11500000, guid: 52bb1d8c0ff9f451da5c996ac58d3a28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: Rest for the night, consuming food and regaining all AP
+  text: Make camp and sleep for the night. Regain AP
 --- !u!1 &702980771
 GameObject:
   m_ObjectHideFlags: 0
@@ -2108,10 +2283,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 720386799}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33c592ae0b63d9847b70b6bcec9daca6, type: 3}
+  m_Script: {fileID: 11500000, guid: 52bb1d8c0ff9f451da5c996ac58d3a28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: Search for edible plants. If successful, creates a day's worth of food.
+  text: Scrounge for edible food
 --- !u!1 &753914106
 GameObject:
   m_ObjectHideFlags: 0
@@ -2808,6 +2983,7 @@ RectTransform:
   - {fileID: 690090803}
   - {fileID: 1705039713}
   - {fileID: 1607947411}
+  - {fileID: 430251304}
   m_Father: {fileID: 1752524824}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3458,7 +3634,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -189, y: -1}
+  m_AnchoredPosition: {x: -189.00003, y: -1}
   m_SizeDelta: {x: -575.50476, y: -161.24734}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1607947412
@@ -4252,7 +4428,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -22.5}
+  m_AnchoredPosition: {x: 0, y: -22.50003}
   m_SizeDelta: {x: 250, y: -45}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1762508245
@@ -4437,7 +4613,6 @@ GameObject:
   - component: {fileID: 1877976141}
   - component: {fileID: 1877976140}
   - component: {fileID: 1877976139}
-  - component: {fileID: 1877976142}
   m_Layer: 5
   m_Name: Button-Gold
   m_TagString: Untagged
@@ -4557,19 +4732,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1877976137}
   m_CullTransparentMesh: 0
---- !u!114 &1877976142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1877976137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33c592ae0b63d9847b70b6bcec9daca6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  text: Pan for gold in rivers. If successful, some gold is found.
 --- !u!1 &1921689214
 GameObject:
   m_ObjectHideFlags: 0
@@ -4849,7 +5011,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -171.14, y: -28}
+  m_AnchoredPosition: {x: -171.14001, y: -28}
   m_SizeDelta: {x: 83.034546, y: 23.793274}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1934960515

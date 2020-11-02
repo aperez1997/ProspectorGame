@@ -46,10 +46,14 @@ public class InventoryController : MonoBehaviour
             Image image = goItem.GetComponentInChildren<Image>();
             image.sprite = item.Sprite;
 
-            // find text and adjust
+            // find amount text and adjust
             Text itemAmountText = goItem.GetComponentInChildren<Text>();
             itemAmountText.text = item.amount.ToString();
             itemAmountText.enabled = true;
+
+            // for tooltips
+            ToolTipUIHelper helper = goItem.GetComponent<ToolTipUIHelper>();
+            helper.text = item.Description;
         }
     }
 

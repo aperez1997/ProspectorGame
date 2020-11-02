@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 // A UI Element that shows a tooltip when moused over
-public class ToolTip_V1 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ToolTipV1 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public string text;
 
