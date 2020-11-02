@@ -10,6 +10,9 @@ public class ItemData : ScriptableObject
     public string description;
 
     public Sprite sprite;
+
+    // if true, inventory will be a stack instead of single slot per item
+    public bool stackable;
 }
 
 public enum ItemType { Money, Ration, GoldNugget, Pan }

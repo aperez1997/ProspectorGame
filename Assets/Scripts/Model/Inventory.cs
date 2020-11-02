@@ -37,7 +37,7 @@ public class Inventory : ISerializationCallbackReceiver
     {
         ItemType type = item.type;
         bool haveItem = HasItem(type, out InventoryItem foundItem);
-        if (haveItem){
+        if (item.Stackable && haveItem){
             foundItem.amount += item.amount;
         } else {
             ItemList.Add(item);

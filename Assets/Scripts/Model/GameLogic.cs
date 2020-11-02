@@ -34,7 +34,7 @@ public class GameLogic
         return true;
     }
 
-    public int GetForageCost(){ return 6; }
+    public int GetForageCost(){ return 4; }
 
     public bool CanForage(){ return CanForage(out _); }
 

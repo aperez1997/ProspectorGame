@@ -48,12 +48,19 @@ public class InventoryController : MonoBehaviour
 
             // find amount text and adjust
             Text itemAmountText = goItem.GetComponentInChildren<Text>();
-            itemAmountText.text = item.amount.ToString();
-            itemAmountText.enabled = true;
+            if (item.Stackable)
+            {
+                itemAmountText.text = item.amount.ToString();
+                itemAmountText.enabled = true;
+            } else
+            {
+                itemAmountText.enabled = false;
+            }
+
 
             // for tooltips
             ToolTipUIHelper helper = goItem.GetComponent<ToolTipUIHelper>();
-            helper.text = item.Description;
+            helper.text = item.Name + "\n" + item.Description;
         }
     }
 

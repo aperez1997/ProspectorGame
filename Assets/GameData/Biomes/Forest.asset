@@ -18,5 +18,5 @@ MonoBehaviour:
   hexTile: {fileID: 11400000, guid: 89372a8eda8c78e4ab9778b277dd611e, type: 2}
   baseMoveCost: 3
   canCamp: 1
-  foragingBaseChance: 25
+  foragingBaseChance: 33
   huntingBaseChance: 33

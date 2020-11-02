@@ -16,3 +16,4 @@ MonoBehaviour:
   name: Money
   description: Pays for stuff
   sprite: {fileID: 21300122, guid: 14aefffd3622c7347aad64f2bed35801, type: 3}
+  stackable: 1
