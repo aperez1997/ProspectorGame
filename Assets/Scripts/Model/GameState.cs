@@ -49,11 +49,7 @@ public class GameState : ISerializationCallbackReceiver
                 HexDirection hdeNeighbor = item.Key;
                 Vector3Int posNeighbor = item.Value;
                 DataTile dataTileNeighbor = GetDataTileAtLocation(posNeighbor);
-                if (!(dataTileNeighbor is DataTile))
-                {
-                    Debug.LogError("Missing datatile at pos " + posNeighbor.ToString());
-                    continue;
-                }
+                if (!(dataTileNeighbor is DataTile)){ continue; }
                 //Debug.Log("Found neighbor " + hdeNeighbor + "=" + dataTileNeighbor);
                 neighborTiles.Add(hdeNeighbor, dataTileNeighbor);
             }

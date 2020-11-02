@@ -17,3 +17,6 @@ MonoBehaviour:
   description: People live here
   hexTile: {fileID: 11400000, guid: 57ef125d103b7a149a183d4149a538c5, type: 2}
   baseMoveCost: 1
+  canCamp: 1
+  foragingBaseChance: 0
+  huntingBaseChance: 0
