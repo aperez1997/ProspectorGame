@@ -1,6 +1,7 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // Actions related stuffs
@@ -12,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public Text healthPointTxt;
 
     public Button CampBtn;
+    public Button TownBtn;
     public Button ForageBtn;
     public TextMeshProUGUI ForageCost;
     public Button HuntBtn;
@@ -45,6 +47,9 @@ public class PlayerController : MonoBehaviour
     {
         DataTile dataTileAt = LoadPlayerDataTile();
         CampBtn.interactable = dataTileAt.CanCamp;
+
+        // Town
+        TownBtn.interactable = (dataTileAt.Type == BiomeType.Town);
 
         // Forage
         bool canForage = gameLogic.CanForage();
@@ -83,6 +88,11 @@ public class PlayerController : MonoBehaviour
     public void ActionPanForGold()
     {
         gameLogic.PanForGold();
+    }
+
+    public void ActionVisitGeneralStore()
+    {
+        SceneManager.LoadScene("GeneralStore", LoadSceneMode.Additive);
     }
 
     private void Player_OnHealthChanged(object sender, EventArgs e)

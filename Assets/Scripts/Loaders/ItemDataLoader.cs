@@ -3,15 +3,28 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class ItemDataLoader : MonoBehaviour
+public class ItemDataLoader
 {
-    public static ItemDataLoader Instance;
+    private static ItemDataLoader _instance = null;
+    private static readonly object padlock = new object();
+    public static ItemDataLoader Instance
+    {
+        get {
+            lock (padlock)
+            {
+                if (_instance == null)
+                {
+                    _instance = new ItemDataLoader();
+                }
+                return _instance;
+            }
+        }
+    }
 
     private readonly Dictionary<ItemType, ItemData> itemDict = new Dictionary<ItemType, ItemData>();
 
-    private void Awake()
+    public ItemDataLoader()
     {
-        Instance = this;
         PopulateList();
     }
 

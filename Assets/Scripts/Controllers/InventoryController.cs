@@ -4,14 +4,15 @@ using UnityEngine.UI;
 
 public class InventoryController : MonoBehaviour
 {
-    public Transform ItemContainer;
     public GameObject ItemTemplate;
+
+    private Transform ItemContainer;
 
     private Inventory inventory;
 
     private void Awake()
     {
-        ItemContainer = transform.Find("Panel-Inventory");
+        ItemContainer = FindInChildren("Item Container").transform;
     }
 
     private void Start()
@@ -67,5 +68,13 @@ public class InventoryController : MonoBehaviour
     private void Inventory_OnItemListChanged(object sender, EventArgs e)
     {
         UpdateInventoryUI();
+    }
+
+    public GameObject FindInChildren(string name)
+    {
+        foreach (var x in gameObject.GetComponentsInChildren<Transform>())
+            if (x.gameObject.name == name)
+                return x.gameObject;
+        throw new System.Exception("Technically the old version throws an exception if none are found, so I'll do the same here!");
     }
 }

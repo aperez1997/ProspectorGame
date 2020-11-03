@@ -3,15 +3,27 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class BiomeDataLoader : MonoBehaviour
+public class BiomeDataLoader
 {
-    public static BiomeDataLoader Instance;
+    private static BiomeDataLoader instance = null;
+    private static readonly object padlock = new object();
+
+    public static BiomeDataLoader Instance {
+        get {
+            lock (padlock)
+            {
+                if (instance == null){
+                    instance = new BiomeDataLoader();
+                }
+                return instance;
+            }
+        }
+    }
 
     private readonly Dictionary<BiomeType, BiomeData> DataDict = new Dictionary<BiomeType, BiomeData>();
 
-    private void Awake()
+    public BiomeDataLoader()
     {
-        Instance = this;
         PopulateList();
     }
 

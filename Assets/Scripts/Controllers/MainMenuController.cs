@@ -21,18 +21,18 @@ public class MainMenuController : MonoBehaviour
     {
         if (GameStateManager.LoadGame())
         {
-            LoadMainScene();
+            LoadOverworld();
         }
     }
 
    public void CreateNewGame()
     {       
         GameStateManager.CreateNewGame();
-        LoadMainScene();
+        LoadOverworld();
     }
 
-    private void LoadMainScene()
+    public static void LoadOverworld()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("Overworld");
     }
 }

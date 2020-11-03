@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+// For UI Elements that have tooltips. Just set the text
 public class ToolTipUIHelper : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public string text;

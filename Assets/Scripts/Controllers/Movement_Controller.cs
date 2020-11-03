@@ -51,7 +51,7 @@ public class Movement_Controller : MonoBehaviour
     public void MoveNorthWest() { HandleMovement(HexDirection.NorthWest); }
 
     // Update is called once per frame
-    void Update()
+    void Awake()
     {
 
     }
