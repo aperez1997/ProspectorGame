@@ -7,9 +7,11 @@ public class InventoryController : MonoBehaviour
 {
     public GameObject ItemTemplate;
 
-    private Transform ItemContainer;
+    protected Transform ItemContainer;
 
-    private Inventory inventory;
+    protected Inventory inventory;
+
+    protected GameLogic gameLogic;
 
     private void Awake()
     {
@@ -18,6 +20,8 @@ public class InventoryController : MonoBehaviour
 
     private void Start()
     {
+        gameLogic = GameState.Instance.GameLogic;
+
         ItemTemplate.SetActive(false);
 
         // get inventory from singleton. Is this the right way?
@@ -50,7 +54,12 @@ public class InventoryController : MonoBehaviour
         }
     }
 
-    public static void SetInventoryPrefab(GameObject goItem, InventoryItem item)
+    protected virtual void SetInventoryPrefab(GameObject goItem, InventoryItem item)
+    {
+        SetInventoryPrefab_Static(goItem, item);
+    }
+
+    public static void SetInventoryPrefab_Static(GameObject goItem, InventoryItem item)
     {
         goItem.SetActive(true);
 

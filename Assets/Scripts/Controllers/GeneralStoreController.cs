@@ -51,24 +51,25 @@ public class GeneralStoreController : MonoBehaviour
         var inventory = gameLogic.GetStoreInventory();
         foreach (InventoryItem item in inventory.ItemList)
         {
-            GameObject goItem = Instantiate(ItemTemplate, ItemContainer);
-            InventoryController.SetInventoryPrefab(goItem, item);
+            GameObject gameObject = Instantiate(ItemTemplate, ItemContainer);
+            PlayerStoreInventoryController.SetInventoryStorePrefab_Static(gameObject, item);
 
             // hide item amount
-            var itemAmountText = InventoryController.GetAmountText(goItem);
+            var itemAmountText = InventoryController.GetAmountText(gameObject);
             itemAmountText.enabled = false;
 
             // set price
             int price = item.Price;
-            var priceText = Utils.FindInChildren(goItem, "Price").GetComponent<TextMeshProUGUI>();
-            priceText.text = "$" + price.ToString();
+            PlayerStoreInventoryController.SetPriceText(gameObject, price);
 
             // setup button
-            var button = goItem.GetComponentInChildren<Button>();
+            var button = PlayerStoreInventoryController.GetActionButton(gameObject);
             button.interactable = gameLogic.CanAfford(price);
             button.onClick.AddListener(() => {
-                gameLogic.BuyItem(price, item.type);
+                gameLogic.BuyItem(item.type, price);
             });
+            var btnText = PlayerStoreInventoryController.GetButtonText(gameObject);
+            btnText.text = "Buy";
         }
     }
 

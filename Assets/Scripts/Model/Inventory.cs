@@ -46,6 +46,14 @@ public class Inventory
         return false;
     }
 
+    /// <summary>Shortcut to add item, if you only care about type+amount</summary>
+    public void AddItem(ItemType type, int amount)
+    {
+        var item = new InventoryItem(type, amount);
+        AddItem(item);
+    }
+
+    /// <summary>Proper way to add an item</summary>
     public void AddItem(InventoryItem item)
     {
         ItemType type = item.type;

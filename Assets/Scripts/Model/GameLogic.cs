@@ -132,7 +132,7 @@ public class GameLogic
         bool success = RollDice(chance);
         if (success)
         {
-            Inventory.AddItem(new InventoryItem(type, quantity));
+            Inventory.AddItem(type, quantity);
         }
         return success;
     }
@@ -151,11 +151,38 @@ public class GameLogic
         return Player.HasEnoughMoney(cost);
     }
 
-    public bool BuyItem(int cost, ItemType type)
+    public bool BuyItem(ItemType type, int cost, int amount = 1)
     {
+        var totalCost = cost * amount;
         if (!Player.SpendMoney(cost)) { return false; }
             
-        Inventory.AddItem(new InventoryItem(type, 1));
+        Inventory.AddItem(type, 1);
+        return true;
+    }
+
+    public bool CanSell(ItemType type)
+    {
+        return GetSellPrice(type) > 0;
+    }
+
+    public int GetSellPrice(ItemType type)
+    {
+        ItemData data = ItemDataLoader.LoadItemByType(type);
+        if (data.price > 0)
+        {
+            float priceRaw = data.price / 2;
+            int price = (priceRaw > 1) ? (int) Math.Floor(priceRaw) : 1;
+            return price;
+        }
+        return -1;
+    }
+
+    public bool SellItem(ItemType type, int price, int amount = 1)
+    {
+        if (!Inventory.RemoveItem(type, amount)) { return false; }
+
+        Player.ReceiveMoney(amount * price);
+
         return true;
     }
 

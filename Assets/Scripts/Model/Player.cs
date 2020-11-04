@@ -95,6 +95,13 @@ public class Player
         return true;
     }
 
+    public bool ReceiveMoney(int amount)
+    {
+        Inventory.AddItem(ItemType.Money, amount);
+        OnMoneyChanged?.Invoke(this, EventArgs.Empty);
+        return true;
+    }
+
     public override string ToString()
     {
         return "Player[" 

@@ -1267,6 +1267,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1119072941}
     m_Modifications:
+    - target: {fileID: 1378021326, guid: c47dfae7290fb46ef9759018cfd2875b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6911380434684104994, guid: c47dfae7290fb46ef9759018cfd2875b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7202595503202021657, guid: c47dfae7290fb46ef9759018cfd2875b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2547,6 +2556,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 419791714}
     m_Modifications:
+    - target: {fileID: 1378021326, guid: c47dfae7290fb46ef9759018cfd2875b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6911380434684104994, guid: c47dfae7290fb46ef9759018cfd2875b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7202595503202021657, guid: c47dfae7290fb46ef9759018cfd2875b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2669,7 +2687,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2101159060}
   - component: {fileID: 2101159059}
-  - component: {fileID: 2101159058}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -2677,14 +2694,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &2101159058
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2101159057}
-  m_Enabled: 1
 --- !u!20 &2101159059
 Camera:
   m_ObjectHideFlags: 0
@@ -2788,7 +2797,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2130559028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44e6fc08540665347b5a1873148f925a, type: 3}
+  m_Script: {fileID: 11500000, guid: 515790276100a4a71be4cb66e8f3c094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ItemTemplate: {fileID: 784842166}
