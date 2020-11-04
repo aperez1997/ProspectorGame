@@ -17,17 +17,7 @@ public class WorldMapLoader : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Hack to auto-load game if we get here and there isn't something loaded yet
-        // this should only be for the editor
-        if (GameState.Instance == null)
-        {
-            Debug.Log("No Gamestate, loading game as an editor hack");
-            if (!GameStateManager.LoadGame())
-            {
-                Debug.Log("No saved game. Creating new game as an editor hack");
-                GameStateManager.CreateNewGame();
-            }
-        }
+        GameStateManager.DebugLoadState();
 
         LoadMapDataIntoTileMap(GameState.Instance.DataTileList);
     }

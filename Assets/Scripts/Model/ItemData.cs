@@ -11,8 +11,11 @@ public class ItemData : ScriptableObject
 
     public Sprite sprite;
 
-    // if true, inventory will be a stack instead of single slot per item
+    [Tooltip("if true, inventory will be a stack instead of single slot per item")]
     public bool stackable;
+
+    [Tooltip("Price the item is sold for in stores. 0 or less means not sold")]
+    public int price;
 }
 
 public enum ItemType { Money, Ration, GoldNugget, Pan }

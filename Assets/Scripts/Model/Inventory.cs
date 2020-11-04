@@ -3,32 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class Inventory : ISerializationCallbackReceiver
+public class Inventory
 {
     // This is how we emit that the Items have changed. UI will catch this and update
     public event EventHandler OnItemListChanged;
 
     [field:SerializeField] public List<InventoryItem> ItemList { get; private set; }
 
-    private readonly Dictionary<ItemType, InventoryItem> itemDict = new Dictionary<ItemType, InventoryItem>();
-
     public Inventory()
     {
         ItemList = new List<InventoryItem>();
-        itemDict = new Dictionary<ItemType, InventoryItem>();
     }
 
+    /** 
+     *  <summary>returns true if inventory has an item of the given type</summary>
+     *  <param name="type">type of item to check for</param>
+     *  <param name="count">number to check for, stackables only!</param>
+     */
     public bool HasItem(ItemType type, int count = 1)
     {
         return HasItem(type, out _, count);
     }
 
+    /** 
+     *  <summary>returns true if inventory has an item of the given type</summary>
+     *  <param name="type">type of item to check for</param>
+     *  <param name="returnItem">If item exists, it will be returned here. For non-stackables, this will be the first item only</param>
+     *  <param name="count">number to check for, stackables only!</param>
+     */
     public bool HasItem(ItemType type, out InventoryItem returnItem, int count = 1)
     {
-        itemDict.TryGetValue(type, out returnItem);
-        if (returnItem is InventoryItem)
+        returnItem = null;
+        for (int i = 0; i < ItemList.Count; i++)
         {
-            return returnItem.amount >= count;
+            InventoryItem inventoryItem = ItemList[i];
+            if (inventoryItem.type == type && inventoryItem.amount >= count)
+            {
+                returnItem = inventoryItem;
+                return true;
+            }
         }
         return false;
     }
@@ -41,7 +54,6 @@ public class Inventory : ISerializationCallbackReceiver
             foundItem.amount += item.amount;
         } else {
             ItemList.Add(item);
-            itemDict.Add(type, item);
         }
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
@@ -55,7 +67,6 @@ public class Inventory : ISerializationCallbackReceiver
             {
                 // remove empty items
                 ItemList.Remove(foundItem);
-                itemDict.Remove(type);
             }
             OnItemListChanged?.Invoke(this, EventArgs.Empty);
             return have;
@@ -83,17 +94,5 @@ public class Inventory : ISerializationCallbackReceiver
             itemStrings += prefix + item.ToString();
         }
         return "Inv{ " + itemStrings + "}";
-    }
-
-    public void OnBeforeSerialize(){}
-
-    public void OnAfterDeserialize()
-    {
-        itemDict.Clear();
-        // repopulate the dictionary [it doesn't serialize]
-        foreach (InventoryItem item in ItemList)
-        {
-            itemDict.Add(item.type, item);
-        }
     }
 } 

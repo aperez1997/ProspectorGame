@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class GameLogic
 {
-    public Player Player { get { return gameState.Player; } }
+    private Player Player { get { return gameState.Player; } }
 
-    public Inventory Inventory { get { return Player.Inventory; } }
+    private Inventory Inventory { get { return Player.Inventory; } }
 
     private readonly GameState gameState;
 
@@ -13,6 +13,8 @@ public class GameLogic
     {
         this.gameState = gameState;
     }
+
+    // ACTIONS
 
     public bool Camp()
     {
@@ -28,7 +30,7 @@ public class GameLogic
         else
         {
             Debug.Log("Health loss due to no food");
-            Player.Health -= 1;
+            Player.ReduceHealth();
         }
         Player.ResetActionPoints();
         return true;
@@ -125,7 +127,7 @@ public class GameLogic
 
     private bool TakeActionForItem(int cost, int chance, ItemType type, int quantity = 1)
     {
-        Player.ActionPoints -= cost;
+        if (!Player.SpendActionPoints(cost)) { return false; }
 
         bool success = RollDice(chance);
         if (success)
@@ -140,5 +142,37 @@ public class GameLogic
         int roll = UnityEngine.Random.Range(0, 99);
         bool success = chance >= roll;
         return success;
+    }
+
+    // SHOP
+
+    public bool CanAfford(int cost)
+    {
+        return Player.HasEnoughMoney(cost);
+    }
+
+    public bool BuyItem(int cost, ItemType type)
+    {
+        if (!Player.SpendMoney(cost)) { return false; }
+            
+        Inventory.AddItem(new InventoryItem(type, 1));
+        return true;
+    }
+
+    // WORLD
+
+    // gets the store inventory.
+    public Inventory GetStoreInventory()
+    {
+        Inventory inventory = new Inventory();
+
+        foreach (ItemType type in Enum.GetValues(typeof(ItemType)))
+        {
+            var item = new InventoryItem(type, 10);
+            if (!(item.Price > 0)) { continue; }
+            inventory.AddItem(item);
+        }
+
+        return inventory;
     }
 }

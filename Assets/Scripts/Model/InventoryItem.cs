@@ -13,6 +13,7 @@ public class InventoryItem : ISerializationCallbackReceiver
     public string Description { get; private set; }
     public Sprite Sprite { get; private set; }
     public bool Stackable { get; private set; }
+    public int Price { get; private set; }
 
     public InventoryItem(ItemType type, int amount)
     {
@@ -30,6 +31,7 @@ public class InventoryItem : ISerializationCallbackReceiver
             Description = item.description;
             Sprite = item.sprite;
             Stackable = item.stackable;
+            Price = item.price;
         }
         else
         {

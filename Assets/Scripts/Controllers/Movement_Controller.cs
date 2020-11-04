@@ -83,7 +83,7 @@ public class Movement_Controller : MonoBehaviour
         if (cost < 0){
             costStr = "X";
             enabled = false;
-        } else if (cost > player.ActionPoints){
+        } else if (!player.HasEnoughActionPoints(cost)){
             enabled = false;
         }
         button.GetComponentInChildren<Text>().text = costStr;
@@ -107,7 +107,7 @@ public class Movement_Controller : MonoBehaviour
         player.SetLocation(newCellPos, direction);
 
         // Bookkeeping
-        player.ActionPoints -= cost;
+        player.SpendActionPoints(cost);
 
         // update internal costs matrix and UI 
         UpdateMovementCosts(direction);

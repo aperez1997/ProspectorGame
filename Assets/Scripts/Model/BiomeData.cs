@@ -12,12 +12,16 @@ public class BiomeData : ScriptableObject
 
     public Tile hexTile;
 
+    [Tooltip("Number of AP to move to this tile")]
     public int baseMoveCost;
 
+    [Tooltip("true if you can camp here")]
     public bool canCamp;
 
+    [Tooltip("If set, foraging changce / 100")]
     public int foragingBaseChance;
 
+    [Tooltip("If set, Hunting chance / 100")]
     public int huntingBaseChance;
 
     public static BiomeType GetRandomTypeForRandoMap()

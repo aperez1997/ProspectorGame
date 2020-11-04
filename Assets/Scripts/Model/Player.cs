@@ -11,7 +11,7 @@ public class Player
     public int Health
     {
         get { return _health; }
-        set { _health = value; OnHealthChanged?.Invoke(this, EventArgs.Empty); }
+        private set { _health = value; OnHealthChanged?.Invoke(this, EventArgs.Empty); }
     }
     public event EventHandler OnHealthChanged;
     
@@ -22,12 +22,15 @@ public class Player
     [SerializeField] private int _actionPoints;
     public int ActionPoints { 
         get { return _actionPoints; }
-        set { _actionPoints = value; OnActionPointsChanged?.Invoke(this, EventArgs.Empty); }
+        private set { _actionPoints = value; OnActionPointsChanged?.Invoke(this, EventArgs.Empty); }
     }
     public event EventHandler OnActionPointsChanged;
 
     // Inventory
     [field:SerializeField] public Inventory Inventory { get; private set; }
+
+    // Money
+    public event EventHandler OnMoneyChanged;
 
     // Location
     [SerializeField] private CellPositionStruct _location;
@@ -48,6 +51,13 @@ public class Player
         return ActionPoints >= desired;
     }
 
+    public bool SpendActionPoints(int cost)
+    {
+        if (!HasEnoughActionPoints(cost)) { return false; }
+        ActionPoints -= cost;
+        return true;
+    }
+
     public void ResetActionPoints()
     {
         // AP reduced by health loss.
@@ -64,6 +74,25 @@ public class Player
     public Vector3Int GetCellPosition()
     {
         return Location.ToVector3Int();
+    }
+
+    public bool ReduceHealth(int amount = 1)
+    {
+        Health -= amount;
+        return true;
+    }
+
+    public bool HasEnoughMoney(int cost)
+    {
+        return Inventory.HasItem(ItemType.Money, cost);
+    }
+
+    public bool SpendMoney(int cost)
+    {
+        if (!HasEnoughMoney(cost)){ return false; }
+        Inventory.RemoveItem(ItemType.Money, cost);
+        OnMoneyChanged?.Invoke(this, EventArgs.Empty);
+        return true;
     }
 
     public override string ToString()

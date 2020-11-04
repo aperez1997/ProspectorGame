@@ -34,4 +34,20 @@ public static class GameStateManager
         GameState state = new GameState(player, DataTileList);
         GameState.Instance = state;
     }
+
+    // Hack to auto-load game if we get here and there isn't something loaded yet
+    // this should only be for the editor
+    public static GameState DebugLoadState()
+    {
+        if (GameState.Instance == null)
+        {
+            Debug.Log("No Gamestate, loading game as an editor hack");
+            if (!LoadGame())
+            {
+                Debug.Log("No saved game. Creating new game as an editor hack");
+                CreateNewGame();
+            }
+        }
+        return GameState.Instance;
+    }
 }
