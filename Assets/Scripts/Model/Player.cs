@@ -11,9 +11,13 @@ public class Player
     public int Health
     {
         get { return _health; }
-        private set { _health = value; OnHealthChanged?.Invoke(this, EventArgs.Empty); }
+        private set {
+            var delta = value - _health;
+            _health = value;
+            OnHealthChanged?.Invoke(this, new IntStatChangeEventArgs(delta, _health));
+        }
     }
-    public event EventHandler OnHealthChanged;
+    public event EventHandler<IntStatChangeEventArgs> OnHealthChanged;
     
     // AP MAX
     [field:SerializeField] public int ActionPointsMax { get; private set; }
@@ -22,9 +26,13 @@ public class Player
     [SerializeField] private int _actionPoints;
     public int ActionPoints { 
         get { return _actionPoints; }
-        private set { _actionPoints = value; OnActionPointsChanged?.Invoke(this, EventArgs.Empty); }
+        private set {
+            var delta = value - _actionPoints;
+            _actionPoints = value;
+            OnActionPointsChanged?.Invoke(this, new IntStatChangeEventArgs(delta, _actionPoints));
+        }
     }
-    public event EventHandler OnActionPointsChanged;
+    public event EventHandler<IntStatChangeEventArgs> OnActionPointsChanged;
 
     // Inventory
     [field:SerializeField] public Inventory Inventory { get; private set; }

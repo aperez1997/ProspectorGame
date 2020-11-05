@@ -6,7 +6,7 @@ using UnityEngine;
 public class Inventory
 {
     // This is how we emit that the Items have changed. UI will catch this and update
-    public event EventHandler OnItemListChanged;
+    public event EventHandler<InventoryChangedEventArgs> OnItemListChanged;
 
     [field:SerializeField] public List<InventoryItem> ItemList { get; private set; }
 
@@ -58,12 +58,16 @@ public class Inventory
     {
         ItemType type = item.type;
         bool haveItem = HasItem(type, out InventoryItem foundItem);
+        int newAmount = item.amount;
         if (item.Stackable && haveItem){
             foundItem.amount += item.amount;
+            newAmount = foundItem.amount;
         } else {
             ItemList.Add(item);
         }
-        OnItemListChanged?.Invoke(this, EventArgs.Empty);
+
+        var e = new InventoryChangedEventArgs(item.type, item.amount, newAmount);
+        OnItemListChanged?.Invoke(this, e);
     }
 
     public bool RemoveItem(ItemType type, int count = 1)
@@ -76,7 +80,8 @@ public class Inventory
                 // remove empty items
                 ItemList.Remove(foundItem);
             }
-            OnItemListChanged?.Invoke(this, EventArgs.Empty);
+            var e = new InventoryChangedEventArgs(type, -1 * count, foundItem.amount);
+            OnItemListChanged?.Invoke(this, e);
             return have;
         } else {
             if (foundItem is InventoryItem)

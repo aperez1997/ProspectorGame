@@ -82,12 +82,14 @@ public class PlayerController : MonoBehaviour
 
     public void ActionForage()
     {
-        gameLogic.Forage();
+        var rv = gameLogic.Forage();
+        PopUpTextDriverV1.CreateSuccessFailurePopUp(ForageBtn.transform, rv);
     }
 
     public void ActionPanForGold()
     {
-        gameLogic.PanForGold();
+        var rv = gameLogic.PanForGold();
+        PopUpTextDriverV1.CreateSuccessFailurePopUp(ForageBtn.transform, rv);
     }
 
     public void ActionVisitGeneralStore()
@@ -95,9 +97,10 @@ public class PlayerController : MonoBehaviour
         SceneManager.LoadScene("GeneralStore", LoadSceneMode.Additive);
     }
 
-    private void Player_OnHealthChanged(object sender, EventArgs e)
+    private void Player_OnHealthChanged(object sender, IntStatChangeEventArgs e)
     {
         UpdateHealthUI();
+        PopUpTextDriverV1.CreateStatChangePopUp(healthPointTxt.transform, e.Delta);
     }
 
     private void Player_OnLocationOrAPChanged(object sender, EventArgs e)

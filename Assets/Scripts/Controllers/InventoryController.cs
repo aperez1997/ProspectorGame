@@ -59,20 +59,22 @@ public class InventoryController : MonoBehaviour
         SetInventoryPrefab_Static(goItem, item);
     }
 
-    public static void SetInventoryPrefab_Static(GameObject goItem, InventoryItem item)
+    public static void SetInventoryPrefab_Static(GameObject gameObject, InventoryItem item)
     {
-        goItem.SetActive(true);
+        // MetaData
+        var metaData = gameObject.GetComponent<InventoryItemUIMetaData>();
+        metaData.SetFromInventoryItem(item);
 
         // find sprit
-        Image image = goItem.GetComponentInChildren<Image>();
+        Image image = gameObject.GetComponentInChildren<Image>();
         image.sprite = item.Sprite;
         image.enabled = true;
 
-        var nameText = Utils.FindInChildren(goItem, "Text Name").GetComponent<TextMeshProUGUI>();
+        var nameText = Utils.FindInChildren(gameObject, "Text Name").GetComponent<TextMeshProUGUI>();
         nameText.text = item.Name;
 
         // find amount text and set
-        var itemAmountText = GetAmountText(goItem);
+        var itemAmountText = GetAmountText(gameObject);
         if (item.Stackable)
         {
             itemAmountText.text = item.amount.ToString();
@@ -82,8 +84,10 @@ public class InventoryController : MonoBehaviour
         }
 
         // for tooltips
-        ToolTipUIHelper helper = goItem.GetComponent<ToolTipUIHelper>();
+        ToolTipUIHelper helper = gameObject.GetComponent<ToolTipUIHelper>();
         helper.text = item.Description;
+
+        gameObject.SetActive(true);
     }
 
     public static TextMeshProUGUI GetAmountText(GameObject goItem)
@@ -91,8 +95,33 @@ public class InventoryController : MonoBehaviour
         return Utils.FindInChildren(goItem, "Text Quantity").GetComponent<TextMeshProUGUI>();
     }
 
-    private void Inventory_OnItemListChanged(object sender, EventArgs e)
+    /// <summary>
+    /// Finds the transform for the first inventory item of the given type, or null
+    /// </summary>
+    private Transform FindInventoryItemTransform(ItemType type)
     {
+        foreach (Transform child in ItemContainer)
+        {
+            // skip the template
+            if (child == ItemTemplate.transform) { continue; }
+            var metaData = child.GetComponent<InventoryItemUIMetaData>();
+            if (metaData.type == type)
+            {
+                return child;
+            }
+        }
+        return null;
+    }
+
+    private void Inventory_OnItemListChanged(object sender, InventoryChangedEventArgs e)
+    {
+        // find item that changed and add popUp
+        var child = FindInventoryItemTransform(e.Type);
+        if (child is Transform)
+        {
+            PopUpTextDriverV1.CreateInventoryChangePopUp(child, e.Delta, e.Type);
+        }
+
         UpdateInventoryUI();
     }
 }

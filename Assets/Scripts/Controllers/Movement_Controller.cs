@@ -144,8 +144,9 @@ public class Movement_Controller : MonoBehaviour
         UpdatePosition();
     }
 
-    private void Player_OnActionPointsChanged(object sender, EventArgs e)
+    private void Player_OnActionPointsChanged(object sender, IntStatChangeEventArgs e)
     {
         UpdateMovementUI();
+        PopUpTextDriverV1.CreateStatChangePopUp(actionPointTxt.transform, e.Delta);
     }
 }

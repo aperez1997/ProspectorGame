@@ -1819,8 +1819,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52bb1d8c0ff9f451da5c996ac58d3a28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: Make camp and sleep for the night. Regain AP. If you don't have rations,
-    you will lose 1 health.
+  text: Make camp, sleep for the night. Regain AP. If you don't have rations, you
+    lose 1 health.
 --- !u!1 &702980771
 GameObject:
   m_ObjectHideFlags: 0
@@ -2908,11 +2908,11 @@ RectTransform:
   m_Father: {fileID: 1705039713}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 15, y: -10}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 15, y: -0.5}
   m_SizeDelta: {x: 75, y: 25}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1127648354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4407,7 +4407,7 @@ Transform:
   - {fileID: 2080249311}
   - {fileID: 1026620539}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1762508243
 GameObject:
@@ -4906,11 +4906,11 @@ RectTransform:
   m_Father: {fileID: 1705039713}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 558.71, y: -10}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -126.28992, y: -0.49998474}
   m_SizeDelta: {x: 115, y: 25}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1921689216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5879,7 +5879,7 @@ PrefabInstance:
     - target: {fileID: 1265721813568663678, guid: 68b1dd9232eb84c98b4dc0c8b05c2d63,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1265721813568663678, guid: 68b1dd9232eb84c98b4dc0c8b05c2d63,
         type: 3}
@@ -5968,3 +5968,72 @@ PrefabInstance:
       objectReference: {fileID: 1026620539}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68b1dd9232eb84c98b4dc0c8b05c2d63, type: 3}
+--- !u!1001 &1820136259275750993
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1820136258871252616, guid: 0b83126309aae44c0870a340af6c97c1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.000061035156
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820136258871252616, guid: 0b83126309aae44c0870a340af6c97c1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820136258871252616, guid: 0b83126309aae44c0870a340af6c97c1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820136258871252616, guid: 0b83126309aae44c0870a340af6c97c1,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820136258871252616, guid: 0b83126309aae44c0870a340af6c97c1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820136258871252616, guid: 0b83126309aae44c0870a340af6c97c1,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820136258871252616, guid: 0b83126309aae44c0870a340af6c97c1,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820136258871252616, guid: 0b83126309aae44c0870a340af6c97c1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820136258871252616, guid: 0b83126309aae44c0870a340af6c97c1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820136258871252616, guid: 0b83126309aae44c0870a340af6c97c1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820136258871252616, guid: 0b83126309aae44c0870a340af6c97c1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820136258871252617, guid: 0b83126309aae44c0870a340af6c97c1,
+        type: 3}
+      propertyPath: m_Name
+      value: PopUpDriver
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0b83126309aae44c0870a340af6c97c1, type: 3}

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 788758054939627841}
   - component: {fileID: 2328323709443019243}
+  - component: {fileID: -294117487253523466}
   m_Layer: 5
   m_Name: pfInvetoryItem
   m_TagString: Untagged
@@ -51,6 +52,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: 
+--- !u!114 &-294117487253523466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788758054939627842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18ef1c2523b44870934d3617c8ce828, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &788758054998624201
 GameObject:
   m_ObjectHideFlags: 0
