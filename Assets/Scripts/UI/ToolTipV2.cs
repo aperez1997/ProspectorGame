@@ -17,14 +17,21 @@ public class ToolTipV2 : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
 
-        // save references for performance
-        RectTransform = gameObject.GetComponent<RectTransform>();
-        TextMeshPro = gameObject.GetComponentInChildren<TextMeshProUGUI>();
-        BackgoundRectTransform = gameObject.GetComponentInChildren<Image>().GetComponent<RectTransform>();
+            // save references for performance
+            RectTransform = gameObject.GetComponent<RectTransform>();
+            TextMeshPro = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+            BackgoundRectTransform = gameObject.GetComponentInChildren<Image>().GetComponent<RectTransform>();
 
-        Hide();
+            Hide();
+        } else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void SetText(Transform parentTransform, string text)
@@ -48,6 +55,10 @@ public class ToolTipV2 : MonoBehaviour
 
     public void Show(Transform parentTransform, string text)
     {
+        // Move to whatever canvas the parent is in. This prevents issues with multiple scenes
+        Canvas canvas = parentTransform.GetComponentInParent<Canvas>();
+        gameObject.transform.SetParent(canvas.transform);
+
         gameObject.SetActive(true);
         SetText(parentTransform, text);
     }

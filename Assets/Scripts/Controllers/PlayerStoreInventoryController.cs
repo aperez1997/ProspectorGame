@@ -9,7 +9,6 @@ public class PlayerStoreInventoryController : InventoryController
 {
     protected override void SetInventoryPrefab(GameObject gameObject, InventoryItem item)
     {
-        Debug.Log("Store prefab");
         SetInventoryStorePrefab_Static(gameObject, item);
 
         // set price
