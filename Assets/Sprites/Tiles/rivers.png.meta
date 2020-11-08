@@ -1,7 +1,100 @@
 fileFormatVersion: 2
 guid: 8e1cc121cc575e14689c273bceff44fa
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 4802330667421382101
+    second: rivers_0
+  - first:
+      213: 1846961558630594842
+    second: rivers_0
+  - first:
+      213: -6546910947366055385
+    second: rivers_1
+  - first:
+      213: -2760262063232256917
+    second: rivers_2
+  - first:
+      213: -2204933821439319297
+    second: rivers_3
+  - first:
+      213: -3839474769569584128
+    second: rivers_4
+  - first:
+      213: 9211758115736200760
+    second: rivers_5
+  - first:
+      213: -4592733876963623394
+    second: rivers_6
+  - first:
+      213: 991360200764645464
+    second: rivers_7
+  - first:
+      213: -6257685770776256661
+    second: rivers_8
+  - first:
+      213: -5643002946123066834
+    second: rivers_9
+  - first:
+      213: -5922000327646753033
+    second: rivers_10
+  - first:
+      213: 5748202102754191606
+    second: rivers_11
+  - first:
+      213: -6807924396400468738
+    second: rivers_12
+  - first:
+      213: -8669767253388975039
+    second: rivers_13
+  - first:
+      213: -13913872508723644
+    second: rivers_14
+  - first:
+      213: -6787573834686730530
+    second: rivers_15
+  - first:
+      213: 6511861064170293162
+    second: rivers_16
+  - first:
+      213: -2869573785459085425
+    second: rivers_17
+  - first:
+      213: -6439453853292206182
+    second: rivers_18
+  - first:
+      213: 916269237871568181
+    second: rivers_19
+  - first:
+      213: 534205043540231702
+    second: rivers_1
+  - first:
+      213: 6899343720768146472
+    second: rivers_2
+  - first:
+      213: 5079361842988685385
+    second: rivers_3
+  - first:
+      213: -2293567954948396471
+    second: rivers_5
+  - first:
+      213: 7559965453220358115
+    second: rivers_6
+  - first:
+      213: -5156801960405099736
+    second: rivers_7
+  - first:
+      213: -4625308841509709873
+    second: rivers_8
+  - first:
+      213: -54211073504497503
+    second: rivers_9
+  - first:
+      213: 7522497520911613398
+    second: rivers_10
+  - first:
+      213: -7873788375664533604
+    second: rivers_11
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -40,12 +133,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 250
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -71,9 +164,273 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: rivers_0
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 916
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a197aff70c9b1a910800000000000000
+      internalID: 1846961558630594842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rivers_4
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 692
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00ceabb1a0277bac0800000000000000
+      internalID: -3839474769569584128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rivers_1
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 916
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 616007128a0e96700800000000000000
+      internalID: 534205043540231702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rivers_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 916
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82c05bb4f846fbf50800000000000000
+      internalID: 6899343720768146472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rivers_3
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 692
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94893014fa48d7640800000000000000
+      internalID: 5079361842988685385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rivers_5
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 692
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94ae419c81c9b20e0800000000000000
+      internalID: -2293567954948396471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rivers_6
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 692
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e7ac6976846ae860800000000000000
+      internalID: 7559965453220358115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rivers_7
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 468
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82b140d50fb5f68b0800000000000000
+      internalID: -5156801960405099736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rivers_8
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 468
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc717555d1a9fcfb0800000000000000
+      internalID: -4625308841509709873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rivers_9
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 468
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a03fdcd0576f3ff0800000000000000
+      internalID: -54211073504497503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rivers_10
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 244
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6dd71bda3a7456860800000000000000
+      internalID: 7522497520911613398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rivers_11
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 20
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9f5aef703faab290800000000000000
+      internalID: -7873788375664533604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
