@@ -116,25 +116,25 @@ public class Movement_Controller : MonoBehaviour
     // Update movement costs for the buttons based on the current location and lastDirection moved
     public void UpdateMovementCosts(HexDirection lastDirection)
     {
-        DataTile dataTileAt = LoadPlayerDataTile();
-        //Debug.Log("New position " + dataTileAt);
+        WorldTile tileAt = LoadPlayerTile();
+        //Debug.Log("New position " + tileAt);
 
         // lookup each neighbor and it's cost
-        foreach (KeyValuePair<HexDirection, DataTile> neighborPair in dataTileAt.Neighbors)
+        foreach (KeyValuePair<HexDirection, WorldTile> neighborPair in tileAt.Neighbors)
         {
             HexDirection hdeNeighbor = neighborPair.Key;
-            DataTile dataTileNeighbor = neighborPair.Value;
-            //Debug.Log("Found neighbor " + hdeNeighbor + "=" + dataTileNeighbor);
+            WorldTile tileNeighbor = neighborPair.Value;
+            //Debug.Log("Found neighbor " + hdeNeighbor + "=" + tileNeighbor);
 
-            // TODO: cost should probably come from a "cost engine". It should eventually be more than the raw terrain cost
-            int costNeighbor = dataTileNeighbor.BaseMoveCost;
+            // TODO: cost should probably come from game logic. It should eventually be more than the raw terrain cost
+            int costNeighbor = tileNeighbor.BaseMoveCost;
             SetCost(hdeNeighbor, costNeighbor);
         }
 
         UpdateMovementUI();
     }
 
-    protected DataTile LoadPlayerDataTile()
+    protected WorldTile LoadPlayerTile()
     {
         return GameState.Instance.GetTileForPlayerLocation(player);
     }

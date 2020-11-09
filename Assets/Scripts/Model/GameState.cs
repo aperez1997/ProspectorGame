@@ -12,48 +12,48 @@ public class GameState : ISerializationCallbackReceiver
     public Inventory Inventory { get { return Player.Inventory; } }
 
     // The world
-    [field:SerializeField] public List<DataTile> DataTileList { get; private set; }
+    [field:SerializeField] public List<WorldTile> WorldTileList { get; private set; }
 
-    private Dictionary<Vector3Int, DataTile> DataTileDict;
+    private Dictionary<Vector3Int, WorldTile> WorldTileDict;
 
     public GameLogic GameLogic { get; private set; }
 
-    public GameState(Player player, List<DataTile> dataTileList)
+    public GameState(Player player, List<WorldTile> worldTileList)
     {
         this.Player = player;
-        this.DataTileList = dataTileList;
+        this.WorldTileList = worldTileList;
         Init();
     }
 
     private void Init()
     {
         // we need to create a new one of these after deserialize.
-        DataTileDict = new Dictionary<Vector3Int, DataTile>(0);
+        WorldTileDict = new Dictionary<Vector3Int, WorldTile>(0);
         // Data Tile Dictionary
-        foreach (DataTile dataTile in DataTileList)
+        foreach (WorldTile worldTile in WorldTileList)
         {
-            //Debug.Log("Adding tile at " + dataTile.CellLoc.ToString());
-            DataTileDict.Add(dataTile.CellLoc, dataTile);
+            //Debug.Log("Adding tile at " + worldTile.CellLoc.ToString());
+            WorldTileDict.Add(worldTile.CellLoc, worldTile);
         }
-        //Debug.Log("Dictionary has " + DataTileDict.Count + " keys");
+        //Debug.Log("Dictionary has " + WorldTileDict.Count + " keys");
 
-        // Set Neighbors for all dataTiles
-        foreach (DataTile dataTile in DataTileList){ 
+        // Set Neighbors for all worldTile
+        foreach (WorldTile tile in WorldTileList){ 
             Dictionary<HexDirection, Vector3Int> neighborVectors = 
-                HexDirectionUtil.GetNeighborWorldVectors(dataTile.CellLoc);
+                HexDirectionUtil.GetNeighborWorldVectors(tile.CellLoc);
 
             // lookup each neighbor and set it in a dictionary
-            Dictionary<HexDirection, DataTile> neighborTiles = new Dictionary<HexDirection, DataTile>();
+            Dictionary<HexDirection, WorldTile> neighborTiles = new Dictionary<HexDirection, WorldTile>();
             foreach (var item in neighborVectors)
             {
                 HexDirection hdeNeighbor = item.Key;
                 Vector3Int posNeighbor = item.Value;
-                DataTile dataTileNeighbor = GetDataTileAtLocation(posNeighbor);
-                if (!(dataTileNeighbor is DataTile)){ continue; }
-                //Debug.Log("Found neighbor " + hdeNeighbor + "=" + dataTileNeighbor);
-                neighborTiles.Add(hdeNeighbor, dataTileNeighbor);
+                WorldTile worldTileNeighbor = GetTileAtLocation(posNeighbor);
+                if (!(worldTileNeighbor is WorldTile)){ continue; }
+                //Debug.Log("Found neighbor " + hdeNeighbor + "=" + worldTileNeighbor);
+                neighborTiles.Add(hdeNeighbor, worldTileNeighbor);
             }
-            dataTile.Neighbors = neighborTiles;
+            tile.Neighbors = neighborTiles;
         }
 
         /*
@@ -67,23 +67,23 @@ public class GameState : ISerializationCallbackReceiver
         GameLogic = new GameLogic(this);
     }
 
-    public DataTile GetDataTileAtLocation(Vector3Int location)
+    public WorldTile GetTileAtLocation(Vector3Int location)
     {
-        _ = DataTileDict.TryGetValue(location, out DataTile dataTile);
-        return dataTile;
+        _ = WorldTileDict.TryGetValue(location, out WorldTile tile);
+        return tile;
     }
 
-    public DataTile GetTileForPlayerLocation(Player player)
+    public WorldTile GetTileForPlayerLocation(Player player)
     {
         Vector3Int posAt = player.GetCellPosition();
-        DataTile dataTileAt = GetDataTileAtLocation(posAt);
-        if (!(dataTileAt is DataTile))
+        WorldTile tileAt = GetTileAtLocation(posAt);
+        if (!(tileAt is WorldTile))
         {
-            string msg = "Could not find dateTile for pos " + posAt.ToString();
+            string msg = "Could not find tile for pos " + posAt.ToString();
             throw new System.Exception(msg);
         }
 
-        return dataTileAt;
+        return tileAt;
     }
 
     public void OnBeforeSerialize() { }

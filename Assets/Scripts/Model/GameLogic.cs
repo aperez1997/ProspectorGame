@@ -110,17 +110,17 @@ public class GameLogic
 
     public int GetForageChanceForPlayerTile()
     {
-        DataTile dataTileAt = GetTileForPlayerLocation();
-        return dataTileAt.ForagingChance;
+        WorldTile tileAt = GetTileForPlayerLocation();
+        return tileAt.ForagingChance;
     }
 
     public int GetHuntingChanceForPlayerTile()
     {
-        DataTile dataTileAt = GetTileForPlayerLocation();
-        return dataTileAt.HuntingChance;
+        WorldTile tileAt = GetTileForPlayerLocation();
+        return tileAt.HuntingChance;
     }
 
-    private DataTile GetTileForPlayerLocation()
+    private WorldTile GetTileForPlayerLocation()
     {
         return gameState.GetTileForPlayerLocation(Player);
     }

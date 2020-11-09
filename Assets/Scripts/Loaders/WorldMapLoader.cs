@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -7,7 +8,7 @@ public class WorldMapLoader : MonoBehaviour
 {
     public static WorldMapLoader Instance { get; private set; }
 
-    public Tilemap tileMap;
+    public Tilemap tileMapBiome;
 
     private void Awake()
     {
@@ -19,28 +20,30 @@ public class WorldMapLoader : MonoBehaviour
     {
         GameStateManager.DebugLoadState();
 
-        LoadMapDataIntoTileMap(GameState.Instance.DataTileList);
+        LoadMapDataIntoTileMap(GameState.Instance.WorldTileList);
     }
 
-    public void LoadMapDataIntoTileMap(List<DataTile> dataTileList)
+    public void LoadMapDataIntoTileMap(List<WorldTile> worldTileList)
     {
-        Debug.Log("Loading World Map with " + dataTileList.Count + " tiles");
-        foreach (DataTile dataTile in dataTileList)
+        Debug.Log("Loading World Map with " + worldTileList.Count + " tiles");
+        foreach (WorldTile worldTile in worldTileList)
         {
-            Tile tile = dataTile.Tile;
-            tileMap.SetTile(dataTile.CellLoc, tile);
+            Tile tile = worldTile.Tile;
+            tileMapBiome.SetTile(worldTile.CellLoc, tile);
         }
+
+        //tileMapBiome.SetTile(new Vector3Int(1, 1, 1), testTile);
     }
 
     // TODO: should probably be moved into gameLogic, once I figure out a way to do that
-    public static List<DataTile> CreateRandomWorldMap()
+    public static List<WorldTile> CreateRandomWorldMap()
     {
         /**
          * consider using data-struct (this many mountains, this height of water)
          * that can be made into a hash, and hash always generates the same level
          */ 
 
-        List<DataTile> dTileList = new List<DataTile>();
+        List<WorldTile> dTileList = new List<WorldTile>();
 
         int maxX = 5;
         int maxY = 5;
@@ -58,7 +61,7 @@ public class WorldMapLoader : MonoBehaviour
                 // always start in town
                 else if (x == 0 && y == 0) { tt = BiomeType.Town; }
 
-                DataTile dTile = new DataTile(loc, tt);
+                WorldTile dTile = new WorldTile(loc, tt);
                 dTileList.Add(dTile);               
             }
         }

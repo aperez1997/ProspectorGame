@@ -45,11 +45,11 @@ public class PlayerController : MonoBehaviour
 
     void UpdateActionsUI()
     {
-        DataTile dataTileAt = LoadPlayerDataTile();
-        CampBtn.interactable = dataTileAt.CanCamp;
+        WorldTile tileAt = LoadPlayerTile();
+        CampBtn.interactable = tileAt.CanCamp;
 
         // Town
-        TownBtn.interactable = (dataTileAt.Type == BiomeType.Town);
+        TownBtn.interactable = (tileAt.Type == BiomeType.Town);
 
         // Forage
         bool canForage = gameLogic.CanForage();
@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
         costText.text = allowed ? cost.ToString() : String.Empty;
     }
 
-    protected DataTile LoadPlayerDataTile()
+    protected WorldTile LoadPlayerTile()
     {
         return GameState.Instance.GetTileForPlayerLocation(player);
     }
