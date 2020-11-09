@@ -512,7 +512,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 780441194}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &73932297
 MonoBehaviour:
@@ -526,7 +526,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 084802a6507ef63479e37533c9088b6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileMap: {fileID: 1933218274}
+  tileMapBiome: {fileID: 1933218274}
+  tileMapFeatures: {fileID: 0}
+  testTile: {fileID: 11400000, guid: 385bb3a2347c447d2a29e479c290302f, type: 2}
 --- !u!1 &102348778
 GameObject:
   m_ObjectHideFlags: 0
@@ -2267,8 +2269,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1933218272}
   - {fileID: 73932296}
+  - {fileID: 1933218272}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4982,7 +4984,7 @@ Transform:
   m_LocalScale: {x: 1.25, y: 1.25, z: 1}
   m_Children: []
   m_Father: {fileID: 780441194}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &1933218273
 TilemapRenderer:

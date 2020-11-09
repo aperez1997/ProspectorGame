@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-// Contains data about the terrain tiles
+/// <summary>
+/// A single tile in the serialized world map
+/// </summary>
 [Serializable]
-public class DataTile : ISerializationCallbackReceiver
+public class WorldTile : ISerializationCallbackReceiver
 {
+    /// <summary> Location (x,y) in the world map</summary>
     public Vector3Int CellLoc;
 
+    /// <summary> Type of Biome </summary>
     public BiomeType Type;
     
     // Derived field that come from TerrainData
@@ -16,11 +20,15 @@ public class DataTile : ISerializationCallbackReceiver
     public bool CanCamp { get; private set; }
     public int ForagingChance { get; private set; }
     public int HuntingChance { get; private set; }
+    /// <summary>Sprite asset for the tile</summary>
     public Tile Tile { get; private set; }
 
-    public Dictionary<HexDirection, DataTile> Neighbors { get; set; }
+    /// <summary>
+    /// Hash of Direction->WorldTile, the neighbors around this tile
+    /// </summary>
+    public Dictionary<HexDirection, WorldTile> Neighbors { get; set; }
 
-    public DataTile(Vector3Int cellLocationIn, BiomeType type)
+    public WorldTile(Vector3Int cellLocationIn, BiomeType type)
     {
         CellLoc = cellLocationIn;
         Type = type;

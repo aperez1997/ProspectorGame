@@ -29,9 +29,9 @@ public static class GameStateManager
         player.Inventory.AddItem(ItemType.Ration, 7);
         player.Inventory.AddItem(ItemType.Pan, 1);
 
-        List<DataTile> DataTileList = WorldMapLoader.CreateRandomWorldMap();
+        List<WorldTile> TileList = WorldMapLoader.CreateRandomWorldMap();
 
-        GameState state = new GameState(player, DataTileList);
+        GameState state = new GameState(player, TileList);
         GameState.Instance = state;
     }
 
