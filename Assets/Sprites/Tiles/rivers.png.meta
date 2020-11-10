@@ -95,6 +95,9 @@ TextureImporter:
   - first:
       213: -7873788375664533604
     second: rivers_11
+  - first:
+      213: -2841246441109462998
+    second: rivers_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -184,7 +187,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 64
-        y: 916
+        y: 1140
         width: 192
         height: 192
       alignment: 0
@@ -201,31 +204,10 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: rivers_4
-      rect:
-        serializedVersion: 2
-        x: 288
-        y: 692
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 00ceabb1a0277bac0800000000000000
-      internalID: -3839474769569584128
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: rivers_1
       rect:
         serializedVersion: 2
-        x: 288
+        x: 64
         y: 916
         width: 192
         height: 192
@@ -246,7 +228,7 @@ TextureImporter:
       name: rivers_2
       rect:
         serializedVersion: 2
-        x: 512
+        x: 288
         y: 916
         width: 192
         height: 192
@@ -267,8 +249,8 @@ TextureImporter:
       name: rivers_3
       rect:
         serializedVersion: 2
-        x: 64
-        y: 692
+        x: 512
+        y: 916
         width: 192
         height: 192
       alignment: 0
@@ -288,7 +270,7 @@ TextureImporter:
       name: rivers_5
       rect:
         serializedVersion: 2
-        x: 512
+        x: 288
         y: 692
         width: 192
         height: 192
@@ -309,7 +291,7 @@ TextureImporter:
       name: rivers_6
       rect:
         serializedVersion: 2
-        x: 736
+        x: 512
         y: 692
         width: 192
         height: 192
@@ -330,8 +312,8 @@ TextureImporter:
       name: rivers_7
       rect:
         serializedVersion: 2
-        x: 64
-        y: 468
+        x: 736
+        y: 692
         width: 192
         height: 192
       alignment: 0
@@ -351,7 +333,7 @@ TextureImporter:
       name: rivers_8
       rect:
         serializedVersion: 2
-        x: 288
+        x: 64
         y: 468
         width: 192
         height: 192
@@ -372,7 +354,7 @@ TextureImporter:
       name: rivers_9
       rect:
         serializedVersion: 2
-        x: 512
+        x: 288
         y: 468
         width: 192
         height: 192
@@ -393,8 +375,8 @@ TextureImporter:
       name: rivers_10
       rect:
         serializedVersion: 2
-        x: 64
-        y: 244
+        x: 512
+        y: 468
         width: 192
         height: 192
       alignment: 0
@@ -415,7 +397,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 64
-        y: 20
+        y: 244
         width: 192
         height: 192
       alignment: 0
@@ -427,6 +409,48 @@ TextureImporter:
       bones: []
       spriteID: c9f5aef703faab290800000000000000
       internalID: -7873788375664533604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rivers_4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 692
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a20e3565a6dd198d0800000000000000
+      internalID: -2841246441109462998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rivers_12
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 20
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efc95d6d4d46581a0800000000000000
+      internalID: -6807924396400468738
       vertices: []
       indices: 
       edges: []

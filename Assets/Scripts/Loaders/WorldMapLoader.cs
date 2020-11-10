@@ -4,11 +4,15 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// Loads the world map into the Overworld's unity TileMap
+/// Also handles creation of random world map
+/// </summary>
 public class WorldMapLoader : MonoBehaviour
 {
     public static WorldMapLoader Instance { get; private set; }
 
-    public Tilemap tileMapBiome;
+    public Tilemap tileMap;
 
     private void Awake()
     {
@@ -29,10 +33,8 @@ public class WorldMapLoader : MonoBehaviour
         foreach (WorldTile worldTile in worldTileList)
         {
             Tile tile = worldTile.Tile;
-            tileMapBiome.SetTile(worldTile.CellLoc, tile);
+            tileMap.SetTile(worldTile.CellLoc, tile);
         }
-
-        //tileMapBiome.SetTile(new Vector3Int(1, 1, 1), testTile);
     }
 
     // TODO: should probably be moved into gameLogic, once I figure out a way to do that

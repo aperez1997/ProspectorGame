@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b9b3f011048a47b893797acfaaa41a2, type: 3}
+  m_Name: RiverTile
+  m_EditorClassIdentifier: 
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Transform:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  m_InstancedGameObject: {fileID: 0}
+  m_Flags: 1
+  m_ColliderType: 1
+  m_Sprites:
+  - {fileID: 4802330667421382101, guid: 8e1cc121cc575e14689c273bceff44fa, type: 3}
+  - {fileID: -6546910947366055385, guid: 8e1cc121cc575e14689c273bceff44fa, type: 3}
+  - {fileID: -2760262063232256917, guid: 8e1cc121cc575e14689c273bceff44fa, type: 3}
+  - {fileID: -2204933821439319297, guid: 8e1cc121cc575e14689c273bceff44fa, type: 3}
+  - {fileID: -3839474769569584128, guid: 8e1cc121cc575e14689c273bceff44fa, type: 3}
+  - {fileID: 9211758115736200760, guid: 8e1cc121cc575e14689c273bceff44fa, type: 3}
+  - {fileID: -4592733876963623394, guid: 8e1cc121cc575e14689c273bceff44fa, type: 3}
+  - {fileID: 991360200764645464, guid: 8e1cc121cc575e14689c273bceff44fa, type: 3}
+  - {fileID: -6257685770776256661, guid: 8e1cc121cc575e14689c273bceff44fa, type: 3}
+  - {fileID: -5643002946123066834, guid: 8e1cc121cc575e14689c273bceff44fa, type: 3}
+  - {fileID: -5922000327646753033, guid: 8e1cc121cc575e14689c273bceff44fa, type: 3}
+  - {fileID: 5748202102754191606, guid: 8e1cc121cc575e14689c273bceff44fa, type: 3}
+  - {fileID: -6807924396400468738, guid: 8e1cc121cc575e14689c273bceff44fa, type: 3}

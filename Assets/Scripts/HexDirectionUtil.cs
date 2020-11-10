@@ -72,40 +72,62 @@ public class HexDirectionUtil
         return new Vector3Int(currentCellPos.x + xOffset, currentCellPos.y + yOffset, currentCellPos.z);
     }
 
-    // TODO: Use the hashes instead of the lists
-    // Get all neighbors of currentPos as WorldLocation Vectors, hashed by the corresponding direction
+    ///<summary>Get all neighbors of currentPos as WorldLocation Vectors, hashed by the corresponding direction</summary>
     public static Dictionary<HexDirection, Vector3Int> GetNeighborWorldVectors(Vector3Int currentPos)
     {
         Dictionary<HexDirection, Vector3Int> dict = new Dictionary<HexDirection, Vector3Int>();
 
         // even and odd rows(y) use different sets of neighbors.
         bool isEvenRow = currentPos.y % 2 == 0;
-        ValueTuple<HexDirection, int, int>[] neighborSet = isEvenRow ? NeighborTuplesEven : NeighborTuplesOdd;
+
+
+        Dictionary<HexDirection, (int, int)> neighborSet = isEvenRow ? NeighborHashEven : NeighborHashOdd;
 
         // turn neighbor tuples into direction+vectors
-        foreach (ValueTuple<HexDirection, int, int> tuple in neighborSet)
+        foreach (KeyValuePair<HexDirection, (int, int)> pair in neighborSet)
         {
-            (HexDirection hexDirection, int xOffset, int yOffset) = tuple;
+            var hexDirection = pair.Key;
+            (int xOffset, int yOffset) = pair.Value;
 
-            Vector3Int posNeighbor = new Vector3Int(currentPos.x + xOffset, currentPos.y + yOffset, 0);
+            Vector3Int posNeighbor = new Vector3Int(currentPos.x + xOffset, currentPos.y + yOffset, currentPos.z);
             dict.Add(hexDirection, posNeighbor);
         }
         return dict;
     }
 
+    /**
+     * Unity uses odd-r convention. On Even rows (y) we want x=-1 and x=0 for the above/below spots, on Odd rows we want x=0 and x=1
+     * https://www.redblobgames.com/grids/hexagons/
+     */
     private static readonly Dictionary<HexDirection, (int, int)> NeighborHashEven = new Dictionary<HexDirection, (int, int)>
         {{HexDirection.East,(1,0)},{HexDirection.West,(-1,0)},{HexDirection.NorthEast,(0,1)}, {HexDirection.NorthWest,(-1,1)}, {HexDirection.SouthEast,(0,-1)}, {HexDirection.SouthWest,(-1,-1)}};
 
     private static readonly Dictionary<HexDirection, ValueTuple<int, int>> NeighborHashOdd = new Dictionary<HexDirection, (int, int)>
         {{HexDirection.East,(1,0)}, {HexDirection.West,(-1,0)}, {HexDirection.NorthEast,(1,1)}, {HexDirection.NorthWest,(0,1)}, {HexDirection.SouthEast,(1,-1)}, {HexDirection.SouthWest,(0,-1)} };
 
-    /**
-     * Unity uses odd-r convention. On Even rows (y) we want x=-1 and x=0 for the above/below spots, on Odd rows we want x=0 and x=1
-     * https://www.redblobgames.com/grids/hexagons/
-     */
-    private static readonly ValueTuple<HexDirection, int, int>[] NeighborTuplesEven = 
-        {(HexDirection.East,1,0), (HexDirection.West,-1,0), (HexDirection.NorthEast,0,1), (HexDirection.NorthWest,-1,1), (HexDirection.SouthEast,0,-1), (HexDirection.SouthWest,-1,-1)};
-
-    private static readonly ValueTuple<HexDirection, int, int>[] NeighborTuplesOdd =
-        {(HexDirection.East,1,0), (HexDirection.West,-1,0), (HexDirection.NorthEast,1,1), (HexDirection.NorthWest,0,1), (HexDirection.SouthEast,1,-1), (HexDirection.SouthWest,0,-1)};
+    /// <summary>
+    /// Returns the bit mask value for the given direction
+    /// Used by scripted tiles (Rivers and Roads)
+    /// </summary>
+    public static int GetNeighborMaskValue(HexDirection hde)
+    {
+        switch (hde)
+        {
+            case HexDirection.East:
+                return 1;
+            case HexDirection.SouthEast:
+                return 2;
+            case HexDirection.SouthWest:
+                return 4;
+            case HexDirection.West:
+                return 8;
+            case HexDirection.NorthWest:
+                return 16;
+            case HexDirection.NorthEast:
+                return 32;
+            default:
+                Debug.LogError("unexpected hde " + hde.ToString());
+                return 0;
+        }
+    }
 }

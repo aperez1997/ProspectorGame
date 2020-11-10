@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// Holds data about the different types of biomes, as well as it's asset for the map
+/// </summary>
 [CreateAssetMenu(fileName = "Biome", menuName = "BiomeData")]
 public class BiomeData : ScriptableObject
 {
@@ -18,7 +21,7 @@ public class BiomeData : ScriptableObject
     [Tooltip("true if you can camp here")]
     public bool canCamp;
 
-    [Tooltip("If set, foraging changce / 100")]
+    [Tooltip("If set, foraging chance / 100")]
     public int foragingBaseChance;
 
     [Tooltip("If set, Hunting chance / 100")]
