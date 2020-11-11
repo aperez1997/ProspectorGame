@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
-// player movement controller. Handles updating button UI based on costs, moving player, and managing remaining APs
-// APs should probably move into some sort of "player state" object
-// Cost resolution should come from some world map class
+/// <summary>
+/// player movement controller. Handles updating button UI based on costs, moving player, and managing AP display
+/// /// </summary>
 public class Movement_Controller : MonoBehaviour
 {
     // World
@@ -23,6 +23,7 @@ public class Movement_Controller : MonoBehaviour
 
     private Player player;
     private MovementUIHelper helper;
+    private GameLogic gameLogic;
 
     int GetCost(HexDirection direction) { return helper.GetMovementCost(direction); }
     void SetCost(HexDirection direction, int cost) { helper.SetMovementCost(direction, cost); }
@@ -33,6 +34,8 @@ public class Movement_Controller : MonoBehaviour
         player = GameState.Instance.Player;
         player.OnActionPointsChanged += Player_OnActionPointsChanged;
         player.OnLocationChanged += Player_OnLocationChanged;
+
+        gameLogic = GameState.Instance.GameLogic;
 
         //Debug.Log("Moving player to " + player.Location);
         UpdatePosition();       
@@ -126,8 +129,7 @@ public class Movement_Controller : MonoBehaviour
             WorldTile tileNeighbor = neighborPair.Value;
             //Debug.Log("Found neighbor " + hdeNeighbor + "=" + tileNeighbor);
 
-            // TODO: cost should probably come from game logic. It should eventually be more than the raw terrain cost
-            int costNeighbor = tileNeighbor.MoveBaseCost;
+            int costNeighbor = gameLogic.GetMovementCost(tileAt, tileNeighbor);
             SetCost(hdeNeighbor, costNeighbor);
         }
 

@@ -14,6 +14,15 @@ public class GameLogic
         this.gameState = gameState;
     }
 
+    // Movement
+    public int GetMovementCost(WorldTile tileAt, WorldTile tileNeighbor)
+    {
+        bool hasRoad = tileAt.HasRoad();
+        int costNeighbor = tileNeighbor.GetMoveCost(hasRoad);
+        costNeighbor = Math.Max(1, costNeighbor);
+        return costNeighbor;
+    }
+
     // ACTIONS
 
     public bool Camp()
@@ -125,6 +134,14 @@ public class GameLogic
         return gameState.GetTileForPlayerLocation(Player);
     }
 
+    /// <summary>
+    /// Take an action that has a chance to yield item
+    /// </summary>
+    /// <param name="cost">AP cost to take the action</param>
+    /// <param name="chance">chance (/100) to get succeed</param>
+    /// <param name="type">type of item if success</param>
+    /// <param name="quantity">amount of item if success</param>
+    /// <returns>success rv</returns>
     private bool TakeActionForItem(int cost, int chance, ItemType type, int quantity = 1)
     {
         if (!Player.SpendActionPoints(cost)) { return false; }
@@ -137,6 +154,11 @@ public class GameLogic
         return success;
     }
 
+    /// <summary>
+    /// Roll dice to see if a chance action has succeeded or not    
+    /// </summary>
+    /// <param name="chance">int chance / 100 e.x. 25 = 25% chance</param>
+    /// <returns></returns>
     private bool RollDice(int chance)
     {
         int roll = UnityEngine.Random.Range(0, 99);
