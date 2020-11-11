@@ -16,7 +16,7 @@ MonoBehaviour:
   name: Grasslands
   description: Watch out for the tall grass
   hexTile: {fileID: 11400000, guid: 0f7be247a798aed4e8f4f4b80d53e196, type: 2}
-  baseMoveCost: 2
+  moveBaseCost: 2
   canCamp: 1
   foragingBaseChance: 50
   huntingBaseChance: 33

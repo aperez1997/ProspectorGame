@@ -16,7 +16,7 @@ public class BiomeData : ScriptableObject
     public Tile hexTile;
 
     [Tooltip("Number of AP to move to this tile")]
-    public int baseMoveCost;
+    public int moveBaseCost;
 
     [Tooltip("true if you can camp here")]
     public bool canCamp;
@@ -30,10 +30,10 @@ public class BiomeData : ScriptableObject
     public static BiomeType GetRandomTypeForRandoMap()
     {
         System.Array values = System.Enum.GetValues(typeof(BiomeType));
-        int index = Random.Range(0, values.Length - 1); // Don't return town tiles
+        int index = Random.Range(1, values.Length); // don't return water tiles
         return (BiomeType)values.GetValue(index);
     }
 }
 
 // All the known biome types. Types are spelled out because they get saved into the saveFile
-public enum BiomeType { Water = 1, Grass = 2, Forest = 3, Hills = 4, Mountains = 5, Town = 6 };
+public enum BiomeType { Water = 1, Grass = 2, Forest = 3, Hills = 4, Mountains = 5 };

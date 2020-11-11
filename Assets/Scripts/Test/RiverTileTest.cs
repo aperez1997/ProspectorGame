@@ -12,6 +12,7 @@ public class RiverTileTest : MonoBehaviour
     public Tilemap tileMap;
 
     public RiverTile riverTile;
+    public RoadTile roadTile;
 
     private Tile grass;
 
@@ -83,6 +84,8 @@ public class RiverTileTest : MonoBehaviour
     {
         SetGrass(loc);
         tileMap.SetTile(loc, riverTile);
+        loc.z = 2;
+        tileMap.SetTile(loc, roadTile);
     }
 }
 

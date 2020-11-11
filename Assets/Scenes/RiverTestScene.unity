@@ -263,6 +263,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileMap: {fileID: 1474393473}
   riverTile: {fileID: 11400000, guid: 35bcf24713cab474e9cc28d02ada5949, type: 2}
+  roadTile: {fileID: 11400000, guid: d1be536a6b69346e2a3d4d2a021cf44c, type: 2}
 --- !u!1 &1474393472
 GameObject:
   m_ObjectHideFlags: 0

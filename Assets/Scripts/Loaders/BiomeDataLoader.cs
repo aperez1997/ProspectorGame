@@ -10,11 +10,8 @@ public class BiomeDataLoader
 
     public static BiomeDataLoader Instance {
         get {
-            lock (padlock)
-            {
-                if (instance == null){
-                    instance = new BiomeDataLoader();
-                }
+            lock (padlock) {
+                if (instance == null){ instance = new BiomeDataLoader(); }
                 return instance;
             }
         }

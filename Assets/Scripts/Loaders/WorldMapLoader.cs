@@ -33,7 +33,16 @@ public class WorldMapLoader : MonoBehaviour
         foreach (WorldTile worldTile in worldTileList)
         {
             Tile tile = worldTile.Tile;
-            tileMap.SetTile(worldTile.CellLoc, tile);
+            Vector3Int cellLoc = worldTile.CellLoc;
+            tileMap.SetTile(cellLoc, tile);
+
+            // load features
+            foreach (var feature in worldTile.Features)
+            {
+                var z = feature.zIndex;
+                var loc = new Vector3Int(cellLoc.x, cellLoc.y, z);
+                tileMap.SetTile(loc, feature.hexTile);
+            }
         }
     }
 
@@ -60,15 +69,40 @@ public class WorldMapLoader : MonoBehaviour
                 BiomeType tt = BiomeData.GetRandomTypeForRandoMap();
                 // surround the edges of the map with water
                 if (Math.Abs(x) == maxX || Math.Abs(y) == maxY) { tt = BiomeType.Water; }
-                // always start in town
-                else if (x == 0 && y == 0) { tt = BiomeType.Town; }
+
+                // grass around the center
+                if (Math.Abs(x) <= 1 && Math.Abs(y) <= 1){ tt = BiomeType.Grass; }
 
                 WorldTile dTile = new WorldTile(loc, tt);
-                dTileList.Add(dTile);               
+                dTileList.Add(dTile);
+
+                // add features
+                if (x == 0 && y == 0) {
+                    // always start in town
+                    dTile.AddFeature(TileFeatureType.Town);
+                }
+                if (RoadLocs.Contains((x,y))){
+                    // Road locations
+                    dTile.AddFeature(TileFeatureType.Road);
+                }
+
+                if (RiverLocs.Contains((x, y)))
+                {
+                    // Road locations
+                    dTile.AddFeature(TileFeatureType.River);
+                }
             }
         }
         return dTileList;
     }
+
+    private static List<(int, int)> RoadLocs = new List<(int, int)>(new (int,int)[]{
+        (-1,-1), (0,0), (1,0), (1,1), (1,2), (1,-1)
+    });
+
+    private static List<(int, int)> RiverLocs = new List<(int, int)>(new (int, int)[]{
+        (-4,-4), (-4,-3), (-4,-2), (-4,-1), (-3,0), (-3,1)
+    });
 
     // Update is called once per frame
     void Update()

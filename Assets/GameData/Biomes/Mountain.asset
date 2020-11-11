@@ -16,7 +16,7 @@ MonoBehaviour:
   name: Mountain
   description: Very tall! Hard to pass
   hexTile: {fileID: 11400000, guid: 45e46da3af3a9b942bfa1c16821a28a0, type: 2}
-  baseMoveCost: 6
+  moveBaseCost: 5
   canCamp: 1
   foragingBaseChance: 0
   huntingBaseChance: 0

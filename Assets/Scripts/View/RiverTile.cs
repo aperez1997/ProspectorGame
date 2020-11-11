@@ -12,7 +12,7 @@ using UnityEditor;
 /// </summary>
 public class RiverTile : Tile
 {
-    [SerializeField] private Sprite[] m_Sprites;
+    [SerializeField] protected Sprite[] m_Sprites;
 
     // This refreshes itself and other RoadTiles that are orthogonally and diagonally adjacent
     public override void RefreshTile(Vector3Int location, ITilemap tilemap)
@@ -64,7 +64,7 @@ public class RiverTile : Tile
 
     // This determines if the Tile at the position is the same Tile.
     // Basically, the same exact Tile object will be placed in multiple spots
-    private bool HasThisTile(ITilemap tilemap, Vector3Int position)
+    protected bool HasThisTile(ITilemap tilemap, Vector3Int position)
     {
         return tilemap.GetTile(position) == this;
     }
@@ -191,7 +191,7 @@ public class RiverTile : Tile
             case 27: // 011011
             case 31: // 011111
             case 63: // 111111
-                // R0
+                // R0 (east)
                 return Quaternion.identity;
             case 2:  // 10 r1
             case 6:  // 110 r1
@@ -205,8 +205,8 @@ public class RiverTile : Tile
             case 46: // 101110 r1
             case 54: // 110110 => 011011 r-1
             case 62: // 111110 r-1
-                // R1
-                return Quaternion.Euler(0f, 0f, -60f);
+                // R1 (south east)
+                return Quaternion.Euler(0f, 0f, -60f); // rot cw 1/6
             case 4: // 000100 r2
             case 12: // 1100 r2
             case 13: // 001101 => 010011 r2
@@ -218,8 +218,9 @@ public class RiverTile : Tile
             case 45: // 101101 => 011011 r-2
             case 60: // 111100 => 001111 r2
             case 61: // 111101 => 011111 r-2
-                // R2
+                // R2 (south west)
                 return Quaternion.Euler(0f, 0f, -120f);
+                //return Quaternion.Euler(0f, 180f, -60f); // rot cw 1/6 flip horiz
             case 8:  // 001000 r3
             case 24: // 011000 r3
             case 25: // 011001 => 001011 r3
@@ -229,8 +230,9 @@ public class RiverTile : Tile
             case 57: // 111001 => 001111 r3
             case 58: // 111010 => 010111 r3
             case 59: // 111011 => 011111 r-3
-                // R3
+                // R3 (west)
                 return Quaternion.Euler(0f, 0f, -180f);
+                //return Quaternion.Euler(180f, 180f, 0); // flipped both ways
             case 16: // 010000 r4
             case 17: // 010001 => 101000 r4
             case 48: // 110000 r4
@@ -240,8 +242,9 @@ public class RiverTile : Tile
             case 53: // 110101 => 010111 r4
             case 51: // 110011 => 001111 r4
             case 55: // 110111 => 011111 r-4
-                // R4
+                // R4 (north west)
                 return Quaternion.Euler(0f, 0f, -240f);
+                //return Quaternion.Euler(180f, 180f, -60f); // flipped both rot cw 60
             case 32: // 100000 r5
             case 33: // 100001 => 110000 r5
             case 34: // 100010 => 101000 r5
@@ -251,8 +254,9 @@ public class RiverTile : Tile
             case 41: // 101001 => 010011 r5
             case 43: // 101011 => 010111 r5
             case 47: // 101111 => 011111 r-5
-                // R5
+                // R5 (north east)
                 return Quaternion.Euler(0f, 0f, -300f);
+                //return Quaternion.Euler(0f, 0f, 60f); // rot ccw 1/6
         }
     }
 

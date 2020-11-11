@@ -127,7 +127,7 @@ public class Movement_Controller : MonoBehaviour
             //Debug.Log("Found neighbor " + hdeNeighbor + "=" + tileNeighbor);
 
             // TODO: cost should probably come from game logic. It should eventually be more than the raw terrain cost
-            int costNeighbor = tileNeighbor.BaseMoveCost;
+            int costNeighbor = tileNeighbor.MoveBaseCost;
             SetCost(hdeNeighbor, costNeighbor);
         }
 

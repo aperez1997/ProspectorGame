@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
         CampBtn.interactable = tileAt.CanCamp;
 
         // Town
-        TownBtn.interactable = (tileAt.Type == BiomeType.Town);
+        TownBtn.interactable = tileAt.HasFeature(TileFeatureType.Town);
 
         // Forage
         bool canForage = gameLogic.CanForage();
