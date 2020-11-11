@@ -68,9 +68,9 @@ public class GameLogic
 
     public bool CanPanForGold(out int chance)
     {
-        chance = 0;
+        chance = 0; // set in case hasPan is false
         bool hasPan = Inventory.HasItem(ItemType.Pan);       
-        return hasPan && IsAllowedOnTileAndHaveAP(ActionType.Pan, 0, out chance);
+        return hasPan && IsAllowedOnTileAndHaveAP(ActionType.PanForGold, GetPanForGoldCost(), out chance);
     }
 
     public bool PanForGold()
@@ -109,9 +109,9 @@ public class GameLogic
             case ActionType.Hunt:
                 chance = GetHuntingChanceForPlayerTile();
                 return chance > 0;
-            case ActionType.Pan:
-                // TODO: check for rivers
-                return false;
+            case ActionType.PanForGold:
+                chance = GetGoldPanningChanceForPlayerTile();
+                return chance > 0;
             default:
                 return true;
         }
@@ -127,6 +127,16 @@ public class GameLogic
     {
         WorldTile tileAt = GetTileForPlayerLocation();
         return tileAt.HuntingChance;
+    }
+
+    public int GetGoldPanningChanceForPlayerTile()
+    {
+        WorldTile tileAt = GetTileForPlayerLocation();
+        if (tileAt.HasRiver()) {
+            // TODO: this should probably be based on the tile or something
+            return 20;
+        }
+        return 0;
     }
 
     private WorldTile GetTileForPlayerLocation()
