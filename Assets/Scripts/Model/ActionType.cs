@@ -2,4 +2,4 @@
 using System.Collections.Generic;
 
 
-public enum ActionType { Camp, Forage, Hunt, Pan }
+public enum ActionType { Camp, Forage, Hunt, PanForGold }

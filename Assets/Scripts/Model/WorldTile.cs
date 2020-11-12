@@ -108,6 +108,10 @@ public class WorldTile : ISerializationCallbackReceiver
     {
         return HasFeature(TileFeatureType.Road);
     }
+    public bool HasRiver()
+    {
+        return HasFeature(TileFeatureType.River);
+    }
 
     public void AddFeature(TileFeatureType type)
     {
