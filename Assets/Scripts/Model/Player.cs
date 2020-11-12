@@ -68,6 +68,7 @@ public class Player
 
     public void ResetActionPoints()
     {
+        Debug.Log("Player AP restored");
         // AP reduced by health loss.
         int healthLossAPRedux = (MAX_HEALTH - Health);
         ActionPoints = this.ActionPointsMax - healthLossAPRedux;
@@ -116,6 +117,5 @@ public class Player
             + Location.ToString() + ",AP(" + ActionPointsMax + "," + ActionPoints + ")"
             + "," + Inventory.ToString()
             + "]";
-       
     }
 }

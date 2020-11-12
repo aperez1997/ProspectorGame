@@ -94,7 +94,7 @@ public class PlayerController : MonoBehaviour
 
     public void ActionVisitGeneralStore()
     {
-        SceneManager.LoadScene("GeneralStore", LoadSceneMode.Additive);
+        SceneController.LoadGeneralStore_Static();
     }
 
     private void Player_OnHealthChanged(object sender, IntStatChangeEventArgs e)
@@ -106,5 +106,12 @@ public class PlayerController : MonoBehaviour
     private void Player_OnLocationOrAPChanged(object sender, EventArgs e)
     {
         UpdateActionsUI();
+    }
+
+    private void OnDestroy()
+    {
+        player.OnHealthChanged -= Player_OnHealthChanged;
+        player.OnLocationChanged -= Player_OnLocationOrAPChanged;
+        player.OnActionPointsChanged -= Player_OnLocationOrAPChanged;
     }
 }

@@ -3,39 +3,37 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryController : MonoBehaviour
+/// <summary>
+/// Controller that displays the contents of an Inventory
+/// Use with the pfInvetoryItem prefab
+/// </summary>
+abstract public class InventoryController : MonoBehaviour
 {
     public GameObject ItemTemplate;
 
     protected Transform ItemContainer;
 
-    protected Inventory inventory;
+    private Inventory inventory;
+    protected Inventory Inventory {
+        get { return inventory;  }  
+        set {
+            if (inventory is Inventory) {
+                inventory.OnItemListChanged -= Inventory_OnItemListChanged;
+            }
+            inventory = value;
+            inventory.OnItemListChanged += Inventory_OnItemListChanged;
+        }
+    }
 
-    protected GameLogic gameLogic;
-
-    private void Awake()
+    protected virtual void Awake()
     {
-        //Debug.Log("Inventory awake");
         ItemContainer = Utils.FindInChildren(gameObject, "Item Container").transform;
     }
 
-    private void Start()
+    protected virtual void Start()
     {
-        //Debug.Log("Inventory start");
-        gameLogic = GameState.Instance.GameLogic;
-
         ItemTemplate.SetActive(false);
-
-        // get inventory from singleton. Is this the right way?
-        SetInventory(GameState.Instance.Inventory);
         UpdateInventoryUI();
-    }
-
-    public void SetInventory(Inventory inventory)
-    {
-        this.inventory = inventory;
-        // subscribe to changes.
-        inventory.OnItemListChanged += Inventory_OnItemListChanged;
     }
 
     public void UpdateInventoryUI()
@@ -100,7 +98,7 @@ public class InventoryController : MonoBehaviour
     /// <summary>
     /// Finds the transform for the first inventory item of the given type, or null
     /// </summary>
-    private Transform FindInventoryItemTransform(ItemId id)
+    protected Transform FindInventoryItemTransform(ItemId id)
     {
         foreach (Transform child in ItemContainer)
         {
@@ -115,7 +113,7 @@ public class InventoryController : MonoBehaviour
         return null;
     }
 
-    private void Inventory_OnItemListChanged(object sender, InventoryChangedEventArgs e)
+    protected void Inventory_OnItemListChanged(object sender, InventoryChangedEventArgs e)
     {
         // find item that changed and add popUp
         var child = FindInventoryItemTransform(e.Type);
@@ -125,5 +123,12 @@ public class InventoryController : MonoBehaviour
         }
 
         UpdateInventoryUI();
+    }
+
+    private void OnDestroy()
+    {
+        // if we don't do this, it will still get called and cause errors
+        // because the gameObjects will be gone
+        inventory.OnItemListChanged -= Inventory_OnItemListChanged;
     }
 }

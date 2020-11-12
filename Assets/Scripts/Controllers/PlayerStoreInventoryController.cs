@@ -1,53 +1,43 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Class for a Player Inventory used in Store context (sell)
-public class PlayerStoreInventoryController : InventoryController
+/// <summary>
+/// Class for a Player Inventory used in Store context (sell)
+/// </summary>
+public class PlayerStoreInventoryController : StoreInventoryController
 {
+    protected override void Start()
+    {
+        // get these from singleton. Is this the right way?
+        Inventory = GameState.Instance.Inventory;
+
+        base.Start();
+    }
+
     protected override void SetInventoryPrefab(GameObject gameObject, InventoryItem item)
     {
         SetInventoryStorePrefab_Static(gameObject, item);
 
-        // set price
-        bool canSell = gameLogic.CanSell(item.id);
-        int price = gameLogic.GetSellPrice(item.id);
-        SetPriceText(gameObject, price);
-
-        // setup button
         var button = GetActionButton(gameObject);
-        button.interactable = canSell;
-        button.onClick.AddListener(() => {
-            gameLogic.SellItem(item.id, price);
-        });
-        var btnText = PlayerStoreInventoryController.GetButtonText(gameObject);
-        btnText.text = "Sell";
-    }
 
-    public static void SetInventoryStorePrefab_Static(GameObject gameObject, InventoryItem item)
-    {
-        SetInventoryPrefab_Static(gameObject, item);
-    }
+        bool canSell = gameLogic.CanSell(item.id);
+        if (canSell) {
+            // set price
+            int price = gameLogic.GetSellPrice(item.id);
+            SetPriceText(gameObject, price);
 
-    public static TextMeshProUGUI GetPriceText(GameObject gameObject)
-    {
-        return Utils.FindInChildren(gameObject, "Price").GetComponent<TextMeshProUGUI>();
-    }
+            // setup button
+            button.onClick.AddListener(() => {
+                gameLogic.SellItem(item.id, price);
+            });
+            SetButtonText(gameObject, "Sell");
+        } else {
+            // hide price
+            GetPriceText(gameObject).enabled = false;
+            // hide button
+            button.gameObject.SetActive(false);
+        }
 
-    public static void SetPriceText(GameObject gameObject, int cost)
-    {
-        GetPriceText(gameObject).text = cost > 0 ? "$" + cost.ToString() : string.Empty;
-    }
-
-    public static Button GetActionButton(GameObject gameObject)
-    {
-        return gameObject.GetComponentInChildren<Button>();
-    }
-
-    public static TextMeshProUGUI GetButtonText(GameObject gameObject)
-    {
-        return GetActionButton(gameObject).GetComponentInChildren<TextMeshProUGUI>();
     }
 }

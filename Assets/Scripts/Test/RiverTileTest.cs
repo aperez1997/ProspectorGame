@@ -87,6 +87,11 @@ public class RiverTileTest : MonoBehaviour
         loc.z = 2;
         tileMap.SetTile(loc, roadTile);
     }
+
+    public void Leave()
+    {
+        SceneController.UnloadAdditiveScene();
+    }
 }
 
 public enum Bits

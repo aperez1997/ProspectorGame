@@ -21,7 +21,7 @@ public class ToolTipV2 : MonoBehaviour
     {
         if (Template == null)
         {
-            Debug.Log("Assigning Tooltip Template");
+            //Debug.Log("Assigning Tooltip Template");
             Template = this;
             DontDestroyOnLoad(gameObject);
             this.gameObject.name = "ToolTipV2 Template";
@@ -32,7 +32,7 @@ public class ToolTipV2 : MonoBehaviour
         } else if (Template != this)
         {
             if (Instance == null) {
-                Debug.Log("Assigning Tooltip Instance");
+                //Debug.Log("Assigning Tooltip Instance");
                 Instance = this;
                 this.gameObject.name = "ToolTipV2 Instance";
                 Init();

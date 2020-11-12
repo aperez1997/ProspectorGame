@@ -98,7 +98,7 @@ public class Movement_Controller : MonoBehaviour
     {
         // get cost
         int cost = GetCost(direction);
-        Debug.Log("Button direction "+ direction.ToString() +" was pressed! Cost is " + cost);
+        //Debug.Log("Button direction "+ direction.ToString() +" was pressed! Cost is " + cost);
         if (!player.HasEnoughActionPoints(cost))
         {
             Debug.LogWarning("Cannot move because not enough AP");
@@ -150,5 +150,11 @@ public class Movement_Controller : MonoBehaviour
     {
         UpdateMovementUI();
         PopUpTextDriverV1.CreateStatChangePopUp(actionPointTxt.transform, e.Delta);
+    }
+
+    private void OnDestroy()
+    {
+        player.OnActionPointsChanged -= Player_OnActionPointsChanged;
+        player.OnLocationChanged -= Player_OnLocationChanged;
     }
 }

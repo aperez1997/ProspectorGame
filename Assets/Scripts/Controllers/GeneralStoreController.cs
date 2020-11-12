@@ -6,75 +6,66 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// Controller for general store scene
-public class GeneralStoreController : MonoBehaviour
+/// <summary>
+/// Controller for General Store scene.
+/// Is also a store controller sub-class, used with the general-store inventory from gamelogic
+/// </summary>
+public class GeneralStoreController : StoreInventoryController
 {
-    public GameObject ItemTemplate;
+    private Player player;
 
-    private Transform ItemContainer;
-
-    private GameLogic gameLogic;
-
-    private void Awake()
+    protected override void Awake()
     {
         ItemContainer = Utils.FindInChildren(gameObject, "Store Container").transform;
-        ItemTemplate.SetActive(false);
     }
 
-    private void Start()
+    protected override void Start()
     {
+        // for loading this scene from editor
         GameStateManager.DebugLoadState();
-        gameLogic = GameState.Instance.GameLogic;
+
+        Inventory = GameState.Instance.GameLogic.GetStoreInventory();
 
         // subscribe to money change event
-        GameState.Instance.Player.OnMoneyChanged += Player_OnMoneyChanged;
+        player = GameState.Instance.Player;
+        player.OnMoneyChanged += Player_OnMoneyChanged;
 
-        UpdateStoreInventoryUI();
+        base.Start();
     }
 
     public void ExitStore()
     {
-        SceneManager.UnloadSceneAsync("GeneralStore");
+        SceneController.UnloadAdditiveScene();
     }
 
-    public void UpdateStoreInventoryUI()
+    protected override void SetInventoryPrefab(GameObject gameObject, InventoryItem item)
     {
-        // remove old display
-        foreach (Transform child in ItemContainer)
-        {
-            // don't destroy the Template or weird things happen
-            if (child == ItemTemplate.transform) { continue; }
-            Destroy(child.gameObject);
-        }
+        SetInventoryStorePrefab_Static(gameObject, item);
 
-        // display items
-        var inventory = gameLogic.GetStoreInventory();
-        foreach (InventoryItem item in inventory.ItemList)
-        {
-            GameObject gameObject = Instantiate(ItemTemplate, ItemContainer);
-            PlayerStoreInventoryController.SetInventoryStorePrefab_Static(gameObject, item);
+        // hide item amount
+        var itemAmountText = GetAmountText(gameObject);
+        itemAmountText.enabled = false;
 
-            // hide item amount
-            var itemAmountText = InventoryController.GetAmountText(gameObject);
-            itemAmountText.enabled = false;
+        // set price
+        int price = item.Price;
+        SetPriceText(gameObject, price);
 
-            // set price
-            int price = item.Price;
-            PlayerStoreInventoryController.SetPriceText(gameObject, price);
-
-            // setup button
-            var button = PlayerStoreInventoryController.GetActionButton(gameObject);
-            button.interactable = gameLogic.CanAfford(price);
-            button.onClick.AddListener(() => {
-                gameLogic.BuyItem(item.id, price);
-            });
-            var btnText = PlayerStoreInventoryController.GetButtonText(gameObject);
-            btnText.text = "Buy";
-        }
+        // setup button
+        var button = GetActionButton(gameObject);
+        button.interactable = gameLogic.CanAfford(price);
+        button.onClick.AddListener(() => {
+            gameLogic.BuyItem(item.id, price);
+        });
+        SetButtonText(gameObject, "Buy");
     }
 
     private void Player_OnMoneyChanged(object sender, EventArgs e)
     {
-        UpdateStoreInventoryUI();
+        UpdateInventoryUI();
+    }
+
+    private void OnDestroy()
+    {
+        player.OnMoneyChanged -= Player_OnMoneyChanged;
     }
 }
