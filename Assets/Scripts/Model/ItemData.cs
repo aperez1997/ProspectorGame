@@ -5,6 +5,9 @@ public class ItemData : ScriptableObject
 {
     public ItemType type;
 
+    [Tooltip("Category of item. Determines which stores sell which items")]
+    public ItemCategory category;
+
     public new string name;
 
     public string description;
@@ -18,4 +21,12 @@ public class ItemData : ScriptableObject
     public int price;
 }
 
-public enum ItemType { Money, Ration, GoldNugget, Pan }
+/// <summary>
+/// Unique Item identifier. Links to SO
+/// </summary>
+public enum ItemType { Money, Ration, Pan, GoldNugget }
+
+/// <summary>
+/// Category of item. Used for store filtering
+/// </summary>
+public enum ItemCategory { None, Food, Tools, Resources }

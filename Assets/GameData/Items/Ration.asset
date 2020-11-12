@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Ration
   m_EditorClassIdentifier: 
   type: 1
+  category: 1
   name: Ration
   description: A simple ration. Nourishes the player for 1 day in the wild.
   sprite: {fileID: 21300048, guid: 14aefffd3622c7347aad64f2bed35801, type: 3}

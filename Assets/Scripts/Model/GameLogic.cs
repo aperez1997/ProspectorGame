@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameLogic
@@ -224,11 +225,17 @@ public class GameLogic
     public Inventory GetStoreInventory()
     {
         Inventory inventory = new Inventory();
+        // TODO: should this binding live in SO?
+        var categories = new List<ItemCategory>( new[]{ ItemCategory.Food, ItemCategory.Tools });
 
+        // Look at each item and determine if it fits
         foreach (ItemType type in Enum.GetValues(typeof(ItemType)))
         {
             var item = new InventoryItem(type, 10);
+            // needs to have a price
             if (!(item.Price > 0)) { continue; }
+            // needs to be a matching category
+            if (!(categories.Contains(item.Category))){ continue; }
             inventory.AddItem(item);
         }
 

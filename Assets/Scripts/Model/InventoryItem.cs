@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -9,6 +10,8 @@ public class InventoryItem : ISerializationCallbackReceiver
 
     public int amount;
 
+    // cached from itemData
+    public ItemCategory Category { get; private set; }
     public string Name { get; private set; }
     public string Description { get; private set; }
     public Sprite Sprite { get; private set; }
@@ -27,6 +30,7 @@ public class InventoryItem : ISerializationCallbackReceiver
         ItemData item = ItemDataLoader.LoadItemByType(type);
         if (item is ItemData)
         {
+            Category = item.category;
             Name = item.name;
             Description = item.description;
             Sprite = item.sprite;
