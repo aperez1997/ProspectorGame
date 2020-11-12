@@ -21,23 +21,23 @@ public class ItemDataLoader
         }
     }
 
-    private readonly Dictionary<ItemType, ItemData> itemDict = new Dictionary<ItemType, ItemData>();
+    private readonly Dictionary<ItemId, ItemData> itemDict = new Dictionary<ItemId, ItemData>();
 
     public ItemDataLoader()
     {
         PopulateList();
     }
 
-    public static ItemData LoadItemByType(ItemType type)
+    public static ItemData LoadItemById(ItemId id)
     {
-        return Instance.LoadByType(type);
+        return Instance.LoadById(id);
     }
 
 
-    public ItemData LoadByType(ItemType type)
+    public ItemData LoadById(ItemId id)
     {
-        bool rv = itemDict.TryGetValue(type, out ItemData item);
-        if (!rv) { Debug.LogError("No item SO found for type [" + type + "]"); }
+        bool rv = itemDict.TryGetValue(id, out ItemData item);
+        if (!rv) { Debug.LogError("No item SO found for type [" + id + "]"); }
         return item;
     }
 
@@ -49,8 +49,8 @@ public class ItemDataLoader
         {
             var SOpath = AssetDatabase.GUIDToAssetPath(SOName);
             var item = AssetDatabase.LoadAssetAtPath<ItemData>(SOpath);
-            itemDict.Add(item.type, item);
-            //Debug.Log("Found item with type " + item.type);
+            itemDict.Add(item.id, item);
+            //Debug.Log("Found item with type " + item.id);
         }
         Debug.Log("Found " + itemDict.Count + " Items");
     }

@@ -12,15 +12,15 @@ public class PlayerStoreInventoryController : InventoryController
         SetInventoryStorePrefab_Static(gameObject, item);
 
         // set price
-        bool canSell = gameLogic.CanSell(item.type);
-        int price = gameLogic.GetSellPrice(item.type);
+        bool canSell = gameLogic.CanSell(item.id);
+        int price = gameLogic.GetSellPrice(item.id);
         SetPriceText(gameObject, price);
 
         // setup button
         var button = GetActionButton(gameObject);
         button.interactable = canSell;
         button.onClick.AddListener(() => {
-            gameLogic.SellItem(item.type, price);
+            gameLogic.SellItem(item.id, price);
         });
         var btnText = PlayerStoreInventoryController.GetButtonText(gameObject);
         btnText.text = "Sell";

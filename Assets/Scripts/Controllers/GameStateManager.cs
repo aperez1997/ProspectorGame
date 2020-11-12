@@ -25,9 +25,9 @@ public static class GameStateManager
         // GameLogic would be nice, but currently gameLogic requires gameState, which creates 
         // chicken/egg problem.
         Player player = new Player(12);
-        player.Inventory.AddItem(ItemType.Money, 50);
-        player.Inventory.AddItem(ItemType.Ration, 7);
-        player.Inventory.AddItem(ItemType.Pan, 1);
+        player.Inventory.AddItem(ItemId.Money, 50);
+        player.Inventory.AddItem(ItemId.Ration, 7);
+        player.Inventory.AddItem(ItemId.Pan, 1);
 
         List<WorldTile> TileList = WorldMapLoader.CreateRandomWorldMap();
 

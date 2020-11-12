@@ -2,7 +2,7 @@
 
 public class InventoryChangedEventArgs : EventArgs
 {
-    public ItemType Type { get; }
+    public ItemId Type { get; }
 
     public int Delta { get; }
 
@@ -10,7 +10,7 @@ public class InventoryChangedEventArgs : EventArgs
 
     public int NewAmount { get; }
 
-    public InventoryChangedEventArgs(ItemType type, int delta, int newAmount)
+    public InventoryChangedEventArgs(ItemId type, int delta, int newAmount)
     {
         Type = type;
         Delta = delta;

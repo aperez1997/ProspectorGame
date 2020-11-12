@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class InventoryItemUIMetaData : MonoBehaviour
 {
-    public ItemType type;
+    public ItemId type;
     public int amount;
 
     public void SetFromInventoryItem(InventoryItem item)
     {
-        type = item.type;
+        type = item.id;
         amount = item.amount;
     }
 }

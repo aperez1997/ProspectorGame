@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class InventoryItem : ISerializationCallbackReceiver
 {
-    public ItemType type;
+    public ItemId id;
 
     public int amount;
 
@@ -18,16 +18,16 @@ public class InventoryItem : ISerializationCallbackReceiver
     public bool Stackable { get; private set; }
     public int Price { get; private set; }
 
-    public InventoryItem(ItemType type, int amount)
+    public InventoryItem(ItemId type, int amount)
     {
-        this.type = type;
+        this.id = type;
         this.amount = amount;
         LoadItemData();
     }
 
     private void LoadItemData()
     {
-        ItemData item = ItemDataLoader.LoadItemByType(type);
+        ItemData item = ItemDataLoader.LoadItemById(id);
         if (item is ItemData)
         {
             Category = item.category;
@@ -39,7 +39,7 @@ public class InventoryItem : ISerializationCallbackReceiver
         }
         else
         {
-            Debug.LogError("Could not find item " + type.ToString());
+            Debug.LogError("Could not find item " + id.ToString());
         }
     }
 
@@ -50,6 +50,6 @@ public class InventoryItem : ISerializationCallbackReceiver
 
     public override string ToString()
     {
-        return "I:"+type+":"+amount;
+        return "I:"+id+":"+amount;
     }
 }

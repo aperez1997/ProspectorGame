@@ -20,7 +20,7 @@ public class Inventory
      *  <param name="type">type of item to check for</param>
      *  <param name="count">number to check for, stackables only!</param>
      */
-    public bool HasItem(ItemType type, int count = 1)
+    public bool HasItem(ItemId type, int count = 1)
     {
         return HasItem(type, out _, count);
     }
@@ -31,13 +31,13 @@ public class Inventory
      *  <param name="returnItem">If item exists, it will be returned here. For non-stackables, this will be the first item only</param>
      *  <param name="count">number to check for, stackables only!</param>
      */
-    public bool HasItem(ItemType type, out InventoryItem returnItem, int count = 1)
+    public bool HasItem(ItemId type, out InventoryItem returnItem, int count = 1)
     {
         returnItem = null;
         for (int i = 0; i < ItemList.Count; i++)
         {
             InventoryItem inventoryItem = ItemList[i];
-            if (inventoryItem.type == type && inventoryItem.amount >= count)
+            if (inventoryItem.id == type && inventoryItem.amount >= count)
             {
                 returnItem = inventoryItem;
                 return true;
@@ -47,7 +47,7 @@ public class Inventory
     }
 
     /// <summary>Shortcut to add item, if you only care about type+amount</summary>
-    public void AddItem(ItemType type, int amount)
+    public void AddItem(ItemId type, int amount)
     {
         var item = new InventoryItem(type, amount);
         AddItem(item);
@@ -56,7 +56,7 @@ public class Inventory
     /// <summary>Proper way to add an item</summary>
     public void AddItem(InventoryItem item)
     {
-        ItemType type = item.type;
+        ItemId type = item.id;
         bool haveItem = HasItem(type, out InventoryItem foundItem);
         int newAmount = item.amount;
         if (item.Stackable && haveItem){
@@ -66,11 +66,11 @@ public class Inventory
             ItemList.Add(item);
         }
 
-        var e = new InventoryChangedEventArgs(item.type, item.amount, newAmount);
+        var e = new InventoryChangedEventArgs(item.id, item.amount, newAmount);
         OnItemListChanged?.Invoke(this, e);
     }
 
-    public bool RemoveItem(ItemType type, int count = 1)
+    public bool RemoveItem(ItemId type, int count = 1)
     {
         bool have = HasItem(type, out InventoryItem foundItem, count);
         if (have) {

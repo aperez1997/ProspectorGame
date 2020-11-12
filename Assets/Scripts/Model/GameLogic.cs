@@ -30,7 +30,7 @@ public class GameLogic
     {
         if (!IsAllowedOnPlayerTile(ActionType.Camp)) { return false; }
 
-        const ItemType ration = ItemType.Ration;
+        const ItemId ration = ItemId.Ration;
         bool hasFood = Inventory.HasItem(ration);
         if (hasFood)
         {
@@ -60,7 +60,7 @@ public class GameLogic
         int cost = GetForageCost();
         if (!CanForage(out int chance)){ return false; }
 
-        return TakeActionForItem(cost, chance, ItemType.Ration, 1);
+        return TakeActionForItem(cost, chance, ItemId.Ration, 1);
     }
 
     public int GetPanForGoldCost() { return 2; }
@@ -70,7 +70,7 @@ public class GameLogic
     public bool CanPanForGold(out int chance)
     {
         chance = 0; // set in case hasPan is false
-        bool hasPan = Inventory.HasItem(ItemType.Pan);       
+        bool hasPan = Inventory.HasItem(ItemId.Pan);       
         return hasPan && IsAllowedOnTileAndHaveAP(ActionType.PanForGold, GetPanForGoldCost(), out chance);
     }
 
@@ -79,7 +79,7 @@ public class GameLogic
         int cost = GetPanForGoldCost();
         if (!CanPanForGold(out int chance)) { return false; }
 
-        return TakeActionForItem(cost, chance, ItemType.GoldNugget, 1);
+        return TakeActionForItem(cost, chance, ItemId.GoldNugget, 1);
     }
 
     public bool IsAllowedOnTileAndHaveAP(ActionType type, int cost, out int chance)
@@ -153,7 +153,7 @@ public class GameLogic
     /// <param name="type">type of item if success</param>
     /// <param name="quantity">amount of item if success</param>
     /// <returns>success rv</returns>
-    private bool TakeActionForItem(int cost, int chance, ItemType type, int quantity = 1)
+    private bool TakeActionForItem(int cost, int chance, ItemId type, int quantity = 1)
     {
         if (!Player.SpendActionPoints(cost)) { return false; }
 
@@ -184,7 +184,7 @@ public class GameLogic
         return Player.HasEnoughMoney(cost);
     }
 
-    public bool BuyItem(ItemType type, int cost, int amount = 1)
+    public bool BuyItem(ItemId type, int cost, int amount = 1)
     {
         var totalCost = cost * amount;
         if (!Player.SpendMoney(cost)) { return false; }
@@ -193,14 +193,14 @@ public class GameLogic
         return true;
     }
 
-    public bool CanSell(ItemType type)
+    public bool CanSell(ItemId type)
     {
         return GetSellPrice(type) > 0;
     }
 
-    public int GetSellPrice(ItemType type)
+    public int GetSellPrice(ItemId type)
     {
-        ItemData data = ItemDataLoader.LoadItemByType(type);
+        ItemData data = ItemDataLoader.LoadItemById(type);
         if (data.price > 0)
         {
             float priceRaw = data.price / 2;
@@ -210,7 +210,7 @@ public class GameLogic
         return -1;
     }
 
-    public bool SellItem(ItemType type, int price, int amount = 1)
+    public bool SellItem(ItemId type, int price, int amount = 1)
     {
         if (!Inventory.RemoveItem(type, amount)) { return false; }
 
@@ -229,7 +229,7 @@ public class GameLogic
         var categories = new List<ItemCategory>( new[]{ ItemCategory.Food, ItemCategory.Tools });
 
         // Look at each item and determine if it fits
-        foreach (ItemType type in Enum.GetValues(typeof(ItemType)))
+        foreach (ItemId type in Enum.GetValues(typeof(ItemId)))
         {
             var item = new InventoryItem(type, 10);
             // needs to have a price

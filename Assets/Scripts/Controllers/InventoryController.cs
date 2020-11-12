@@ -15,11 +15,13 @@ public class InventoryController : MonoBehaviour
 
     private void Awake()
     {
+        //Debug.Log("Inventory awake");
         ItemContainer = Utils.FindInChildren(gameObject, "Item Container").transform;
     }
 
     private void Start()
     {
+        //Debug.Log("Inventory start");
         gameLogic = GameState.Instance.GameLogic;
 
         ItemTemplate.SetActive(false);
@@ -98,14 +100,14 @@ public class InventoryController : MonoBehaviour
     /// <summary>
     /// Finds the transform for the first inventory item of the given type, or null
     /// </summary>
-    private Transform FindInventoryItemTransform(ItemType type)
+    private Transform FindInventoryItemTransform(ItemId id)
     {
         foreach (Transform child in ItemContainer)
         {
             // skip the template
             if (child == ItemTemplate.transform) { continue; }
             var metaData = child.GetComponent<InventoryItemUIMetaData>();
-            if (metaData.type == type)
+            if (metaData.type == id)
             {
                 return child;
             }

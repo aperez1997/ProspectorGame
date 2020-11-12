@@ -66,7 +66,7 @@ public class GeneralStoreController : MonoBehaviour
             var button = PlayerStoreInventoryController.GetActionButton(gameObject);
             button.interactable = gameLogic.CanAfford(price);
             button.onClick.AddListener(() => {
-                gameLogic.BuyItem(item.type, price);
+                gameLogic.BuyItem(item.id, price);
             });
             var btnText = PlayerStoreInventoryController.GetButtonText(gameObject);
             btnText.text = "Buy";

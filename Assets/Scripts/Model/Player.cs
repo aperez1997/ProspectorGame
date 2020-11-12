@@ -92,20 +92,20 @@ public class Player
 
     public bool HasEnoughMoney(int cost)
     {
-        return Inventory.HasItem(ItemType.Money, cost);
+        return Inventory.HasItem(ItemId.Money, cost);
     }
 
     public bool SpendMoney(int cost)
     {
         if (!HasEnoughMoney(cost)){ return false; }
-        Inventory.RemoveItem(ItemType.Money, cost);
+        Inventory.RemoveItem(ItemId.Money, cost);
         OnMoneyChanged?.Invoke(this, EventArgs.Empty);
         return true;
     }
 
     public bool ReceiveMoney(int amount)
     {
-        Inventory.AddItem(ItemType.Money, amount);
+        Inventory.AddItem(ItemId.Money, amount);
         OnMoneyChanged?.Invoke(this, EventArgs.Empty);
         return true;
     }

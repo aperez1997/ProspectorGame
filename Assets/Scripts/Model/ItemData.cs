@@ -3,7 +3,7 @@
 [CreateAssetMenu(fileName = "Item", menuName = "ItemData")]
 public class ItemData : ScriptableObject
 {
-    public ItemType type;
+    public ItemId id;
 
     [Tooltip("Category of item. Determines which stores sell which items")]
     public ItemCategory category;
@@ -24,7 +24,7 @@ public class ItemData : ScriptableObject
 /// <summary>
 /// Unique Item identifier. Links to SO
 /// </summary>
-public enum ItemType { Money, Ration, Pan, GoldNugget }
+public enum ItemId { Money, Ration, Pan, GoldNugget }
 
 /// <summary>
 /// Category of item. Used for store filtering
