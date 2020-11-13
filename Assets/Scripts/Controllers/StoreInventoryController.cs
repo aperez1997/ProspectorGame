@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// abstract controller class for a store inventory.
 /// Includes things like a price text and sell button
-/// Use with the storeInventoryItem prefab
+/// Use with the "pfInventoryItem-Store Variant" prefab
 /// </summary>
 abstract public class StoreInventoryController : InventoryController
 {
@@ -20,7 +20,6 @@ abstract public class StoreInventoryController : InventoryController
 
         base.Start();
     }
-
 
     public static void SetInventoryStorePrefab_Static(GameObject gameObject, InventoryItem item)
     {
