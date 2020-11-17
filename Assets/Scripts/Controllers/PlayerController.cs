@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,11 +8,16 @@ using UnityEngine.UI;
 // Actions related stuffs
 public class PlayerController : MonoBehaviour
 {
+    // game data
     private Player player;
+    private GameStateMeta gameStateMeta;
     private GameLogic gameLogic;
 
+    // TopBar UI
     public Text healthPointTxt;
+    public TextMeshProUGUI DateText;
 
+    // Actions UI
     public Button CampBtn;
 
     public Button TownBtn;
@@ -31,23 +37,33 @@ public class PlayerController : MonoBehaviour
     {
         gameLogic = GameState.Instance.GameLogic;
         player = GameState.Instance.Player;
+
         player.OnHealthChanged += Player_OnHealthChanged;
         player.OnLocationChanged += Player_OnLocationOrAPChanged;
         player.OnActionPointsChanged += Player_OnLocationOrAPChanged;
 
+        gameStateMeta = GameState.Instance.GameStateMeta;
+        gameStateMeta.OnGameDateChanged += GameStateMeta_OnDateChanged;
+
         UpdateHealthUI();
         UpdateActionsUI();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        UpdateDateUI();
     }
 
     void UpdateHealthUI()
     {
         healthPointTxt.text = player.Health.ToString() + "/" + Player.MAX_HEALTH.ToString();
+    }
+
+    void UpdateDateUI()
+    {
+        var date = gameStateMeta.GameDate;
+        var dayOfWeek = date.ToString("ddd");
+        var month = date.ToString("MMM", CultureInfo.InvariantCulture);
+        var dayOfMonth = date.Day.ToString();
+        var yearStr = date.Year.ToString();
+
+        DateText.text = string.Format("{0,3} {1} {2}, {3}", dayOfWeek, month, dayOfMonth, yearStr);
     }
 
     void UpdateActionsUI()
@@ -134,10 +150,17 @@ public class PlayerController : MonoBehaviour
         UpdateActionsUI();
     }
 
+    private void GameStateMeta_OnDateChanged(object sender, EventArgs e)
+    {
+        UpdateDateUI();
+    }
+
     private void OnDestroy()
     {
+        // cleanup or bad things can happen
         player.OnHealthChanged -= Player_OnHealthChanged;
         player.OnLocationChanged -= Player_OnLocationOrAPChanged;
         player.OnActionPointsChanged -= Player_OnLocationOrAPChanged;
+        gameStateMeta.OnGameDateChanged -= GameStateMeta_OnDateChanged;
     }
 }

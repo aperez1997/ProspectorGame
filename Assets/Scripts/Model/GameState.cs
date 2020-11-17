@@ -2,26 +2,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Acts as the source of truth for game data while running
+/// AND as the serialized data struct.
+/// Probably want to decouple this and make a GameStateData class to serialize
+/// and leave this as the "factory"/singleton
+/// </summary>
 [Serializable]
 public class GameState : ISerializationCallbackReceiver
 {
+    // singleton
     public static GameState Instance { get; set; }
 
+    /// SERIALIZED FIELEDS ///
+
+    /// <summary>
+    /// The player's data, including their inventory
+    /// </summary>
     public Player Player;
 
-    public Inventory Inventory { get { return Player.Inventory; } }
-
-    // The world
+    /// <summary>
+    /// The world map
+    /// </summary>
     [field:SerializeField] public List<WorldTile> WorldTileList { get; private set; }
 
+    /// <summary>
+    /// Meta data about the game
+    /// </summary>
+    public GameStateMeta GameStateMeta;
+
+    /// SERIALIZED FIELEDS ///
+
+    // Derived from world tiles, Location => WorldTile mapping
     private Dictionary<Vector3Int, WorldTile> WorldTileDict;
 
+    // Other Accessors, not serialized
+    public Inventory Inventory { get { return Player.Inventory; } }
+    public DateTime GameDate { get { return GameStateMeta.GameDate; } }
     public GameLogic GameLogic { get; private set; }
 
     public GameState(Player player, List<WorldTile> worldTileList)
     {
         this.Player = player;
         this.WorldTileList = worldTileList;
+        this.GameStateMeta = new GameStateMeta();
         Init();
     }
 

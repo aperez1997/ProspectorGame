@@ -8,6 +8,8 @@ public class GameLogic
 
     private Inventory Inventory { get { return Player.Inventory; } }
 
+    private GameStateMeta GameStateMeta { get { return gameState.GameStateMeta; } }
+
     private readonly GameState gameState;
 
     public GameLogic(GameState gameState)
@@ -42,7 +44,10 @@ public class GameLogic
             Debug.Log("Health loss due to no food");
             Player.ReduceHealth();
         }
+        // give back AP
         Player.ResetActionPoints();
+        // advance date
+        GameStateMeta.AddDays(1);
         return true;
     }
 

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Class for a Player Inventory used in Store context (sell)
+/// Controller for displaying a Player Inventory used in Store context (sell)
 /// </summary>
 public class PlayerStoreInventoryController : StoreInventoryController
 {
