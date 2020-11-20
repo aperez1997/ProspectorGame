@@ -406,6 +406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileMap: {fileID: 1933218274}
+  HiddenTile: {fileID: 11400000, guid: 93f97f72d49f72c419a2c66d40bff5d0, type: 2}
 --- !u!1 &223711260
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -12,7 +13,12 @@ public class WorldTile : ISerializationCallbackReceiver
     /// <summary> Location (x,y) in the world map</summary>
     public Vector3Int CellLoc;
 
+    /// <summary>Whether the player has revealed this tile or not</summary>
+    [SerializeField] private bool isRevealed = false;
+    public bool IsRevealed { get { return isRevealed; } }
+
     /// <summary> Type of Biome </summary>
+    /// TODO: Make private
     public BiomeType Type;
 
     /// <summary>Lazy-Loaded BiomeData object</summary>
@@ -55,6 +61,28 @@ public class WorldTile : ISerializationCallbackReceiver
         }
     }
 
+    public bool HasFeature(TileFeatureType type)
+    {
+        return FeatureTypes.Contains(type);
+    }
+
+    public bool HasRoad()
+    {
+        return HasFeature(TileFeatureType.Road);
+    }
+    public bool HasRiver()
+    {
+        return HasFeature(TileFeatureType.River);
+    }
+
+    public void AddFeature(TileFeatureType type)
+    {
+        if (!HasFeature(type)) {
+            FeatureTypes.Add(type);
+            ResetLoadedFields(); // need to recompute
+        }
+    }
+
     /// <summary>
     /// computed foraging chance
     /// </summary>
@@ -86,6 +114,51 @@ public class WorldTile : ISerializationCallbackReceiver
     /// </summary>
     public Dictionary<HexDirection, WorldTile> Neighbors { get; set; }
 
+    /// <summary>
+    /// Returns true if otherTile is a neighbor of this tile
+    /// </summary>
+    public bool IsNeighbor(WorldTile otherTile)
+    {
+        return IsNeighbor(otherTile, out _);
+    }
+
+    /// <summary>
+    /// Returns true if otherTile is a neighbor of this tile
+    /// </summary>
+    /// <param name="direction">Returns the direction to otherTile</param>
+    public bool IsNeighbor(WorldTile otherTile, out HexDirection direction)
+    {
+        direction = GetNeighborDirection(otherTile);
+        return direction != HexDirection.None;
+    }
+
+    /// <summary>
+    /// Get the direction to otherTile, or "None" if they are not neighbors
+    /// </summary>
+    /// <returns></returns>
+    public HexDirection GetNeighborDirection(WorldTile otherTile)
+    {
+        var keyValuePair = Neighbors.FirstOrDefault(x => x.Value == otherTile);
+        if (keyValuePair.Value == otherTile) {
+            return keyValuePair.Key;
+        }
+        return HexDirection.None;
+    }
+
+    /// <summary>
+    /// Gets the neighboring tile in the given direction
+    /// </summary>
+    public WorldTile GetNeighborInDirection(HexDirection direction)
+    {
+        Neighbors.TryGetValue(direction, out var tile);
+        return tile;
+    }
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="cellLocationIn"></param>
+    /// <param name="type"></param>
     public WorldTile(Vector3Int cellLocationIn, BiomeType type)
     {
         CellLoc = cellLocationIn;
@@ -97,28 +170,6 @@ public class WorldTile : ISerializationCallbackReceiver
     private void ResetLoadedFields()
     {
         _biomeData = null;
-    }
-
-    public bool HasFeature(TileFeatureType type)
-    {
-        return FeatureTypes.Contains(type);
-    }
-
-    public bool HasRoad()
-    {
-        return HasFeature(TileFeatureType.Road);
-    }
-    public bool HasRiver()
-    {
-        return HasFeature(TileFeatureType.River);
-    }
-
-    public void AddFeature(TileFeatureType type)
-    {
-        if (!HasFeature(type)){
-            FeatureTypes.Add(type);
-            ResetLoadedFields(); // need to recompute
-        }
     }
 
     /// <summary>
@@ -135,6 +186,35 @@ public class WorldTile : ISerializationCallbackReceiver
         }
         
         return moveCost;
+    }
+
+    public List<WorldTile> Reveal(int radius = 1)
+    {
+        var traveled = new List<WorldTile>();
+        Reveal(radius, traveled);
+        return traveled;
+    }
+
+    /// <summary>
+    /// Reveal tile and neighboring tiles at radius distance apart
+    /// TODO: create a world map object and make these immutable.
+    /// then express mutation as creating new WorldTiles
+    /// </summary>
+    private void Reveal(int radius, List<WorldTile> traveled)
+    {
+        traveled.Add(this);
+        this.isRevealed = true;
+        if (radius <= 0) { return; }
+
+        // reveal neighbors too
+        int newRadius = radius - 1;
+        foreach (var keyValuePair in Neighbors) {
+            var neighbor = keyValuePair.Value;
+            if (!traveled.Contains(neighbor)) {
+                traveled.Add(neighbor);
+                neighbor.Reveal(newRadius, traveled);
+            }
+        }
     }
 
     public override string ToString()

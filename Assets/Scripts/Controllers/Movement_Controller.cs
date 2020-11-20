@@ -94,26 +94,16 @@ public class Movement_Controller : MonoBehaviour
     }
 
     // Called to move in the given direction
-    public void HandleMovement(HexDirection direction)
+    public bool HandleMovement(HexDirection direction)
     {
-        // get cost
-        int cost = GetCost(direction);
         //Debug.Log("Button direction "+ direction.ToString() +" was pressed! Cost is " + cost);
-        if (!player.HasEnoughActionPoints(cost))
-        {
-            Debug.LogWarning("Cannot move because not enough AP");
-            return;
-        }
+        var tileAt = LoadPlayerTile();
 
-        // change the player's position. This will cause an event to update UI
-        Vector3Int newCellPos = HexDirectionUtil.TranslateVector3Int(player.GetCellPosition(), direction);
-        player.SetLocation(newCellPos, direction);
-
-        // Bookkeeping
-        player.SpendActionPoints(cost);
+        var rv = gameLogic.MovePlayer(tileAt, direction);
 
         // update internal costs matrix and UI 
         UpdateMovementCosts(direction);
+        return rv;
     }
 
     // Update movement costs for the buttons based on the current location and lastDirection moved

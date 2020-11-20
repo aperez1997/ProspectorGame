@@ -18,12 +18,43 @@ public class GameLogic
     }
 
     // Movement
+
+    /// <summary>
+    /// Gets AP cost to move from tileAt to tileNeighbor
+    /// </summary>
     public int GetMovementCost(WorldTile tileAt, WorldTile tileNeighbor)
     {
         bool hasRoad = tileAt.HasRoad();
         int costNeighbor = tileNeighbor.GetMoveCost(hasRoad);
         costNeighbor = Math.Max(1, costNeighbor);
         return costNeighbor;
+    }
+
+    /// <summary>
+    /// Move player from tileFrom to tileTo
+    /// </summary>
+    public bool MovePlayer(WorldTile tileFrom, HexDirection direction)
+    {
+        var tileTo = tileFrom.GetNeighborInDirection(direction);
+        int cost = GetMovementCost(tileFrom, tileTo);
+        if (!Player.HasEnoughActionPoints(cost)) {
+            Debug.LogWarning("Cannot move because not enough AP");
+            return false;
+        }
+
+        // change the player's position.
+        Player.SetLocation(tileTo.CellLoc, direction);
+
+        // Bookkeeping
+        Player.SpendActionPoints(cost);
+
+        // reveal tile and neighbors
+        // TODO: refactor this into a worldMap class that contains and manages the tiless
+        var tilesChanged = tileTo.Reveal(1);
+        // this would be a "on tiles changed event" that worldMapLoader would subscribe too
+        WorldMapLoader.Instance.LoadWorldTileListIntoTileMap(tilesChanged);
+
+        return true;
     }
 
     // ACTIONS

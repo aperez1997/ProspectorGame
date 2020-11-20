@@ -14,6 +14,9 @@ public class WorldMapLoader : MonoBehaviour
 
     public Tilemap tileMap;
 
+    [Tooltip("Used for tiles that have not been revealed")] 
+    public Tile HiddenTile;
+
     private void Awake()
     {
         Instance = this;
@@ -24,25 +27,34 @@ public class WorldMapLoader : MonoBehaviour
     {
         GameStateManager.DebugLoadState();
 
-        LoadMapDataIntoTileMap(GameState.Instance.WorldTileList);
+        LoadWorldTileListIntoTileMap(GameState.Instance.WorldTileList);
     }
 
-    public void LoadMapDataIntoTileMap(List<WorldTile> worldTileList)
+    public void LoadWorldTileListIntoTileMap(List<WorldTile> worldTileList)
     {
         Debug.Log("Loading World Map with " + worldTileList.Count + " tiles");
         foreach (WorldTile worldTile in worldTileList)
         {
-            Tile tile = worldTile.Tile;
-            Vector3Int cellLoc = worldTile.CellLoc;
-            tileMap.SetTile(cellLoc, tile);
+            LoadWorldTileIntoTileMap(worldTile);
+        }
+    }
 
-            // load features
-            foreach (var feature in worldTile.Features)
-            {
-                var z = feature.zIndex;
-                var loc = new Vector3Int(cellLoc.x, cellLoc.y, z);
-                tileMap.SetTile(loc, feature.hexTile);
-            }
+    public void LoadWorldTileIntoTileMap(WorldTile worldTile)
+    {
+        Vector3Int cellLoc = worldTile.CellLoc;
+        if (!worldTile.IsRevealed) {
+            tileMap.SetTile(cellLoc, HiddenTile);
+            return;
+        }
+
+        Tile tile = worldTile.Tile;
+        tileMap.SetTile(cellLoc, tile);
+
+        // load features
+        foreach (var feature in worldTile.Features) {
+            var z = feature.zIndex;
+            var loc = new Vector3Int(cellLoc.x, cellLoc.y, z);
+            tileMap.SetTile(loc, feature.hexTile);
         }
     }
 
@@ -73,23 +85,23 @@ public class WorldMapLoader : MonoBehaviour
                 // grass around the center
                 if (Math.Abs(x) <= 1 && Math.Abs(y) <= 1){ tt = BiomeType.Grass; }
 
-                WorldTile dTile = new WorldTile(loc, tt);
-                dTileList.Add(dTile);
+                WorldTile worldTile = new WorldTile(loc, tt);
+                dTileList.Add(worldTile);
 
                 // add features
                 if (x == 0 && y == 0) {
                     // always start in town
-                    dTile.AddFeature(TileFeatureType.Town);
+                    worldTile.AddFeature(TileFeatureType.Town);
                 }
                 if (RoadLocs.Contains((x,y))){
                     // Road locations
-                    dTile.AddFeature(TileFeatureType.Road);
+                    worldTile.AddFeature(TileFeatureType.Road);
                 }
 
                 if (RiverLocs.Contains((x, y)))
                 {
                     // Road locations
-                    dTile.AddFeature(TileFeatureType.River);
+                    worldTile.AddFeature(TileFeatureType.River);
                 }
             }
         }

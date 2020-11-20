@@ -33,6 +33,10 @@ public static class GameStateManager
 
         GameState state = new GameState(player, TileList);
         GameState.Instance = state;
+
+        // reveal players location
+        var tileAt = state.GetTileForPlayerLocation(player);
+        tileAt.Reveal(1);
     }
 
     // Hack to auto-load game if we get here and there isn't something loaded yet
