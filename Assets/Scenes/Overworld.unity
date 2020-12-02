@@ -1453,59 +1453,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 713728432}
   m_CullTransparentMesh: 0
---- !u!1 &749623023
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 749623025}
-  - component: {fileID: 749623024}
-  m_Layer: 0
-  m_Name: LoaderTest
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &749623024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 749623023}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cac7d85cfa116e046be6429ab59fbcf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moneySprite: {fileID: 21300122, guid: 14aefffd3622c7347aad64f2bed35801, type: 3}
-  grassSprite: {fileID: 21300040, guid: ac1645b9b895a8c4a9f8d5b744dcf28b, type: 3}
-  riverSprite: {fileID: 4802330667421382101, guid: 8e1cc121cc575e14689c273bceff44fa,
-    type: 3}
-  roadSprite: {fileID: -6043416981284610355, guid: 0c1b55c158d18334999da216928b9a79,
-    type: 3}
-  moneyItem: {fileID: 11400000, guid: 650fb5babc0686b40bfe175b2f440eb8, type: 2}
-  grassBiome: {fileID: 11400000, guid: 64f6f75068786c74883b2930763defe4, type: 2}
-  road: {fileID: 11400000, guid: d1be536a6b69346e2a3d4d2a021cf44c, type: 2}
-  river: {fileID: 11400000, guid: 35bcf24713cab474e9cc28d02ada5949, type: 2}
---- !u!4 &749623025
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 749623023}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 610.21515, y: 331.26346, z: -101.052086}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &780441192
 GameObject:
   m_ObjectHideFlags: 0
