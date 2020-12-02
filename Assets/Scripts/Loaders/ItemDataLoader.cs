@@ -1,5 +1,8 @@
-﻿/// <summary>
-/// Loads ItemData ScriptableObject.
+﻿using UnityEngine;
+using System.Linq;
+
+/// <summary>
+/// Loads ItemData ScriptableObjects
 /// </summary>
 public class ItemDataLoader : AssetLoader<ItemData>
 {
@@ -23,4 +26,6 @@ public class ItemDataLoader : AssetLoader<ItemData>
     {
         return Instance.LoadByKey(id.ToString());
     }
+
+    protected override string GetPath(){ return "GameData/Items"; }
 }

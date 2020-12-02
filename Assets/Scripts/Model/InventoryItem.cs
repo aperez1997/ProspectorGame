@@ -39,7 +39,7 @@ public class InventoryItem : ISerializationCallbackReceiver
         }
         else
         {
-            Debug.LogError("Could not find item " + id.ToString());
+            //Debug.LogError("Could not find item " + id.ToString());
         }
     }
 

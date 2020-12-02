@@ -16,4 +16,6 @@
     {
         return Instance.LoadByKey(type.ToString());
     }
+
+    protected override string GetPath() { return "GameData/Biomes"; }
 }
