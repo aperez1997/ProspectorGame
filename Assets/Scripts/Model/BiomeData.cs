@@ -2,10 +2,10 @@
 using UnityEngine.Tilemaps;
 
 /// <summary>
-/// Holds data about the different types of biomes, as well as it's asset for the map
+/// Loads BiomeData stored objects
 /// </summary>
 [CreateAssetMenu(fileName = "Biome", menuName = "BiomeData")]
-public class BiomeData : ScriptableObject
+public class BiomeData : ScriptableObject, IAssetLoaderItem
 {
     public BiomeType type;
 
@@ -33,6 +33,8 @@ public class BiomeData : ScriptableObject
         int index = Random.Range(1, values.Length); // don't return water tiles
         return (BiomeType)values.GetValue(index);
     }
+
+    public string GetKey(){ return type.ToString(); }
 }
 
 // All the known biome types. Types are spelled out because they get saved into the saveFile

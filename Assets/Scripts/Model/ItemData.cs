@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "Item", menuName = "ItemData")]
-public class ItemData : ScriptableObject
+public class ItemData : ScriptableObject, IAssetLoaderItem
 {
     public ItemId id;
 
@@ -19,6 +19,8 @@ public class ItemData : ScriptableObject
 
     [Tooltip("Price the item is sold for in stores. 0 or less means not sold")]
     public int price;
+
+    public string GetKey() { return id.ToString(); }
 }
 
 /// <summary>

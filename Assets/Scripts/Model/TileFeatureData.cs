@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 [CreateAssetMenu(fileName = "TileFeature", menuName = "TileFeatureData")]
-public class TileFeatureData : ScriptableObject
+public class TileFeatureData : ScriptableObject, IAssetLoaderItem
 {
     public TileFeatureType type;
 
@@ -26,6 +26,8 @@ public class TileFeatureData : ScriptableObject
 
     [Tooltip("Modifies base hunting chance")]
     public int huntingChanceModifier;
+
+    public string GetKey() { return type.ToString(); }
 }
 
 // Note: this currently map to which tilemap layer the features go on.
