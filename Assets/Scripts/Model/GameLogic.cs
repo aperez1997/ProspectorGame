@@ -26,7 +26,10 @@ public class GameLogic
     {
         bool hasRoad = tileAt.HasRoad();
         int costNeighbor = tileNeighbor.GetMoveCost(hasRoad);
-        costNeighbor = Math.Max(1, costNeighbor);
+        if (tileNeighbor.MoveBaseCost > 0){
+            // Only enforce min-cost-1 if the tile is moveable (negative base cost means can't move)
+            costNeighbor = Math.Max(1, costNeighbor);
+        }
         return costNeighbor;
     }
 

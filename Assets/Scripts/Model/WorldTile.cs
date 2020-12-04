@@ -40,7 +40,7 @@ public class WorldTile : ISerializationCallbackReceiver
     /// <summary>Sprite asset for the tile</summary>
     public Tile Tile { get { return BiomeData.hexTile; } }
     public bool CanCamp { get { return BiomeData.canCamp; } }
-    private int MoveBaseCost { get { return BiomeData.moveBaseCost; } }
+    public int MoveBaseCost { get { return BiomeData.moveBaseCost; } }
     private int ForagingBaseChance { get { return BiomeData.foragingBaseChance; } }
     private int HuntingBaseChance { get { return BiomeData.huntingBaseChance; } }
 
@@ -173,18 +173,17 @@ public class WorldTile : ISerializationCallbackReceiver
     }
 
     /// <summary>
-    /// Computed move cost. Has to be function because it's conditional on the
-    /// road bonus (which is tile dependent)
+    /// Computed move cost. Has to be method because it takes a parameter
     /// </summary>
+    /// <param name="roadBonus">true if roadbonus is currently in effect</param>
     public int GetMoveCost(bool roadBonus)
-    {
+    {        
         var moveCost = MoveBaseCost;
         foreach (var feature in Features) {
             if (roadBonus || feature.type != TileFeatureType.Road) {
                 moveCost += feature.moveCostModifier;
             }
         }
-        
         return moveCost;
     }
 
