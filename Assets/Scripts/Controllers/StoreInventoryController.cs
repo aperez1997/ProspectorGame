@@ -16,7 +16,7 @@ abstract public class StoreInventoryController : InventoryController
     protected override void Start()
     {
         // get these from singleton. Is this the right way?
-        gameLogic = GameState.Instance.GameLogic;
+        gameLogic = GameStateManager.LogicInstance;
 
         base.Start();
     }

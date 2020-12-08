@@ -31,11 +31,11 @@ public class Movement_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameState.Instance.Player;
+        player = GameStateManager.LogicInstance.Player;
         player.OnActionPointsChanged += Player_OnActionPointsChanged;
         player.OnLocationChanged += Player_OnLocationChanged;
 
-        gameLogic = GameState.Instance.GameLogic;
+        gameLogic = GameStateManager.LogicInstance;
 
         //Debug.Log("Moving player to " + player.Location);
         UpdatePosition();       
@@ -128,7 +128,7 @@ public class Movement_Controller : MonoBehaviour
 
     protected WorldTile LoadPlayerTile()
     {
-        return GameState.Instance.GetTileForPlayerLocation(player);
+        return GameStateManager.LogicInstance.GetTileForPlayerLocation();
     }
 
     private void Player_OnLocationChanged(object sender, EventArgs e)

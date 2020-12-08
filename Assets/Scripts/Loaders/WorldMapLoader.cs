@@ -17,6 +17,8 @@ public class WorldMapLoader : MonoBehaviour
     [Tooltip("Used for tiles that have not been revealed")] 
     public Tile HiddenTile;
 
+    private WorldMap WorldMap;
+
     private void Awake()
     {
         Instance = this;
@@ -27,7 +29,10 @@ public class WorldMapLoader : MonoBehaviour
     {
         GameStateManager.DebugLoadState();
 
-        LoadWorldTileListIntoTileMap(GameState.Instance.WorldTileList);
+        WorldMap = GameStateManager.LogicInstance.WorldMap;
+        LoadWorldTileListIntoTileMap(WorldMap.WorldTileList);
+
+        WorldMap.OnWorldTilesChanged += WorldMap_OnWorldTilesChanged;
     }
 
     public void LoadWorldTileListIntoTileMap(List<WorldTile> worldTileList)
@@ -58,67 +63,13 @@ public class WorldMapLoader : MonoBehaviour
         }
     }
 
-    // TODO: should probably be moved into gameLogic, once I figure out a way to do that
-    public static List<WorldTile> CreateRandomWorldMap()
+    private void WorldMap_OnWorldTilesChanged(object sender, WorldTileChangeEventArgs e)
     {
-        /**
-         * consider using data-struct (this many mountains, this height of water)
-         * that can be made into a hash, and hash always generates the same level
-         */ 
-
-        List<WorldTile> dTileList = new List<WorldTile>();
-
-        int maxX = 5;
-        int maxY = 5;
-
-        // generates a random map for now
-        for (int x = -1 * maxX; x <= maxX; x++)
-        {
-            for (int y = -1 * maxY; y <= maxY; y++)
-            {
-                Vector3Int loc = new Vector3Int(x, y, 0);
-
-                BiomeType tt = BiomeData.GetRandomTypeForRandoMap();
-                // surround the edges of the map with water
-                if (Math.Abs(x) == maxX || Math.Abs(y) == maxY) { tt = BiomeType.Water; }
-
-                // grass around the center
-                if (Math.Abs(x) <= 1 && Math.Abs(y) <= 1){ tt = BiomeType.Grass; }
-
-                WorldTile worldTile = new WorldTile(loc, tt);
-                dTileList.Add(worldTile);
-
-                // add features
-                if (x == 0 && y == 0) {
-                    // always start in town
-                    worldTile.AddFeature(TileFeatureType.Town);
-                }
-                if (RoadLocs.Contains((x,y))){
-                    // Road locations
-                    worldTile.AddFeature(TileFeatureType.Road);
-                }
-
-                if (RiverLocs.Contains((x, y)))
-                {
-                    // Road locations
-                    worldTile.AddFeature(TileFeatureType.River);
-                }
-            }
-        }
-        return dTileList;
+        LoadWorldTileListIntoTileMap(e.WorldTileList);
     }
 
-    private static List<(int, int)> RoadLocs = new List<(int, int)>(new (int,int)[]{
-        (-1,-1), (0,0), (1,0), (1,1), (1,2), (1,-1)
-    });
-
-    private static List<(int, int)> RiverLocs = new List<(int, int)>(new (int, int)[]{
-        (-4,-4), (-4,-3), (-4,-2), (-4,-1), (-3,0), (-3,1)
-    });
-
-    // Update is called once per frame
-    void Update()
+    private void OnDestroy()
     {
-        
+        WorldMap.OnWorldTilesChanged -= WorldMap_OnWorldTilesChanged;
     }
 }

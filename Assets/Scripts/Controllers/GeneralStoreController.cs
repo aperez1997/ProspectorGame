@@ -24,10 +24,10 @@ public class GeneralStoreController : StoreInventoryController
         // for loading this scene from editor
         GameStateManager.DebugLoadState();
 
-        Inventory = GameState.Instance.GameLogic.GetStoreInventory();
+        Inventory = GameStateManager.LogicInstance.GetStoreInventory();
 
         // subscribe to money change event
-        player = GameState.Instance.Player;
+        player = GameStateManager.LogicInstance.Player;
         player.OnMoneyChanged += Player_OnMoneyChanged;
 
         base.Start();

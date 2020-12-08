@@ -1,57 +1,51 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-// Combines GameState and SaveSystem
+/// <summary>
+/// Maintains singleton for current GameLogic, which is how the other classes accesss all game data
+/// It does this by acting as a wrapper around SaveSystem.
+/// </summary>
 public static class GameStateManager
 {
+    // Logic singleton
+    public static GameLogic LogicInstance { get; set; }
+
+    public static void CreateNewGame()
+    {
+        LogicInstance = new GameLogic();
+    }
+
+    public static void SaveGame()
+    {
+        SaveSystem.SaveData(LogicInstance.GameState);
+    }
+
     public static bool LoadGame()
     {
         GameState state = SaveSystem.LoadData();
-        if (state == null)
-        {
+        if (state == null) {
             Debug.LogError("Failed to load game");
             return false;
-        }
-        else
-        {
-            GameState.Instance = state;
+        } else {
+            var logic = new GameLogic(state);
+            LogicInstance = logic;
             return true;
         }
     }
 
-    public static void CreateNewGame()
-    {
-        // TODO: move this to another class? 
-        // GameLogic would be nice, but currently gameLogic requires gameState, which creates 
-        // chicken/egg problem.
-        Player player = new Player(12);
-        player.Inventory.AddItem(ItemId.Money, 50);
-        player.Inventory.AddItem(ItemId.Ration, 7);
-        player.Inventory.AddItem(ItemId.Pan, 1);
-
-        List<WorldTile> TileList = WorldMapLoader.CreateRandomWorldMap();
-
-        GameState state = new GameState(player, TileList);
-        GameState.Instance = state;
-
-        // reveal players location
-        var tileAt = state.GetTileForPlayerLocation(player);
-        tileAt.Reveal(1);
-    }
-
     // Hack to auto-load game if we get here and there isn't something loaded yet
     // this should only be for the editor
-    public static GameState DebugLoadState()
+    public static GameLogic DebugLoadState()
     {
-        if (GameState.Instance == null)
+        if (LogicInstance == null)
         {
-            Debug.Log("No Gamestate, loading game as an editor hack");
+            Debug.Log("No GameLogic, loading game as an editor hack");
             if (!LoadGame())
             {
                 Debug.Log("No saved game. Creating new game as an editor hack");
                 CreateNewGame();
             }
         }
-        return GameState.Instance;
+        return LogicInstance;
     }
 }

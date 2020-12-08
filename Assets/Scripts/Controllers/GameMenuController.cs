@@ -27,7 +27,7 @@ public class GameMenuController : MonoBehaviour
 
     public void SaveGame()
     {
-        SaveSystem.SaveData(GameState.Instance);
+        GameStateManager.SaveGame();
         PopUpTextDriverV1.CreateSuccessPopUp(transform);
         Hide();
     }

@@ -6,7 +6,7 @@ public class PlayerInventoryController : InventoryController
     protected override void Start()
     {
         // get these from singleton. Is this the right way?
-        Inventory = GameState.Instance.Inventory;
+        Inventory = GameStateManager.LogicInstance.Inventory;
 
         base.Start();
     }

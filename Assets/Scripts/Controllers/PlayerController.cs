@@ -35,14 +35,14 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameLogic = GameState.Instance.GameLogic;
-        player = GameState.Instance.Player;
+        gameLogic = GameStateManager.LogicInstance;
+        player = GameStateManager.LogicInstance.Player;
 
         player.OnHealthChanged += Player_OnHealthChanged;
         player.OnLocationChanged += Player_OnLocationOrAPChanged;
         player.OnActionPointsChanged += Player_OnLocationOrAPChanged;
 
-        gameStateMeta = GameState.Instance.GameStateMeta;
+        gameStateMeta = GameStateManager.LogicInstance.GameStateMeta;
         gameStateMeta.OnGameDateChanged += GameStateMeta_OnDateChanged;
 
         UpdateHealthUI();
@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
 
     protected WorldTile LoadPlayerTile()
     {
-        return GameState.Instance.GetTileForPlayerLocation(player);
+        return GameStateManager.LogicInstance.GetTileForPlayerLocation();
     }
 
     public void ActionCamp()

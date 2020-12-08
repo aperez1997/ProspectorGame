@@ -2,19 +2,101 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Has all the game logic, as well as the game state
+/// </summary>
 public class GameLogic
 {
-    private Player Player { get { return gameState.Player; } }
+    public readonly GameState GameState;
+    public GameStateMeta GameStateMeta { get { return GameState.GameStateMeta; } }
 
-    private Inventory Inventory { get { return Player.Inventory; } }
+    public Player Player { get { return GameState.Player; } }
 
-    private GameStateMeta GameStateMeta { get { return gameState.GameStateMeta; } }
+    public Inventory Inventory { get { return Player.Inventory; } }
 
-    private readonly GameState gameState;
+    public WorldMap WorldMap { get { return GameState.WorldMap; } }
 
+    /// <summary>
+    /// Create a new game, basically
+    /// </summary>
+    public GameLogic()
+    {
+        Player player = new Player(12);
+        player.Inventory.AddItem(ItemId.Money, 50);
+        player.Inventory.AddItem(ItemId.Ration, 7);
+        player.Inventory.AddItem(ItemId.Pan, 1);
+
+        List<WorldTile> TileList = CreateRandomWorldMap();
+        var WorldMap = new WorldMap(TileList);
+
+        var meta = new GameStateMeta();
+        this.GameState = new GameState(meta, player, WorldMap);
+
+        // reveal players location
+        var tileAt = GetTileForPlayerLocation();
+        tileAt.Reveal(1);
+    }
+
+    public List<WorldTile> CreateRandomWorldMap()
+    {
+        /**
+         * consider using data-struct (this many mountains, this height of water)
+         * that can be made into a hash, and hash always generates the same level
+         */
+
+        List<WorldTile> dTileList = new List<WorldTile>();
+
+        int maxX = 5;
+        int maxY = 5;
+
+        // generates a random map for now
+        for (int x = -1 * maxX; x <= maxX; x++) {
+            for (int y = -1 * maxY; y <= maxY; y++) {
+                Vector3Int loc = new Vector3Int(x, y, 0);
+
+                BiomeType tt = BiomeData.GetRandomTypeForRandoMap();
+                // surround the edges of the map with water
+                if (Math.Abs(x) == maxX || Math.Abs(y) == maxY) { tt = BiomeType.Water; }
+
+                // grass around the center
+                if (Math.Abs(x) <= 1 && Math.Abs(y) <= 1) { tt = BiomeType.Grass; }
+
+                WorldTile worldTile = new WorldTile(loc, tt);
+                dTileList.Add(worldTile);
+
+                // add features
+                if (x == 0 && y == 0) {
+                    // always start in town
+                    worldTile.AddFeature(TileFeatureType.Town);
+                }
+                if (RoadLocs.Contains((x, y))) {
+                    // Road locations
+                    worldTile.AddFeature(TileFeatureType.Road);
+                }
+
+                if (RiverLocs.Contains((x, y))) {
+                    // Road locations
+                    worldTile.AddFeature(TileFeatureType.River);
+                }
+            }
+        }
+        return dTileList;
+    }
+
+    private static List<(int, int)> RoadLocs = new List<(int, int)>(new (int, int)[]{
+        (-1,-1), (0,0), (1,0), (1,1), (1,2), (1,-1)
+    });
+
+    private static List<(int, int)> RiverLocs = new List<(int, int)>(new (int, int)[]{
+        (-4,-4), (-4,-3), (-4,-2), (-4,-1), (-3,0), (-3,1)
+    });
+
+    /// <summary>
+    /// Load game, basically
+    /// </summary>
     public GameLogic(GameState gameState)
     {
-        this.gameState = gameState;
+        this.GameState = gameState;
     }
 
     // Movement
@@ -51,11 +133,8 @@ public class GameLogic
         // Bookkeeping
         Player.SpendActionPoints(cost);
 
-        // reveal tile and neighbors
-        // TODO: refactor this into a worldMap class that contains and manages the tiless
-        var tilesChanged = tileTo.Reveal(1);
-        // this would be a "on tiles changed event" that worldMapLoader would subscribe too
-        WorldMapLoader.Instance.LoadWorldTileListIntoTileMap(tilesChanged);
+        // reveal the tile we moved to
+        WorldMap.RevealTile(tileTo);
 
         return true;
     }
@@ -179,9 +258,9 @@ public class GameLogic
         return 0;
     }
 
-    private WorldTile GetTileForPlayerLocation()
+    public WorldTile GetTileForPlayerLocation()
     {
-        return gameState.GetTileForPlayerLocation(Player);
+        return GameState.GetTileForPlayerLocation();
     }
 
     /// <summary>
