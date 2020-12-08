@@ -61,7 +61,8 @@ public class GameLogic
                 // grass around the center
                 if (Math.Abs(x) <= 1 && Math.Abs(y) <= 1) { tt = BiomeType.Grass; }
 
-                WorldTile worldTile = new WorldTile(loc, tt);
+                var goldRichness = WorldTile.GetRandomRichness();
+                WorldTile worldTile = new WorldTile(loc, tt, goldRichness);
                 dTileList.Add(worldTile);
 
                 // add features
@@ -229,8 +230,8 @@ public class GameLogic
                 chance = GetHuntingChanceForPlayerTile();
                 return chance > 0;
             case ActionType.PanForGold:
-                chance = GetGoldPanningChanceForPlayerTile();
-                return chance > 0;
+                chance = GetGoldPanningChanceForPlayerTile(out var hasRiver);
+                return hasRiver;
             default:
                 return true;
         }
@@ -248,12 +249,20 @@ public class GameLogic
         return tileAt.HuntingChance;
     }
 
-    public int GetGoldPanningChanceForPlayerTile()
+    public int GetGoldPanningChanceForPlayerTile(out bool hasRiver)
     {
         WorldTile tileAt = GetTileForPlayerLocation();
-        if (tileAt.HasRiver()) {
-            // TODO: this should probably be based on the tile or something
-            return 20;
+        hasRiver = tileAt.HasRiver();
+        if (hasRiver) {
+            // chance depends on richness
+            switch (tileAt.GoldRichness) {
+                case Richness.High:
+                    return 25;
+                case Richness.Medium:
+                    return 15;
+                case Richness.Low:
+                    return 5;
+            }
         }
         return 0;
     }

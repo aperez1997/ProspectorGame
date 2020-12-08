@@ -17,8 +17,12 @@ public class WorldTile : ISerializationCallbackReceiver
     [SerializeField] private bool isRevealed = false;
     public bool IsRevealed { get { return isRevealed; } }
 
+    /// <summary>
+    /// The amoung old gold available here. This does not depend on biome
+    /// </summary>
+    public Richness GoldRichness;
+
     /// <summary> Type of Biome </summary>
-    /// TODO: Make private
     public BiomeType Type;
 
     /// <summary>Lazy-Loaded BiomeData object</summary>
@@ -154,15 +158,11 @@ public class WorldTile : ISerializationCallbackReceiver
         return tile;
     }
 
-    /// <summary>
-    /// Constructor
-    /// </summary>
-    /// <param name="cellLocationIn"></param>
-    /// <param name="type"></param>
-    public WorldTile(Vector3Int cellLocationIn, BiomeType type)
+    public WorldTile(Vector3Int cellLocationIn, BiomeType type, Richness goldRichness)
     {
         CellLoc = cellLocationIn;
         Type = type;
+        GoldRichness = goldRichness;
         FeatureTypes = new List<TileFeatureType>();
         ResetLoadedFields();
     }
@@ -228,4 +228,16 @@ public class WorldTile : ISerializationCallbackReceiver
         // need to do this, otherwise the loaded fields wont be in a good state
         ResetLoadedFields();
     }
+
+    public static Richness GetRandomRichness()
+    {
+        System.Array values = System.Enum.GetValues(typeof(Richness));
+        int index = UnityEngine.Random.Range(0, values.Length);
+        return (Richness)values.GetValue(index);
+    }
+}
+
+public enum Richness
+{
+    None = 0, Low = 1, Medium = 2, High = 3
 }
