@@ -18,7 +18,7 @@ public class WorldTile : ISerializationCallbackReceiver
     public bool IsRevealed { get { return isRevealed; } }
 
     /// <summary>
-    /// The amoung old gold available here. This does not depend on biome
+    /// The amoung of gold available here. This does not depend on biome
     /// </summary>
     public Richness GoldRichness;
 

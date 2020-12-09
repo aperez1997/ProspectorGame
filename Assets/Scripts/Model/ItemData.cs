@@ -26,7 +26,7 @@ public class ItemData : ScriptableObject, IAssetLoaderItem
 /// <summary>
 /// Unique Item identifier. Links to SO
 /// </summary>
-public enum ItemId { Money, Ration, Pan, GoldNugget }
+public enum ItemId { Money, Ration, Pan, GoldNugget, ForagedFood }
 
 /// <summary>
 /// Category of item. Used for store filtering

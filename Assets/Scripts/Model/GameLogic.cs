@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -146,23 +147,38 @@ public class GameLogic
     {
         if (!IsAllowedOnPlayerTile(ActionType.Camp)) { return false; }
 
-        const ItemId ration = ItemId.Ration;
-        bool hasFood = Inventory.HasItem(ration);
-        if (hasFood)
-        {
-            Debug.Log("Eating a ration");
-            Inventory.RemoveItem(ration);
-        }
-        else
-        {
+        var food = GetAllPlayerFood();
+        InventoryItem foodToEat = food.First();
+
+        if (foodToEat is InventoryItem) {
+            Debug.Log("Eating some food");
+            Inventory.RemoveItem(foodToEat.id, 1);
+        } else {
             Debug.Log("Health loss due to no food");
             Player.ReduceHealth();
         }
+
         // give back AP
         Player.ResetActionPoints();
         // advance date
         GameStateMeta.AddDays(1);
         return true;
+    }
+
+    /// <summary>
+    /// Find all the player's food items, sorted by lowest price first
+    /// </summary>
+    private List<InventoryItem> GetAllPlayerFood()
+    {
+        // find all food items
+        var items = Inventory.GetItemsByCategory(ItemCategory.Food);
+
+        // sort by price
+        items.Sort(delegate (InventoryItem x, InventoryItem y) {
+            return x.Price.CompareTo(y.Price);
+        });
+
+        return items;
     }
 
     public int GetForageCost(){ return 4; }
@@ -179,7 +195,7 @@ public class GameLogic
         int cost = GetForageCost();
         if (!CanForage(out int chance)){ return false; }
 
-        return TakeActionForItem(cost, chance, ItemId.Ration, 1);
+        return TakeActionForItem(cost, chance, ItemId.ForagedFood, 1);
     }
 
     public int GetPanForGoldCost() { return 2; }
