@@ -9,13 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd4bf576ead293445a69c336385bc6e0, type: 3}
-  m_Name: Gold Pan
+  m_Script: {fileID: 11500000, guid: 10aeb08383e893e4ba34d06b52b7a59b, type: 3}
+  m_Name: Weapon-Bow
   m_EditorClassIdentifier: 
-  id: 3
-  category: 2
-  name: Gold Pan
-  description: Used to pan for gold
-  sprite: {fileID: 21300000, guid: 4e146f59009f04d48b2c7166102b69c5, type: 3}
+  id: 5
+  category: 3
+  name: Bow
+  description: Used for hunting. Requires arrows.
+  sprite: {fileID: 21300000, guid: b37abd6a6e26fcb47bd01d0d50906e2e, type: 3}
   stackable: 0
-  price: 8
+  price: 25
+  AmmoId: 6
+  HuntingModifier: 15

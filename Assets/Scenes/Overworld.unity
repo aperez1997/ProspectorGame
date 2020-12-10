@@ -1063,7 +1063,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2080249310}
+      objectReference: {fileID: 2080249312}
+    - target: {fileID: 929267390042917212, guid: 6c9c2a53d10984d109e4d42216cc3e41,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ActionHunt
+      objectReference: {fileID: 0}
+    - target: {fileID: 929267390042917212, guid: 6c9c2a53d10984d109e4d42216cc3e41,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4250978304612345042, guid: 6c9c2a53d10984d109e4d42216cc3e41,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2643,6 +2653,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1386959148}
   m_CullTransparentMesh: 0
+--- !u!114 &1395367205 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1806784087481025585, guid: 6c9c2a53d10984d109e4d42216cc3e41,
+    type: 3}
+  m_PrefabInstance: {fileID: 694105941}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1402127967
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2817,6 +2839,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c9c2a53d10984d109e4d42216cc3e41, type: 3}
+--- !u!114 &1508373419 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 39252542, guid: 6c9c2a53d10984d109e4d42216cc3e41,
+    type: 3}
+  m_PrefabInstance: {fileID: 694105941}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1551860075 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4250978304612345042, guid: 6c9c2a53d10984d109e4d42216cc3e41,
@@ -5177,6 +5211,8 @@ MonoBehaviour:
   ForageCost: {fileID: 3142850454105192482}
   ForageChance: {fileID: 39252542}
   HuntBtn: {fileID: 2118274963}
+  HuntCost: {fileID: 1395367205}
+  HuntChance: {fileID: 1508373419}
   PanForGoldBtn: {fileID: 621523135}
   PanForGoldCost: {fileID: 1754334998}
   PanForGoldChance: {fileID: 967975699}

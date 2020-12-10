@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
 {
     // game data
     private Player player;
+    private Inventory inventory;
     private GameStateMeta gameStateMeta;
     private GameLogic gameLogic;
 
@@ -27,6 +28,8 @@ public class PlayerController : MonoBehaviour
     public TextMeshProUGUI ForageChance;
 
     public Button HuntBtn;
+    public TextMeshProUGUI HuntCost;
+    public TextMeshProUGUI HuntChance;
 
     public Button PanForGoldBtn;
     public TextMeshProUGUI PanForGoldCost;
@@ -37,10 +40,12 @@ public class PlayerController : MonoBehaviour
     {
         gameLogic = GameStateManager.LogicInstance;
         player = GameStateManager.LogicInstance.Player;
+        inventory = player.Inventory;
 
         player.OnHealthChanged += Player_OnHealthChanged;
         player.OnLocationChanged += Player_OnLocationOrAPChanged;
         player.OnActionPointsChanged += Player_OnLocationOrAPChanged;
+        inventory.OnItemListChanged += Inventory_OnItemListChanged;
 
         gameStateMeta = GameStateManager.LogicInstance.GameStateMeta;
         gameStateMeta.OnGameDateChanged += GameStateMeta_OnDateChanged;
@@ -80,8 +85,11 @@ public class PlayerController : MonoBehaviour
         UpdateActionChanceText(ForageChance, forageChance);
         UpdateActionCostText(ForageCost, canForage, gameLogic.GetForageCost());
 
-        // TODO: implement
-        HuntBtn.interactable = false;
+        // Hunt
+        bool canHunt= gameLogic.CanHunt(out int huntChance);
+        HuntBtn.interactable = canHunt;
+        UpdateActionChanceText(HuntChance, huntChance);
+        UpdateActionCostText(HuntCost, canHunt, gameLogic.GetHuntCost());      
 
         // Pan for Gold
         bool canPan = gameLogic.CanPanForGold(out int panChance);
@@ -128,6 +136,12 @@ public class PlayerController : MonoBehaviour
         PopUpTextDriverV1.CreateSuccessFailurePopUp(ForageBtn.transform, rv);
     }
 
+    public void ActionHunt()
+    {
+        var rv = gameLogic.Hunt();
+        PopUpTextDriverV1.CreateSuccessFailurePopUp(HuntBtn.transform, rv);
+    }
+
     public void ActionPanForGold()
     {
         var rv = gameLogic.PanForGold();
@@ -150,6 +164,12 @@ public class PlayerController : MonoBehaviour
         UpdateActionsUI();
     }
 
+    private void Inventory_OnItemListChanged(object sender, EventArgs e)
+    {
+        // primarily needed for ammo changes, which may happen after all other subscribed changes
+        UpdateActionsUI();
+    }
+
     private void GameStateMeta_OnDateChanged(object sender, EventArgs e)
     {
         UpdateDateUI();
@@ -161,6 +181,8 @@ public class PlayerController : MonoBehaviour
         player.OnHealthChanged -= Player_OnHealthChanged;
         player.OnLocationChanged -= Player_OnLocationOrAPChanged;
         player.OnActionPointsChanged -= Player_OnLocationOrAPChanged;
+        inventory.OnItemListChanged -= Inventory_OnItemListChanged;
+
         gameStateMeta.OnGameDateChanged -= GameStateMeta_OnDateChanged;
     }
 }

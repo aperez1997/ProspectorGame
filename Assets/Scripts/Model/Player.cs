@@ -49,7 +49,7 @@ public class Player
     {
         Health = MAX_HEALTH;
         ActionPointsMax = actionPointsMax;
-        Inventory = new Inventory();
+        Inventory = new Inventory();                 
         Location = new CellPositionStruct(0, 0, 0, HexDirection.None);
         ResetActionPoints();
     }

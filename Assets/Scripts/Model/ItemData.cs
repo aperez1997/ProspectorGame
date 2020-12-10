@@ -5,6 +5,8 @@ public class ItemData : ScriptableObject, IAssetLoaderItem
 {
     public ItemId id;
 
+
+    // TODO: Should this be replaced with sub-classes?
     [Tooltip("Category of item. Determines which stores sell which items")]
     public ItemCategory category;
 
@@ -26,9 +28,9 @@ public class ItemData : ScriptableObject, IAssetLoaderItem
 /// <summary>
 /// Unique Item identifier. Links to SO
 /// </summary>
-public enum ItemId { Money, Ration, Pan, GoldNugget, ForagedFood }
+public enum ItemId { Money, Ration, ForagedFood, Pan, GoldNugget, Bow, Arrow }
 
 /// <summary>
 /// Category of item. Used for store filtering
 /// </summary>
-public enum ItemCategory { None, Food, Tools, Resources }
+public enum ItemCategory { None, Food, Tools, Weapons, Ammo, Resources }

@@ -46,6 +46,19 @@ public class Inventory
         return false;
     }
 
+    /// <summary>
+    /// Returns true if the inventory contains at least 1 item of the given type
+    /// </summary>
+    public bool HasItemOfCategory(ItemCategory category)
+    {
+        foreach (var inventoryItem in ItemList) {
+            if (inventoryItem.Category == category) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<InventoryItem> GetItemsByCategory(ItemCategory category)
     {
         var foundItems = new List<InventoryItem>();
@@ -56,6 +69,19 @@ public class Inventory
             }
         }
         return foundItems;
+    }
+
+    public bool HasAmmoForWeapon(InventoryItem item)
+    {
+        if (item.Category != ItemCategory.Weapons) {
+            Debug.LogWarning("Tried to look for ammo for a non-wweapon " + item.ToString());
+            return false;
+        } else if (item.AmmoId is null) {
+            Debug.LogWarning("Tried to look for ammo for a weapon without ammoId " + item.ToString());
+            return false;
+        }
+        var ammoId = (ItemId) item.AmmoId;
+        return HasItem(ammoId);
     }
 
     /// <summary>Shortcut to add item, if you only care about id+amount</summary>

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd4bf576ead293445a69c336385bc6e0, type: 3}
   m_Name: Gold Nugget
   m_EditorClassIdentifier: 
-  id: 3
-  category: 3
+  id: 4
+  category: 5
   name: Gold Nugget
   description: Small pieces of gold, worth a little bit of money
   sprite: {fileID: 21300278, guid: 14aefffd3622c7347aad64f2bed35801, type: 3}

@@ -148,7 +148,7 @@ public class GameLogic
         if (!IsAllowedOnPlayerTile(ActionType.Camp)) { return false; }
 
         var food = GetAllPlayerFood();
-        InventoryItem foodToEat = food.First();
+        InventoryItem foodToEat = food.FirstOrDefault();
 
         if (foodToEat is InventoryItem) {
             Debug.Log("Eating some food");
@@ -198,6 +198,56 @@ public class GameLogic
         return TakeActionForItem(cost, chance, ItemId.ForagedFood, 1);
     }
 
+    public int GetHuntCost() { return 2; }
+
+    public bool CanHunt() { return CanHunt(out _, out _); }
+
+    public bool CanHunt(out int chance) { return CanHunt(out chance, out _); }
+
+    public bool CanHunt(out int chance, out InventoryItem bestWeapon)
+    {
+        // Weapon check is buried in here
+        var rv = IsAllowedOnTileAndHaveAP(ActionType.Hunt, GetHuntCost(), out chance);
+
+        // look for the best working weapon (has ammo)
+        bestWeapon = GetBestWorkingWeapon();
+        if (bestWeapon is InventoryItem actualWeapon) {
+            chance += actualWeapon.HuntingModifier ?? 0;
+        } else {
+            // no weapon = no chance
+            chance = 0;
+            rv = false;
+        }
+
+        return rv;
+    }
+
+    public bool Hunt()
+    {
+        int cost = GetHuntCost();
+        if (!CanHunt(out var chance, out var bestWeapon)) { return false; }
+
+        var weaponStr = bestWeapon == null ? "NULL!" : bestWeapon.ToString();
+        Debug.Log("Hunting with " + weaponStr);
+
+        bool rv = TakeActionForItem(cost, chance, ItemId.ForagedFood, 1);
+        // chance to lose ammo even if you don't catch something
+        bool usedAmmoAnyway = RollDice(25);
+
+        // if we caught something or used ammo anyway, deduct ammo
+        if (rv || usedAmmoAnyway) {
+            if (bestWeapon is InventoryItem && bestWeapon.AmmoId is ItemId ammoId) {
+                Debug.Log("Removed ammo because " + (rv ? "success" : "failed but used ammo"));
+                Inventory.RemoveItem(ammoId);
+            } else {
+                var debug = bestWeapon == null ? "null weapon" : bestWeapon.ToString();
+                Debug.LogWarning("Hunted but weapon is missing or missing ammo? " + debug);
+            }
+        }
+
+        return rv;
+    }
+
     public int GetPanForGoldCost() { return 2; }
 
     public bool CanPanForGold() { return CanPanForGold(out _); }
@@ -205,7 +255,7 @@ public class GameLogic
     public bool CanPanForGold(out int chance)
     {
         chance = 0; // set in case hasPan is false
-        bool hasPan = Inventory.HasItem(ItemId.Pan);       
+        bool hasPan = Inventory.HasItem(ItemId.Pan);
         return hasPan && IsAllowedOnTileAndHaveAP(ActionType.PanForGold, GetPanForGoldCost(), out chance);
     }
 
@@ -251,6 +301,18 @@ public class GameLogic
             default:
                 return true;
         }
+    }
+
+    public InventoryItem GetBestWorkingWeapon()
+    {
+        var weapons = Inventory.GetItemsByCategory(ItemCategory.Weapons);
+        // use linq to get only working weapons
+        var workingWeapons = from weapon in weapons
+                             where Inventory.HasAmmoForWeapon(weapon)
+                             select weapon;
+        // use linq to sort by hunting modifier (asc)
+        workingWeapons.OrderBy(item => item.HuntingModifier);
+        return workingWeapons.LastOrDefault();
     }
 
     public int GetForageChanceForPlayerTile()
@@ -369,7 +431,9 @@ public class GameLogic
     {
         Inventory inventory = new Inventory();
         // TODO: should this binding live in SO?
-        var categories = new List<ItemCategory>( new[]{ ItemCategory.Food, ItemCategory.Tools });
+        var categories = new List<ItemCategory>(
+            new[]{ ItemCategory.Food, ItemCategory.Tools, ItemCategory.Weapons, ItemCategory.Ammo }
+        );
 
         // Look at each item and determine if it fits
         foreach (ItemId type in Enum.GetValues(typeof(ItemId)))
