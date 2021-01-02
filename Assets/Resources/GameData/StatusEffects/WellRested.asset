@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35fa0dc05bb054098afec8c58455c653, type: 3}
+  m_Name: WellRested
+  m_EditorClassIdentifier: 
+  name: Well Rested
+  Description: You gain extra AP from being well reted
+  AffectedStat: 1
+  AffectAmount: 1
+  DurationDays: 2

@@ -26,6 +26,7 @@ public class GameLogic
         player.Inventory.AddItem(ItemId.Money, 50);
         player.Inventory.AddItem(ItemId.Ration, 7);
         player.Inventory.AddItem(ItemId.Pan, 1);
+        player.ResetActionPoints();
 
         List<WorldTile> TileList = CreateRandomWorldMap();
         var WorldMap = new WorldMap(TileList);
@@ -162,6 +163,16 @@ public class GameLogic
         Player.ResetActionPoints();
         // advance date
         GameStateMeta.AddDays(1);
+
+        // advance day for player status effects
+        foreach (var tuple in Player.Status.PlayerStatusEffects) {
+            var psEffect = tuple.Value;
+            psEffect.DaysLeft -= 1;
+            if (psEffect.DaysLeft < 0) {
+                Player.Status.RemoveEffect(psEffect.Name);
+            }
+        }
+
         return true;
     }
 

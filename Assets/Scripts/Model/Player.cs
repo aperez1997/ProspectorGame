@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -45,13 +46,16 @@ public class Player
     public CellPositionStruct Location { get => _location; private set => _location = value; }
     public event EventHandler OnLocationChanged;
 
+    // Effects
+    [field: SerializeField] public PlayerStatus Status { get; private set; }
+
     public Player(int actionPointsMax)
     {
         Health = MAX_HEALTH;
         ActionPointsMax = actionPointsMax;
         Inventory = new Inventory();                 
         Location = new CellPositionStruct(0, 0, 0, HexDirection.None);
-        ResetActionPoints();
+        Status = new PlayerStatus(this);
     }
 
     public bool HasEnoughActionPoints(int desired)
@@ -69,9 +73,7 @@ public class Player
     public void ResetActionPoints()
     {
         Debug.Log("Player AP restored");
-        // AP reduced by health loss.
-        int healthLossAPRedux = (MAX_HEALTH - Health);
-        ActionPoints = this.ActionPointsMax - healthLossAPRedux;
+        ActionPoints = Status.GetMaxActionPoints();
     }
 
     public void SetLocation(Vector3Int vector3int, HexDirection direction)
