@@ -6,6 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Controller that displays the contents of an Inventory
 /// Use with the pfInvetoryItem prefab
+/// TODO: refactor out an abstract version of this!
 /// </summary>
 abstract public class InventoryController : MonoBehaviour
 {

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 /// <summary>
@@ -9,27 +11,16 @@ using UnityEngine;
 [Serializable]
 public class PlayerStatus
 {
-    public Player player;
-
     // Effects
-    [field: SerializeField] public Dictionary<string, PlayerStatusEffect> PlayerStatusEffects { get; private set; }
+    [SerializeField] private List<PlayerStatusEffect> _effectsList;
+    public ReadOnlyCollection<PlayerStatusEffect> EffectsList { get { return _effectsList.AsReadOnly(); } }
 
-    public PlayerStatus(Player player)
+    // This is how we emit that the Effects have changed. UI will catch this and update
+    public event EventHandler<EventArgs> OnStatusEffectsChange;
+
+    public PlayerStatus()
     {
-        this.player = player;
-        PlayerStatusEffects = new Dictionary<string, PlayerStatusEffect>();
-    }
-
-    public int GetMaxActionPoints()
-    {
-        // AP reduced by health loss.
-        int healthLossAPRedux = -1 * (Player.MAX_HEALTH - player.Health);
-
-        // effect loss
-        int totalEffectChange = GetTotalStatEffect(PlayerStat.ActionPoints);
-
-        // don't go below 1
-        return Math.Max(1, player.ActionPointsMax + totalEffectChange - healthLossAPRedux);
+        _effectsList = new List<PlayerStatusEffect>();
     }
 
     public bool HasEffect(String name)
@@ -39,7 +30,7 @@ public class PlayerStatus
 
     public bool HasEffect(String name, out PlayerStatusEffect psEffect)
     {
-        _ = PlayerStatusEffects.TryGetValue(name, out psEffect);
+        psEffect = _effectsList.Find(x => x.Name == name);
         return psEffect is PlayerStatusEffect;
     }
 
@@ -57,29 +48,42 @@ public class PlayerStatus
         int durationDays = effect.DurationDays;
         PlayerStatusEffect pStatusEffect;
         if (HasEffect(key, out pStatusEffect)) {
+            Debug.Log("effect re-up " + pStatusEffect.ToString());
             // just re-up the duration
             pStatusEffect.DaysLeft = durationDays;
         } else {
             pStatusEffect = new PlayerStatusEffect(key, durationDays);
+            Debug.Log("new effect " + pStatusEffect.ToString());
+            _effectsList.Add(pStatusEffect);
         }
+        OnStatusEffectsChange?.Invoke(this, EventArgs.Empty);
         return pStatusEffect;
     }
 
     public void RemoveEffect(String name)
     {
-        PlayerStatusEffects.Remove(name);
+        var removeList = _effectsList.FindAll(x => x.Name == name);
+        RemoveEffectList(removeList);
     }
 
-    public List<PlayerStatusEffect> GetEffectsThatInfluenceStat(PlayerStat stat)
+    public void RemoveEffectList(List<PlayerStatusEffect> removeList)
+    {
+        foreach (var removeEffect in removeList) {
+            Debug.Log("effect remove " + removeEffect.ToString());
+            _effectsList.Remove(removeEffect);
+        }
+        OnStatusEffectsChange?.Invoke(this, EventArgs.Empty);
+    }
+
+    public ReadOnlyCollection<PlayerStatusEffect> GetEffectsThatInfluenceStat(PlayerStat stat)
     {
         List<PlayerStatusEffect> psEffects = new List<PlayerStatusEffect>();
-        foreach (var tuple in PlayerStatusEffects) {
-            var psEffect = tuple.Value;
+        foreach (var psEffect in _effectsList) {
             if (psEffect.AffectedStat == stat) {
                 psEffects.Add(psEffect);
             }
         }
-        return psEffects;
+        return psEffects.AsReadOnly();
     }
 
     public int GetTotalStatEffect(PlayerStat stat)

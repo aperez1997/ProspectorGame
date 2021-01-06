@@ -5,6 +5,8 @@ using UnityEngine;
 
 /// <summary>
 /// Has all the game logic, as well as the game state
+/// TODO: I need to create a monobehavior singleton (like tooltipv2) that can bind SOs for new game stuff
+/// This will allow me to bind "well rested" and grant to player at start
 /// </summary>
 public class GameLogic
 {
@@ -17,22 +19,42 @@ public class GameLogic
 
     public WorldMap WorldMap { get { return GameState.WorldMap; } }
 
+    private readonly ScriptedObjectBinder soBinder;
+
     /// <summary>
-    /// Create a new game, basically
+    /// Used when creating a new game, as the gamestate will be created.
     /// </summary>
-    public GameLogic()
+    public GameLogic(ScriptedObjectBinder ScriptedObjectBinder)
     {
-        Player player = new Player(12);
-        player.Inventory.AddItem(ItemId.Money, 50);
-        player.Inventory.AddItem(ItemId.Ration, 7);
-        player.Inventory.AddItem(ItemId.Pan, 1);
-        player.ResetActionPoints();
+        soBinder = ScriptedObjectBinder;
+
+        // create a gamestate
+        Player player = new Player();
 
         List<WorldTile> TileList = CreateRandomWorldMap();
         var WorldMap = new WorldMap(TileList);
 
         var meta = new GameStateMeta();
         this.GameState = new GameState(meta, player, WorldMap);
+    }
+
+    /// <summary>
+    /// used when loading a game
+    /// </summary>
+    public GameLogic(GameState gameState, ScriptedObjectBinder ScriptedObjectBinder)
+    {
+        soBinder = ScriptedObjectBinder;
+        this.GameState = gameState;
+    }
+
+    public void InitNewGame()
+    {
+        // New game stuff, should be moved probably
+        Player.Inventory.AddItem(ItemId.Money, 50);
+        Player.Inventory.AddItem(ItemId.Ration, 7);
+        Player.Inventory.AddItem(ItemId.Pan, 1);
+        Player.Status.AddEffect(soBinder.seWellRested);
+        Player.ActionPoints = GetPlayerMaxActionPoints();
 
         // reveal players location
         var tileAt = GetTileForPlayerLocation();
@@ -94,14 +116,6 @@ public class GameLogic
         (-4,-4), (-4,-3), (-4,-2), (-4,-1), (-3,0), (-3,1)
     });
 
-    /// <summary>
-    /// Load game, basically
-    /// </summary>
-    public GameLogic(GameState gameState)
-    {
-        this.GameState = gameState;
-    }
-
     // Movement
 
     /// <summary>
@@ -160,21 +174,37 @@ public class GameLogic
         }
 
         // give back AP
-        Player.ResetActionPoints();
+        Player.ActionPoints = GetPlayerMaxActionPoints();
         // advance date
         GameStateMeta.AddDays(1);
 
         // advance day for player status effects
-        foreach (var tuple in Player.Status.PlayerStatusEffects) {
-            var psEffect = tuple.Value;
+        var expireList = new List<PlayerStatusEffect>();
+        foreach (var psEffect in Player.Status.EffectsList) {
             psEffect.DaysLeft -= 1;
             if (psEffect.DaysLeft < 0) {
-                Player.Status.RemoveEffect(psEffect.Name);
+                // remove expired effect
+                expireList.Add(psEffect);
             }
         }
+        Player.Status.RemoveEffectList(expireList);
 
         return true;
     }
+
+    public int GetPlayerMaxActionPoints()
+    {
+        // AP reduced by health loss.
+        int healthLossAPRedux = -1 * (Player.MAX_HEALTH - Player.Health);
+
+        // effect loss
+        int totalEffectChange = Player.Status.GetTotalStatEffect(PlayerStat.ActionPoints);
+
+        Debug.Log("AP Max:" + Player.ActionPointsMax + " effects:" + totalEffectChange + " health loss:" + healthLossAPRedux);
+        // don't go below 1
+        return Math.Max(1, Player.ActionPointsMax + totalEffectChange - healthLossAPRedux);
+    }
+
 
     /// <summary>
     /// Find all the player's food items, sorted by lowest price first

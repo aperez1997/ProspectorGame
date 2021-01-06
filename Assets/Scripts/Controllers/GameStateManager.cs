@@ -12,7 +12,9 @@ public static class GameStateManager
 
     public static void CreateNewGame()
     {
-        LogicInstance = new GameLogic();
+        var logic = new GameLogic(ScriptedObjectBinder.Instance);
+        logic.InitNewGame();
+        LogicInstance = logic;
     }
 
     public static void SaveGame()
@@ -27,7 +29,7 @@ public static class GameStateManager
             Debug.LogError("Failed to load game");
             return false;
         } else {
-            var logic = new GameLogic(state);
+            var logic = new GameLogic(state, ScriptedObjectBinder.Instance);
             LogicInstance = logic;
             return true;
         }

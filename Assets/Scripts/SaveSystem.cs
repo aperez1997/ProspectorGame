@@ -13,7 +13,7 @@ public static class SaveSystem
 
         string json = JsonUtility.ToJson(state);
         string path = GetSaveFilePath();
-        Debug.Log("serialized data is " + json);
+        Debug.Log("Saving serialized data: " + json);
         File.WriteAllText(path, json);
     }
 
@@ -33,6 +33,7 @@ public static class SaveSystem
         }
 
         string rawData = File.ReadAllText(path);
+        Debug.Log("Loading serialized data: " + rawData);
         GameState state = JsonUtility.FromJson<GameState>(rawData);
         return state;
     }

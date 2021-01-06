@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ using UnityEngine;
 /// Links a StatusEffect SO to a player.
 /// keyed by name, adds "days left"
 /// </summary>
+[Serializable]
 public class PlayerStatusEffect
 {
     public string Name;
@@ -41,4 +43,9 @@ public class PlayerStatusEffect
     public int AffectAmount { get { return StatusEffect.AffectAmount; } }
 
     public int DurationDays { get { return StatusEffect.DurationDays; } }
+
+    public override string ToString()
+    {
+        return "PSE[" + StatusEffect.ToString() + "d:"+DaysLeft + "]";
+    }
 }

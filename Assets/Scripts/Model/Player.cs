@@ -6,6 +6,7 @@ using UnityEngine;
 public class Player
 {
     public const int MAX_HEALTH = 4;
+    public const int MAX_AP = 12;
 
     // Health
     [SerializeField] private int _health;
@@ -27,7 +28,7 @@ public class Player
     [SerializeField] private int _actionPoints;
     public int ActionPoints { 
         get { return _actionPoints; }
-        private set {
+        set {
             var delta = value - _actionPoints;
             _actionPoints = value;
             OnActionPointsChanged?.Invoke(this, new IntStatChangeEventArgs(delta, _actionPoints));
@@ -49,13 +50,13 @@ public class Player
     // Effects
     [field: SerializeField] public PlayerStatus Status { get; private set; }
 
-    public Player(int actionPointsMax)
+    public Player()
     {
         Health = MAX_HEALTH;
-        ActionPointsMax = actionPointsMax;
+        ActionPointsMax = MAX_AP;
         Inventory = new Inventory();                 
         Location = new CellPositionStruct(0, 0, 0, HexDirection.None);
-        Status = new PlayerStatus(this);
+        Status = new PlayerStatus();
     }
 
     public bool HasEnoughActionPoints(int desired)
@@ -68,12 +69,6 @@ public class Player
         if (!HasEnoughActionPoints(cost)) { return false; }
         ActionPoints -= cost;
         return true;
-    }
-
-    public void ResetActionPoints()
-    {
-        Debug.Log("Player AP restored");
-        ActionPoints = Status.GetMaxActionPoints();
     }
 
     public void SetLocation(Vector3Int vector3int, HexDirection direction)

@@ -19,9 +19,15 @@ public class StatusEffect : ScriptableObject, IAssetLoaderItem
     {
         return name;
     }
+
+    public override string ToString()
+    {
+        return "SE(" + name + "," + AffectedStat + "=" + AffectAmount + ")";
+    }
 }
 
 public enum PlayerStat
 {
     Health, ActionPoints
 }
+
