@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,14 +8,9 @@ using UnityEngine.UI;
 /// <summary>
 /// Controller that displays the contents of an Inventory
 /// Use with the pfInvetoryItem prefab
-/// TODO: refactor out an abstract version of this!
 /// </summary>
-abstract public class InventoryController : MonoBehaviour
+abstract public class InventoryController : ContainerDisplayController<InventoryItem>
 {
-    public GameObject ItemTemplate;
-
-    protected Transform ItemContainer;
-
     private Inventory inventory;
     protected Inventory Inventory {
         get { return inventory;  }  
@@ -26,36 +23,12 @@ abstract public class InventoryController : MonoBehaviour
         }
     }
 
-    protected virtual void Awake()
+    protected override ReadOnlyCollection<InventoryItem> GetItemList()
     {
-        ItemContainer = Utils.FindInChildren(gameObject, "Item Container").transform;
+        return inventory.ItemList;
     }
 
-    protected virtual void Start()
-    {
-        ItemTemplate.SetActive(false);
-        UpdateInventoryUI();
-    }
-
-    public void UpdateInventoryUI()
-    {
-        // remove old display
-        foreach (Transform child in ItemContainer)
-        {
-            // don't destroy the Template or weird things happen
-            if (child == ItemTemplate.transform) { continue; }
-            Destroy(child.gameObject);
-        }
-
-        // display items   
-        foreach (InventoryItem item in inventory.ItemList)
-        {
-            GameObject goItem = Instantiate(ItemTemplate, ItemContainer);
-            SetInventoryPrefab(goItem, item);
-        }
-    }
-
-    protected virtual void SetInventoryPrefab(GameObject goItem, InventoryItem item)
+    protected override void SetPrefabDetails(GameObject goItem, InventoryItem item)
     {
         SetInventoryPrefab_Static(goItem, item);
     }
@@ -123,7 +96,7 @@ abstract public class InventoryController : MonoBehaviour
             PopUpTextDriverV1.CreateInventoryChangePopUp(child, e.Delta, e.Type);
         }
 
-        UpdateInventoryUI();
+        OnItemListChanged(sender, e);
     }
 
     private void OnDestroy()

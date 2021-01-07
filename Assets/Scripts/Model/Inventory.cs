@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 [Serializable]
@@ -8,11 +9,12 @@ public class Inventory
     // This is how we emit that the Items have changed. UI will catch this and update
     public event EventHandler<InventoryChangedEventArgs> OnItemListChanged;
 
-    [field:SerializeField] public List<InventoryItem> ItemList { get; private set; }
+    [SerializeField] private List<InventoryItem> _itemList;
+    public ReadOnlyCollection<InventoryItem> ItemList { get { return _itemList.AsReadOnly(); } }
 
     public Inventory()
     {
-        ItemList = new List<InventoryItem>();
+        _itemList = new List<InventoryItem>();
     }
 
     /** 
@@ -34,9 +36,9 @@ public class Inventory
     public bool HasItem(ItemId id, out InventoryItem returnItem, int count = 1)
     {
         returnItem = null;
-        for (int i = 0; i < ItemList.Count; i++)
+        for (int i = 0; i < _itemList.Count; i++)
         {
-            InventoryItem inventoryItem = ItemList[i];
+            InventoryItem inventoryItem = _itemList[i];
             if (inventoryItem.id == id && inventoryItem.amount >= count)
             {
                 returnItem = inventoryItem;
@@ -51,7 +53,7 @@ public class Inventory
     /// </summary>
     public bool HasItemOfCategory(ItemCategory category)
     {
-        foreach (var inventoryItem in ItemList) {
+        foreach (var inventoryItem in _itemList) {
             if (inventoryItem.Category == category) {
                 return true;
             }
@@ -62,8 +64,8 @@ public class Inventory
     public List<InventoryItem> GetItemsByCategory(ItemCategory category)
     {
         var foundItems = new List<InventoryItem>();
-        for (int i = 0; i < ItemList.Count; i++) {
-            InventoryItem inventoryItem = ItemList[i];
+        for (int i = 0; i < _itemList.Count; i++) {
+            InventoryItem inventoryItem = _itemList[i];
             if (inventoryItem.Category == category) {
                 foundItems.Add(inventoryItem);
             }
@@ -101,7 +103,7 @@ public class Inventory
             foundItem.amount += item.amount;
             newAmount = foundItem.amount;
         } else {
-            ItemList.Add(item);
+            _itemList.Add(item);
         }
 
         var e = new InventoryChangedEventArgs(id, item.amount, newAmount);
@@ -116,7 +118,7 @@ public class Inventory
             if (foundItem.amount == 0)
             {
                 // remove empty items
-                ItemList.Remove(foundItem);
+                _itemList.Remove(foundItem);
             }
             var e = new InventoryChangedEventArgs(id, -1 * count, foundItem.amount);
             OnItemListChanged?.Invoke(this, e);
@@ -138,7 +140,7 @@ public class Inventory
     {
         bool first = true;
         string itemStrings = "";
-        foreach (InventoryItem item in ItemList)
+        foreach (InventoryItem item in _itemList)
         {
             string prefix = first ? "" : ",";
             first = false;

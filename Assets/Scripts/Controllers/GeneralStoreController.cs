@@ -14,10 +14,8 @@ public class GeneralStoreController : StoreInventoryController
 {
     private Player player;
 
-    protected override void Awake()
-    {
-        ItemContainer = Utils.FindInChildren(gameObject, "Store Container").transform;
-    }
+
+    protected override string GetItemContainerName() { return "Store Container"; }
 
     protected override void Start()
     {
@@ -38,7 +36,7 @@ public class GeneralStoreController : StoreInventoryController
         SceneController.UnloadAdditiveScene();
     }
 
-    protected override void SetInventoryPrefab(GameObject gameObject, InventoryItem item)
+    protected override void SetPrefabDetails(GameObject gameObject, InventoryItem item)
     {
         SetInventoryStorePrefab_Static(gameObject, item);
 
@@ -61,7 +59,7 @@ public class GeneralStoreController : StoreInventoryController
 
     private void Player_OnMoneyChanged(object sender, EventArgs e)
     {
-        UpdateInventoryUI();
+        UpdateUI();
     }
 
     private void OnDestroy()

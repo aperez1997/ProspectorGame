@@ -15,7 +15,7 @@ public class PlayerStoreInventoryController : StoreInventoryController
         base.Start();
     }
 
-    protected override void SetInventoryPrefab(GameObject gameObject, InventoryItem item)
+    protected override void SetPrefabDetails(GameObject gameObject, InventoryItem item)
     {
         SetInventoryStorePrefab_Static(gameObject, item);
 
