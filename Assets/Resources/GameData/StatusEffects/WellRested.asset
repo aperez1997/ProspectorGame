@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35fa0dc05bb054098afec8c58455c653, type: 3}
   m_Name: WellRested
   m_EditorClassIdentifier: 
-  name: Well Rested
+  Id: wellRested
+  Name: Well Rested
   Description: You gain extra AP from being well reted
   AffectedStat: 1
   AffectAmount: 1

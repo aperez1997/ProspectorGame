@@ -27,7 +27,7 @@ public class PlayerStatusEffect
             if (_statusEffect is null) {
                 var data = StatusEffectLoader.LoadItemById(Name);
                 if (!(data is StatusEffect)) {
-                    throw new System.Exception("No StatusEffect data for ID " + Name.ToString());
+                    throw new System.Exception("No StatusEffect data for ID " + Name);
                 }
                 _statusEffect = data;
             }

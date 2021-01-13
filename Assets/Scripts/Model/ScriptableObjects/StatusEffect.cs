@@ -1,28 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "", menuName = "StatusEffect")]
 public class StatusEffect : ScriptableObject, IAssetLoaderItem
 {
-    public new string name;
+    [Tooltip("Must be unique!")]
+    public string Id;
 
+    [Tooltip("display name")]
+    public string Name;
+
+    [Tooltip("describe it")]
     public string Description;
 
+    [Tooltip("which stat is affected")]
     public PlayerStat AffectedStat;
 
+    [Tooltip("by how much (positive for buff, negative for debuff)")]
     public int AffectAmount;
 
+    [Tooltip("for how long")]
     public int DurationDays;
 
     public string GetKey()
     {
-        return name;
+        return Id;
     }
 
     public override string ToString()
     {
-        return "SE(" + name + "," + AffectedStat + "=" + AffectAmount + ")";
+        return "SE(" + Id + ","+ Name + "," + AffectedStat + "=" + AffectAmount + ")";
     }
 }
 

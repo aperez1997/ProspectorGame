@@ -22,7 +22,7 @@ public class StatusEffectLoader : AssetLoader<StatusEffect>
 
     public static StatusEffect LoadItemById(string id)
     {
-        return Instance.LoadByKey(id.ToString());
+        return Instance.LoadByKey(id);
     }
 
     protected override string GetPath() { return "GameData/StatusEffects"; }

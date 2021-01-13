@@ -27,6 +27,7 @@ public class WorldMapLoader : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("WorldMapLoader start");
         GameStateManager.DebugLoadState();
 
         WorldMap = GameStateManager.LogicInstance.WorldMap;

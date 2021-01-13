@@ -12,7 +12,9 @@ public static class GameStateManager
 
     public static void CreateNewGame()
     {
+        Debug.Log("Creating gameLogic for new game...");
         var logic = new GameLogic(ScriptedObjectBinder.Instance);
+        Debug.Log("GameLogic created successfully. Calling init...");
         logic.InitNewGame();
         LogicInstance = logic;
     }

@@ -28,12 +28,13 @@ public class GameLogic
     {
         soBinder = ScriptedObjectBinder;
 
-        // create a gamestate
+        Debug.Log("Creating player...");
         Player player = new Player();
 
         List<WorldTile> TileList = CreateRandomWorldMap();
         var WorldMap = new WorldMap(TileList);
 
+        Debug.Log("Creating game state meta...");
         var meta = new GameStateMeta();
         this.GameState = new GameState(meta, player, WorldMap);
     }
@@ -49,7 +50,8 @@ public class GameLogic
 
     public void InitNewGame()
     {
-        // New game stuff, should be moved probably
+        // Player starting EQ
+        Debug.Log("Adding player starting EQ");
         Player.Inventory.AddItem(ItemId.Money, 50);
         Player.Inventory.AddItem(ItemId.Ration, 7);
         Player.Inventory.AddItem(ItemId.Pan, 1);
@@ -57,12 +59,15 @@ public class GameLogic
         Player.ActionPoints = GetPlayerMaxActionPoints();
 
         // reveal players location
+        Debug.Log("Revealing player location...");
         var tileAt = GetTileForPlayerLocation();
         tileAt.Reveal(1);
     }
 
     public List<WorldTile> CreateRandomWorldMap()
     {
+        Debug.Log("Creating new random world");
+
         /**
          * consider using data-struct (this many mountains, this height of water)
          * that can be made into a hash, and hash always generates the same level

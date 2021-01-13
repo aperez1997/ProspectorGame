@@ -13,13 +13,17 @@ public abstract class AssetLoader<Type> where Type : IAssetLoaderItem
 
     public AssetLoader()
     {
+        Debug.Log("Creating new " + typeof(Type).Name + " loader and populating...");
         PopulateList();
     }
 
     public Type LoadByKey(string key)
     {
+        if (string.IsNullOrEmpty(key)) { 
+            Debug.LogError("Trying to load null/empty key for type " + typeof(Type).Name); 
+        }
         bool rv = itemDict.TryGetValue(key, out Type item);
-        //if (!rv) { Debug.LogError("No " + typeof(Type).Name +" SO found for key [" + key + "]"); }
+        if (!rv) { Debug.LogError("No " + typeof(Type).Name +" SO found for key [" + key + "]"); }
         return item;
     }
 
@@ -31,7 +35,7 @@ public abstract class AssetLoader<Type> where Type : IAssetLoaderItem
         // The type filtering keeps failing in builds for some reason, so leaving it out for now
         var items = Resources.LoadAll(GetPath()).Cast<Type>();
         foreach (var item in items){
-            //Debug.Log("Found item " + item.ToString());
+            //Debug.Log("Found item " + item.ToString() + " of type " + typeof(Type).Name);
             itemDict.Add(item.GetKey(), item);
         }
         Debug.Log("Found " + itemDict.Count + " items of type " + typeof(Type).Name);

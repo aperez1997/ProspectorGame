@@ -26,13 +26,15 @@ public class MainMenuController : MonoBehaviour
     }
 
    public void CreateNewGame()
-    {       
+    {
+        Debug.Log("Creating new game");
         GameStateManager.CreateNewGame();
         LoadOverworld();
     }
 
     public static void LoadOverworld()
     {
+        Debug.Log("Loading overworld");
         SceneManager.LoadScene("Overworld");
     }
 }
