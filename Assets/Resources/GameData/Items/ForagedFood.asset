@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd4bf576ead293445a69c336385bc6e0, type: 3}
   m_Name: ForagedFood
   m_EditorClassIdentifier: 
-  id: 2
+  id: foragedFood
   category: 1
   name: Foraged Food
   description: Fruits and vegetables found in the wild. Counts as a meal.

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
 
+/// <summary>
+/// Player's inventory. Basically a list of InventoryItem objects
+/// </summary>
 [Serializable]
 public class Inventory
 {
@@ -18,28 +21,38 @@ public class Inventory
     }
 
     /** 
-     *  <summary>returns true if inventory has an item of the given id</summary>
-     *  <param name="id">item to check for</param>
+     *  <summary>returns true if inventory has the given item</summary>
+     *  <param name="itemData">item to check for</param>
      *  <param name="count">number to check for, stackables only!</param>
      */
-    public bool HasItem(ItemId id, int count = 1)
+    public bool HasItem(ItemData itemData, int count = 1)
     {
-        return HasItem(id, out _, count);
+        return HasItem(itemData.id, out _, count);
+    }
+
+    /** 
+     *  <summary>returns true if inventory has the given item</summary>
+     *  <param name="itemId">item to check for</param>
+     *  <param name="count">number to check for, stackables only!</param>
+     */
+    public bool HasItem(string itemId, int count = 1)
+    {
+        return HasItem(itemId, out _, count);
     }
 
     /** 
      *  <summary>returns true if inventory has an item of the given id</summary>
-     *  <param name="id">id of item to check for</param>
+     *  <param name="itemId">id of item to check for</param>
      *  <param name="returnItem">If item exists, it will be returned here. For non-stackables, this will be the first item only</param>
      *  <param name="count">number to check for, stackables only!</param>
      */
-    public bool HasItem(ItemId id, out InventoryItem returnItem, int count = 1)
+    public bool HasItem(string itemId, out InventoryItem returnItem, int count = 1)
     {
         returnItem = null;
         for (int i = 0; i < _itemList.Count; i++)
         {
             InventoryItem inventoryItem = _itemList[i];
-            if (inventoryItem.id == id && inventoryItem.amount >= count)
+            if (inventoryItem.id == itemId && inventoryItem.amount >= count)
             {
                 returnItem = inventoryItem;
                 return true;
@@ -78,16 +91,22 @@ public class Inventory
         if (item.Category != ItemCategory.Weapons) {
             Debug.LogWarning("Tried to look for ammo for a non-wweapon " + item.ToString());
             return false;
-        } else if (item.AmmoId is null) {
+        } else if (!(item.AmmoItem is ItemData)) {
             Debug.LogWarning("Tried to look for ammo for a weapon without ammoId " + item.ToString());
             return false;
         }
-        var ammoId = (ItemId) item.AmmoId;
-        return HasItem(ammoId);
+        var ammoItem = item.AmmoItem;
+        return HasItem(ammoItem);
+    }
+
+    /// <summary>Shortcut to add item by itemData</summary>
+    public void AddItem(ItemData data, int amount)
+    {
+        AddItem(data.id, amount);
     }
 
     /// <summary>Shortcut to add item, if you only care about id+amount</summary>
-    public void AddItem(ItemId id, int amount)
+    public void AddItem(string id, int amount)
     {
         var item = new InventoryItem(id, amount);
         AddItem(item);
@@ -96,7 +115,7 @@ public class Inventory
     /// <summary>Proper way to add an item</summary>
     public void AddItem(InventoryItem item)
     {
-        ItemId id = item.id;
+        string id = item.id;
         bool haveItem = HasItem(id, out InventoryItem foundItem);
         int newAmount = item.amount;
         if (item.Stackable && haveItem){
@@ -106,11 +125,16 @@ public class Inventory
             _itemList.Add(item);
         }
 
-        var e = new InventoryChangedEventArgs(id, item.amount, newAmount);
+        var e = new InventoryChangedEventArgs(id, item.Name, item.amount, newAmount);
         OnItemListChanged?.Invoke(this, e);
     }
 
-    public bool RemoveItem(ItemId id, int count = 1)
+    public bool RemoveItem(ItemData itemData, int count = 1)
+    {
+        return RemoveItem(itemData.id, count);
+    }
+
+    public bool RemoveItem(string id, int count = 1)
     {
         bool have = HasItem(id, out InventoryItem foundItem, count);
         if (have) {
@@ -120,7 +144,7 @@ public class Inventory
                 // remove empty items
                 _itemList.Remove(foundItem);
             }
-            var e = new InventoryChangedEventArgs(id, -1 * count, foundItem.amount);
+            var e = new InventoryChangedEventArgs(id, foundItem.Name, -1 * count, foundItem.amount);
             OnItemListChanged?.Invoke(this, e);
             return have;
         } else {

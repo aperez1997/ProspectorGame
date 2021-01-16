@@ -402,8 +402,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 211041523}
   m_HandleRect: {fileID: 211041522}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.9999999
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6476,6 +6476,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScriptedObjectBinder
       objectReference: {fileID: 0}
+    - target: {fileID: 7413290648931334690, guid: b27b805d678d7de42ad775d77bd1d3ea,
+        type: 3}
+      propertyPath: itemMoney
+      value: 
+      objectReference: {fileID: 11400000, guid: 5e3c64875fe616747b3d798d761fc9ca,
+        type: 2}
+    - target: {fileID: 7413290648931334690, guid: b27b805d678d7de42ad775d77bd1d3ea,
+        type: 3}
+      propertyPath: itemRation
+      value: 
+      objectReference: {fileID: 11400000, guid: 1ffdc2baf04262e45aa8d710cbfc68aa,
+        type: 2}
+    - target: {fileID: 7413290648931334690, guid: b27b805d678d7de42ad775d77bd1d3ea,
+        type: 3}
+      propertyPath: itemGoldPan
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e549bf2ae2a04b418ed728cac75e07b,
+        type: 2}
+    - target: {fileID: 7413290648931334690, guid: b27b805d678d7de42ad775d77bd1d3ea,
+        type: 3}
+      propertyPath: itemGoldNugget
+      value: 
+      objectReference: {fileID: 11400000, guid: 76673b70f7df4f74ba7c6cc7511e503a,
+        type: 2}
+    - target: {fileID: 7413290648931334690, guid: b27b805d678d7de42ad775d77bd1d3ea,
+        type: 3}
+      propertyPath: itemForagedFood
+      value: 
+      objectReference: {fileID: 11400000, guid: c38d0f230027a894fa994e498e54415e,
+        type: 2}
     - target: {fileID: 7413290648931334691, guid: b27b805d678d7de42ad775d77bd1d3ea,
         type: 3}
       propertyPath: m_LocalPosition.x

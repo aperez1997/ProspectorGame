@@ -1,8 +1,13 @@
 ﻿using System;
 
+/// <summary>
+/// When the inventory changes
+/// </summary>
 public class InventoryChangedEventArgs : EventArgs
 {
-    public ItemId Type { get; }
+    public string ItemId { get; }
+
+    public string Name { get; }
 
     public int Delta { get; }
 
@@ -10,9 +15,10 @@ public class InventoryChangedEventArgs : EventArgs
 
     public int NewAmount { get; }
 
-    public InventoryChangedEventArgs(ItemId type, int delta, int newAmount)
+    public InventoryChangedEventArgs(string itemId, string name, int delta, int newAmount)
     {
-        Type = type;
+        ItemId = itemId;
+        Name = name;
         Delta = delta;
         NewAmount = newAmount;
     }

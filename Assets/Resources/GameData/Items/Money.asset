@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd4bf576ead293445a69c336385bc6e0, type: 3}
   m_Name: Money
   m_EditorClassIdentifier: 
-  id: 0
+  id: money
   category: 0
   name: Money
   description: Pays for stuff

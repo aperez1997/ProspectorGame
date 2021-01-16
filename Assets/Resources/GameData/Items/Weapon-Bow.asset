@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10aeb08383e893e4ba34d06b52b7a59b, type: 3}
   m_Name: Weapon-Bow
   m_EditorClassIdentifier: 
-  id: 5
+  id: bow
   category: 3
   name: Bow
   description: Used for hunting. Requires arrows.
@@ -20,4 +20,5 @@ MonoBehaviour:
   stackable: 0
   price: 25
   AmmoId: 6
+  Ammo: {fileID: 11400000, guid: 0e1e50be79aabe64b9766f5334a7fe72, type: 2}
   HuntingModifier: 15

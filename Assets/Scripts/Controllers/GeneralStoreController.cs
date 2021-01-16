@@ -26,7 +26,7 @@ public class GeneralStoreController : StoreInventoryController
 
         // subscribe to money change event
         player = GameStateManager.LogicInstance.Player;
-        player.OnMoneyChanged += Player_OnMoneyChanged;
+        player.Inventory.OnItemListChanged += Player_OnMoneyChanged;
 
         base.Start();
     }
@@ -64,6 +64,6 @@ public class GeneralStoreController : StoreInventoryController
 
     private void OnDestroy()
     {
-        player.OnMoneyChanged -= Player_OnMoneyChanged;
+        player.Inventory.OnItemListChanged -= Player_OnMoneyChanged;
     }
 }

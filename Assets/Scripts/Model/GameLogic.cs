@@ -5,8 +5,6 @@ using UnityEngine;
 
 /// <summary>
 /// Has all the game logic, as well as the game state
-/// TODO: I need to create a monobehavior singleton (like tooltipv2) that can bind SOs for new game stuff
-/// This will allow me to bind "well rested" and grant to player at start
 /// </summary>
 public class GameLogic
 {
@@ -52,9 +50,9 @@ public class GameLogic
     {
         // Player starting EQ
         Debug.Log("Adding player starting EQ");
-        Player.Inventory.AddItem(ItemId.Money, 50);
-        Player.Inventory.AddItem(ItemId.Ration, 7);
-        Player.Inventory.AddItem(ItemId.Pan, 1);
+        Player.Inventory.AddItem(soBinder.itemMoney, 50);
+        Player.Inventory.AddItem(soBinder.itemRation, 7);
+        Player.Inventory.AddItem(soBinder.itemGoldPan, 1);
         Player.Status.AddEffect(soBinder.seWellRested);
         Player.ActionPoints = GetPlayerMaxActionPoints();
 
@@ -241,7 +239,7 @@ public class GameLogic
         int cost = GetForageCost();
         if (!CanForage(out int chance)){ return false; }
 
-        return TakeActionForItem(cost, chance, ItemId.ForagedFood, 1);
+        return TakeActionForItem(cost, chance, soBinder.itemForagedFood, 1);
     }
 
     public int GetHuntCost() { return 2; }
@@ -276,15 +274,15 @@ public class GameLogic
         var weaponStr = bestWeapon == null ? "NULL!" : bestWeapon.ToString();
         Debug.Log("Hunting with " + weaponStr);
 
-        bool rv = TakeActionForItem(cost, chance, ItemId.ForagedFood, 1);
+        bool rv = TakeActionForItem(cost, chance, soBinder.itemForagedFood, 1);
         // chance to lose ammo even if you don't catch something
         bool usedAmmoAnyway = RollDice(25);
 
         // if we caught something or used ammo anyway, deduct ammo
         if (rv || usedAmmoAnyway) {
-            if (bestWeapon is InventoryItem && bestWeapon.AmmoId is ItemId ammoId) {
+            if (bestWeapon is InventoryItem && bestWeapon.AmmoItem is ItemData ammoItem) {
                 Debug.Log("Removed ammo because " + (rv ? "success" : "failed but used ammo"));
-                Inventory.RemoveItem(ammoId);
+                Inventory.RemoveItem(ammoItem);
             } else {
                 var debug = bestWeapon == null ? "null weapon" : bestWeapon.ToString();
                 Debug.LogWarning("Hunted but weapon is missing or missing ammo? " + debug);
@@ -301,7 +299,8 @@ public class GameLogic
     public bool CanPanForGold(out int chance)
     {
         chance = 0; // set in case hasPan is false
-        bool hasPan = Inventory.HasItem(ItemId.Pan);
+        // TODO: use a tool sub-class
+        bool hasPan = Inventory.HasItem(soBinder.itemGoldPan);
         return hasPan && IsAllowedOnTileAndHaveAP(ActionType.PanForGold, GetPanForGoldCost(), out chance);
     }
 
@@ -310,7 +309,7 @@ public class GameLogic
         int cost = GetPanForGoldCost();
         if (!CanPanForGold(out int chance)) { return false; }
 
-        return TakeActionForItem(cost, chance, ItemId.GoldNugget, 1);
+        return TakeActionForItem(cost, chance, soBinder.itemGoldNugget, 1);
     }
 
     public bool IsAllowedOnTileAndHaveAP(ActionType type, int cost, out int chance)
@@ -401,17 +400,17 @@ public class GameLogic
     /// </summary>
     /// <param name="cost">AP cost to take the action</param>
     /// <param name="chance">chance (/100) to get succeed</param>
-    /// <param name="type">type of item if success</param>
+    /// <param name="item">type of item if success</param>
     /// <param name="quantity">amount of item if success</param>
     /// <returns>success rv</returns>
-    private bool TakeActionForItem(int cost, int chance, ItemId type, int quantity = 1)
+    private bool TakeActionForItem(int cost, int chance, ItemData item, int quantity = 1)
     {
         if (!Player.SpendActionPoints(cost)) { return false; }
 
         bool success = RollDice(chance);
         if (success)
         {
-            Inventory.AddItem(type, quantity);
+            Inventory.AddItem(item, quantity);
         }
         return success;
     }
@@ -432,26 +431,39 @@ public class GameLogic
 
     public bool CanAfford(int cost)
     {
-        return Player.HasEnoughMoney(cost);
+        return Player.Inventory.HasItem(soBinder.itemMoney, cost);
     }
 
-    public bool BuyItem(ItemId type, int cost, int amount = 1)
+    public bool ReceiveMoney(int amount)
     {
-        var totalCost = cost * amount;
-        if (!Player.SpendMoney(cost)) { return false; }
-            
-        Inventory.AddItem(type, 1);
+        Inventory.AddItem(soBinder.itemMoney, amount);
         return true;
     }
 
-    public bool CanSell(ItemId type)
+    public bool SpendMoney(int cost)
     {
-        return GetSellPrice(type) > 0;
+        if (!CanAfford(cost)) { return false; }
+        Inventory.RemoveItem(soBinder.itemMoney.id, cost);
+        return true;
     }
 
-    public int GetSellPrice(ItemId type)
+    public bool BuyItem(string id, int cost, int amount = 1)
     {
-        ItemData data = ItemDataLoader.LoadItemById(type);
+        var totalCost = cost * amount;
+        if (!SpendMoney(cost)) { return false; }
+            
+        Inventory.AddItem(id, 1);
+        return true;
+    }
+
+    public bool CanSell(string id)
+    {
+        return GetSellPrice(id) > 0;
+    }
+
+    public int GetSellPrice(string id)
+    {
+        ItemData data = ItemDataLoader.LoadItemById(id);
         if (data.price > 0)
         {
             float priceRaw = data.price / 2;
@@ -461,11 +473,11 @@ public class GameLogic
         return -1;
     }
 
-    public bool SellItem(ItemId type, int price, int amount = 1)
+    public bool SellItem(string id, int price, int amount = 1)
     {
-        if (!Inventory.RemoveItem(type, amount)) { return false; }
+        if (!Inventory.RemoveItem(id, amount)) { return false; }
 
-        Player.ReceiveMoney(amount * price);
+        ReceiveMoney(amount * price);
 
         return true;
     }
@@ -482,9 +494,9 @@ public class GameLogic
         );
 
         // Look at each item and determine if it fits
-        foreach (ItemId type in Enum.GetValues(typeof(ItemId)))
+        foreach (string itemId in ItemDataLoader.Instance.Keys)
         {
-            var item = new InventoryItem(type, 10);
+            var item = new InventoryItem(itemId, 10);
             // needs to have a price
             if (!(item.Price > 0)) { continue; }
             // needs to be a matching category

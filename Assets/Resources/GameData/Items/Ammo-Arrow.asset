@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd4bf576ead293445a69c336385bc6e0, type: 3}
   m_Name: Ammo-Arrow
   m_EditorClassIdentifier: 
-  id: 6
+  id: arrows
   category: 4
   name: Arrows
   description: Used with a Bow.

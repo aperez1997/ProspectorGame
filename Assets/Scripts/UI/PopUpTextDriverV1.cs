@@ -40,11 +40,11 @@ public class PopUpTextDriverV1 : MonoBehaviour
         return popUpTextV1;
     }
 
-    public static PopUpTextV1 CreateInventoryChangePopUp(Transform parentTransform, int delta, ItemId type)
+    public static PopUpTextV1 CreateInventoryChangePopUp(Transform parentTransform, int delta, string itemId)
     {
         var text = delta.ToString();
         if (delta > 0) { text = "+" + delta; }
-        text += " " + type.ToString();
+        text += " " + itemId.ToString();
         if (delta > 1) { text += "s"; }
 
         PopUpTextV1 popUpTextV1 = CreatePopUp(parentTransform, text);

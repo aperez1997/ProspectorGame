@@ -72,14 +72,14 @@ abstract public class InventoryController : ContainerDisplayController<Inventory
     /// <summary>
     /// Finds the transform for the first inventory item of the given type, or null
     /// </summary>
-    protected Transform FindInventoryItemTransform(ItemId id)
+    protected Transform FindInventoryItemTransform(string itemId)
     {
         foreach (Transform child in ItemContainer)
         {
             // skip the template
             if (child == ItemTemplate.transform) { continue; }
             var metaData = child.GetComponent<InventoryItemUIMetaData>();
-            if (metaData.type == id)
+            if (metaData.itemId == itemId)
             {
                 return child;
             }
@@ -90,10 +90,10 @@ abstract public class InventoryController : ContainerDisplayController<Inventory
     protected void Inventory_OnItemListChanged(object sender, InventoryChangedEventArgs e)
     {
         // find item that changed and add popUp
-        var child = FindInventoryItemTransform(e.Type);
+        var child = FindInventoryItemTransform(e.ItemId);
         if (child is Transform)
         {
-            PopUpTextDriverV1.CreateInventoryChangePopUp(child, e.Delta, e.Type);
+            PopUpTextDriverV1.CreateInventoryChangePopUp(child, e.Delta, e.Name);
         }
 
         OnItemListChanged(sender, e);

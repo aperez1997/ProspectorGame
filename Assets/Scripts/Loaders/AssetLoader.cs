@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 
@@ -10,6 +11,12 @@ using UnityEngine;
 public abstract class AssetLoader<Type> where Type : IAssetLoaderItem
 {
     protected readonly Dictionary<string, Type> itemDict = new Dictionary<string, Type>();
+
+    public ReadOnlyCollection<string> Keys {
+        get {
+            return new List<string>(this.itemDict.Keys).AsReadOnly();
+        }
+    }
 
     public AssetLoader()
     {

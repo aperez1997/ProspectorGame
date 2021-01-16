@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Record class for the player
+/// </summary>
 [Serializable]
 public class Player
 {
@@ -38,9 +41,6 @@ public class Player
 
     // Inventory
     [field:SerializeField] public Inventory Inventory { get; private set; }
-
-    // Money
-    public event EventHandler OnMoneyChanged;
 
     // Location
     [SerializeField] private CellPositionStruct _location;
@@ -85,26 +85,6 @@ public class Player
     public bool ReduceHealth(int amount = 1)
     {
         Health -= amount;
-        return true;
-    }
-
-    public bool HasEnoughMoney(int cost)
-    {
-        return Inventory.HasItem(ItemId.Money, cost);
-    }
-
-    public bool SpendMoney(int cost)
-    {
-        if (!HasEnoughMoney(cost)){ return false; }
-        Inventory.RemoveItem(ItemId.Money, cost);
-        OnMoneyChanged?.Invoke(this, EventArgs.Empty);
-        return true;
-    }
-
-    public bool ReceiveMoney(int amount)
-    {
-        Inventory.AddItem(ItemId.Money, amount);
-        OnMoneyChanged?.Invoke(this, EventArgs.Empty);
         return true;
     }
 

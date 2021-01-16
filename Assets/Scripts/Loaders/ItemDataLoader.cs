@@ -22,9 +22,9 @@ public class ItemDataLoader : AssetLoader<ItemData>
         }
     }
 
-    public static ItemData LoadItemById(ItemId id)
+    public static ItemData LoadItemById(string id)
     {
-        return Instance.LoadByKey(id.ToString());
+        return Instance.LoadByKey(id);
     }
 
     protected override string GetPath(){ return "GameData/Items"; }

@@ -2,10 +2,13 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// links players inventory to underlying scripted objects
+/// </summary>
 [Serializable]
 public class InventoryItem : ISerializationCallbackReceiver
 {
-    public ItemId id;
+    public string id;
 
     public int amount;
 
@@ -18,12 +21,12 @@ public class InventoryItem : ISerializationCallbackReceiver
     public int Price { get; private set; }
 
     // Weapon sub-type
-    public ItemId? AmmoId { get; private set; }
+    public ItemData AmmoItem { get; private set; }
     public int? HuntingModifier { get; private set; }
 
-    public InventoryItem(ItemId type, int amount)
+    public InventoryItem(string id, int amount)
     {
-        this.id = type;
+        this.id = id;
         this.amount = amount;
         LoadItemData();
     }
@@ -44,7 +47,7 @@ public class InventoryItem : ISerializationCallbackReceiver
         Price = item.price;
 
         if (item is ItemDataWeapon weaponItem) {
-            AmmoId = weaponItem.AmmoId;
+            AmmoItem = weaponItem.Ammo;
             HuntingModifier = weaponItem.HuntingModifier;
         }
     }
