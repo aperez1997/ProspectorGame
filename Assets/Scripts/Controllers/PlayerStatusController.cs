@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Displays player status effects in a container using prefabs
@@ -19,10 +20,15 @@ public class PlayerStatusController : ContainerDisplayController<PlayerStatusEff
         base.Start();
     }
 
-    protected override void SetPrefabDetails(GameObject gameObject, PlayerStatusEffect playerStatusEffect)
+    protected override void SetPrefabDetails(GameObject gameObject, PlayerStatusEffect pse)
     {
         ToolTipUIHelper helper = gameObject.GetComponent<ToolTipUIHelper>();
-        helper.text = playerStatusEffect.Description;
+        helper.text = pse.Name + "\n" + pse.Description + "\nDays left: " + pse.DaysLeft; 
+
+        // find sprite
+        Image image = gameObject.GetComponentInChildren<Image>();
+        image.sprite = pse.Sprite;
+        image.enabled = true;
     }
 
     private void OnDestroy()

@@ -28,9 +28,9 @@ public class PlayerStatus
         return HasEffect(name, out _);
     }
 
-    public bool HasEffect(String name, out PlayerStatusEffect psEffect)
+    public bool HasEffect(String id, out PlayerStatusEffect psEffect)
     {
-        psEffect = _effectsList.Find(x => x.Name == name);
+        psEffect = _effectsList.Find(x => x.Id == id);
         return psEffect is PlayerStatusEffect;
     }
 
@@ -60,9 +60,9 @@ public class PlayerStatus
         return pStatusEffect;
     }
 
-    public void RemoveEffect(String name)
+    public void RemoveEffect(String id)
     {
-        var removeList = _effectsList.FindAll(x => x.Name == name);
+        var removeList = _effectsList.FindAll(x => x.Id == id);
         RemoveEffectList(removeList);
     }
 

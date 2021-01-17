@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: wellRested
   Name: Well Rested
-  Description: You gain extra AP from being well reted
+  Description: You have extra AP
+  Sprite: {fileID: 21300000, guid: 42be6ae53b5254ce5ae8df577d47009f, type: 3}
   AffectedStat: 1
   AffectAmount: 1
   DurationDays: 2

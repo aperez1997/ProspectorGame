@@ -10,13 +10,13 @@ using UnityEngine;
 [Serializable]
 public class PlayerStatusEffect
 {
-    public string Name;
+    public string Id;
 
     public int DaysLeft;
 
-    public PlayerStatusEffect(string name, int daysLeft)
+    public PlayerStatusEffect(string id, int daysLeft)
     {
-        this.Name = name;
+        this.Id = id;
         DaysLeft = daysLeft;
     }
 
@@ -25,9 +25,9 @@ public class PlayerStatusEffect
     public StatusEffect StatusEffect {
         get {
             if (_statusEffect is null) {
-                var data = StatusEffectLoader.LoadItemById(Name);
+                var data = StatusEffectLoader.LoadItemById(Id);
                 if (!(data is StatusEffect)) {
-                    throw new System.Exception("No StatusEffect data for ID " + Name);
+                    throw new System.Exception("No StatusEffect data for ID " + Id);
                 }
                 _statusEffect = data;
             }
@@ -36,7 +36,11 @@ public class PlayerStatusEffect
     }
 
     // Derived field that come from StatusEffect
+    public string Name { get { return StatusEffect.Name; } }
+
     public string Description { get { return StatusEffect.Description; } }
+
+    public Sprite Sprite { get { return StatusEffect.Sprite; } }
 
     public PlayerStat AffectedStat { get { return StatusEffect.AffectedStat; } }
 

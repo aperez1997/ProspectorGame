@@ -12,6 +12,8 @@ public class StatusEffect : ScriptableObject, IAssetLoaderItem
     [Tooltip("describe it")]
     public string Description;
 
+    public Sprite Sprite;
+
     [Tooltip("which stat is affected")]
     public PlayerStat AffectedStat;
 
