@@ -10,15 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10aeb08383e893e4ba34d06b52b7a59b, type: 3}
-  m_Name: Weapon-Bow
+  m_Name: w-Bow
   m_EditorClassIdentifier: 
   id: bow
-  category: 3
   name: Bow
   description: Used for hunting. Requires arrows.
   sprite: {fileID: 21300000, guid: b37abd6a6e26fcb47bd01d0d50906e2e, type: 3}
   stackable: 0
   price: 25
-  AmmoId: 6
-  Ammo: {fileID: 11400000, guid: 0e1e50be79aabe64b9766f5334a7fe72, type: 2}
+  Ammo: {fileID: 11400000, guid: abbb49452ad5645dc862cef8e279d749, type: 2}
   HuntingModifier: 15

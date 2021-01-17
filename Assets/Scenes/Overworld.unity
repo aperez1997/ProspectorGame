@@ -6486,25 +6486,25 @@ PrefabInstance:
         type: 3}
       propertyPath: itemRation
       value: 
-      objectReference: {fileID: 11400000, guid: 1ffdc2baf04262e45aa8d710cbfc68aa,
+      objectReference: {fileID: 11400000, guid: 14a78c151ea554554bab2769069bf9a1,
         type: 2}
     - target: {fileID: 7413290648931334690, guid: b27b805d678d7de42ad775d77bd1d3ea,
         type: 3}
       propertyPath: itemGoldPan
       value: 
-      objectReference: {fileID: 11400000, guid: 0e549bf2ae2a04b418ed728cac75e07b,
+      objectReference: {fileID: 11400000, guid: 26026c185c484426bb532d37c241ee81,
         type: 2}
     - target: {fileID: 7413290648931334690, guid: b27b805d678d7de42ad775d77bd1d3ea,
         type: 3}
       propertyPath: itemGoldNugget
       value: 
-      objectReference: {fileID: 11400000, guid: 76673b70f7df4f74ba7c6cc7511e503a,
+      objectReference: {fileID: 11400000, guid: 6e96ddd100c4c47e08c415725a734dbb,
         type: 2}
     - target: {fileID: 7413290648931334690, guid: b27b805d678d7de42ad775d77bd1d3ea,
         type: 3}
       propertyPath: itemForagedFood
       value: 
-      objectReference: {fileID: 11400000, guid: c38d0f230027a894fa994e498e54415e,
+      objectReference: {fileID: 11400000, guid: 9e651ced60d494904870d388154b2b8a,
         type: 2}
     - target: {fileID: 7413290648931334691, guid: b27b805d678d7de42ad775d77bd1d3ea,
         type: 3}

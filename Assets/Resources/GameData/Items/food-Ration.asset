@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd4bf576ead293445a69c336385bc6e0, type: 3}
-  m_Name: Ration
+  m_Script: {fileID: 11500000, guid: 79f233665e5124979a527da5ac880b29, type: 3}
+  m_Name: food-Ration
   m_EditorClassIdentifier: 
   id: ration
-  category: 1
   name: Ration
   description: A simple ration. Nourishes the player for 1 day in the wild.
   sprite: {fileID: 21300048, guid: 14aefffd3622c7347aad64f2bed35801, type: 3}

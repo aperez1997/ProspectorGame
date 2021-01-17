@@ -8,9 +8,7 @@ public class ItemData : ScriptableObject, IAssetLoaderItem
 {
     public string id;
 
-    // TODO: Should this be replaced with sub-classes?
-    [Tooltip("Category of item. Determines which stores sell which items")]
-    public ItemCategory category;
+    public virtual ItemCategory category { get { return ItemCategory.None; } }
 
     public new string name;
 

@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Sub-class of SO items that are weapons
+/// tool item that is used for killing
 /// </summary>
 [CreateAssetMenu(fileName = "Weapon-", menuName = "Item: Weapon")]
-public class ItemDataWeapon : ItemData
+public class ItemDataWeapon : ItemDataTool
 {
     [Tooltip("Ammo SO for this weapon")]
     public ItemData Ammo;
@@ -12,8 +12,5 @@ public class ItemDataWeapon : ItemData
     [Tooltip("Added to hunting chance")]
     public int HuntingModifier;
 
-    void Reset()
-    {
-        category = ItemCategory.Weapons;
-    }
+    public override ItemCategory category { get { return ItemCategory.Weapons; } }
 }
