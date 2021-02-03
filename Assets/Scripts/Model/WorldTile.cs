@@ -172,21 +172,6 @@ public class WorldTile : ISerializationCallbackReceiver
         _biomeData = null;
     }
 
-    /// <summary>
-    /// Computed move cost. Has to be method because it takes a parameter
-    /// </summary>
-    /// <param name="roadBonus">true if roadbonus is currently in effect</param>
-    public int GetMoveCost(bool roadBonus)
-    {        
-        var moveCost = MoveBaseCost;
-        foreach (var feature in Features) {
-            if (roadBonus || feature.type != TileFeatureType.Road) {
-                moveCost += feature.moveCostModifier;
-            }
-        }
-        return moveCost;
-    }
-
     public List<WorldTile> Reveal(int radius = 1)
     {
         var traveled = new List<WorldTile>();

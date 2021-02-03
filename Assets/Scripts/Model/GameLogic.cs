@@ -124,15 +124,27 @@ public class GameLogic
     /// <summary>
     /// Gets AP cost to move from tileAt to tileNeighbor
     /// </summary>
-    public int GetMovementCost(WorldTile tileAt, WorldTile tileNeighbor)
+    public CostDescription GetMovementCost(WorldTile tileAt, WorldTile tileNeighbor)
     {
         bool hasRoad = tileAt.HasRoad();
-        int costNeighbor = tileNeighbor.GetMoveCost(hasRoad);
-        if (tileNeighbor.MoveBaseCost > 0){
-            // Only enforce min-cost-1 if the tile is moveable (negative base cost means can't move)
-            costNeighbor = Math.Max(1, costNeighbor);
+
+        var costs = new List<CostItem>();
+
+        costs.Add(new CostItem("Base cost", tileNeighbor.MoveBaseCost));
+        var costNeighbor = tileNeighbor.MoveBaseCost;
+        foreach (var feature in tileNeighbor.Features) {
+            if (hasRoad || feature.type != TileFeatureType.Road) {
+                costs.Add(new CostItem(feature.name, feature.moveCostModifier));
+            }
         }
-        return costNeighbor;
+
+        // enforce min-cost-1 if the tile is moveable (negative base cost means can't move)
+        int totalCost = CostDescription.GetTotalCostFromCostItems(costs);
+        if (totalCost <= 0 && tileNeighbor.MoveBaseCost > 0) {
+            var minCostAdj = 1 - totalCost;
+            costs.Add(new CostItem("Min Cost adjustment", minCostAdj));
+        }
+        return new CostDescription(costs);
     }
 
     /// <summary>
@@ -141,7 +153,8 @@ public class GameLogic
     public bool MovePlayer(WorldTile tileFrom, HexDirection direction)
     {
         var tileTo = tileFrom.GetNeighborInDirection(direction);
-        int cost = GetMovementCost(tileFrom, tileTo);
+        var costDesc = GetMovementCost(tileFrom, tileTo);
+        int cost = costDesc.TotalCost;
         if (!Player.HasEnoughActionPoints(cost)) {
             Debug.LogWarning("Cannot move because not enough AP");
             return false;

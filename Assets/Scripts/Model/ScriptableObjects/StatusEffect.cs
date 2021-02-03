@@ -36,6 +36,6 @@ public class StatusEffect : ScriptableObject, IAssetLoaderItem
 
 public enum PlayerStat
 {
-    Health, ActionPoints
+    Health, ActionPoints, MovementCost
 }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -25,8 +26,8 @@ public class Movement_Controller : MonoBehaviour
     private MovementUIHelper helper;
     private GameLogic gameLogic;
 
-    int GetCost(HexDirection direction) { return helper.GetMovementCost(direction); }
-    void SetCost(HexDirection direction, int cost) { helper.SetMovementCost(direction, cost); }
+    public CostDescription GetCost(HexDirection direction) { return helper.GetMovementCostDescription(direction); }
+    public void SetCost(HexDirection direction, CostDescription costDesc) { helper.SetMovementCost(direction, costDesc); }
 
     // Start is called before the first frame update
     void Start()
@@ -74,23 +75,36 @@ public class Movement_Controller : MonoBehaviour
 
         foreach (MovementUIData data in helper.data)
         {
-            UpdateButtonUI(data.button, data.cost);
+            UpdateButtonUI(data.Button, data.CostDesc);
         }
     }
 
     // Updates a single movement button, also controlling enabled state
-    void UpdateButtonUI(Button button, int cost)
+    void UpdateButtonUI(Button button, CostDescription costDesc)
     {
+        var cost = costDesc.TotalCost;
         string costStr = cost.ToString();
+        string toolTipStr = GetMovementCostDescriptionText(costDesc);
         bool enabled = true;
-        if (cost < 0){
+        if (cost < 0) {
             costStr = "X";
-            enabled = false;
-        } else if (!player.HasEnoughActionPoints(cost)){
+            toolTipStr = "Unpassable";
+            enabled = false;            
+        } else if (!player.HasEnoughActionPoints(cost)) {
             enabled = false;
         }
         button.GetComponentInChildren<Text>().text = costStr;
+        button.GetComponentInChildren<ToolTipUIHelper>().text = toolTipStr;
         button.interactable = enabled;
+    }
+
+    /// <summary>
+    /// Get the full cost description for the given cost
+    /// </summary>
+    public string GetMovementCostDescriptionText(CostDescription costDesc)
+    {
+        var strings = costDesc.CostItems.Select(item => item.Name + " " + item.Value.ToString());
+        return string.Join("\n", strings);
     }
 
     // Called to move in the given direction
@@ -119,8 +133,8 @@ public class Movement_Controller : MonoBehaviour
             WorldTile tileNeighbor = neighborPair.Value;
             //Debug.Log("Found neighbor " + hdeNeighbor + "=" + tileNeighbor);
 
-            int costNeighbor = gameLogic.GetMovementCost(tileAt, tileNeighbor);
-            SetCost(hdeNeighbor, costNeighbor);
+            var costDesc = gameLogic.GetMovementCost(tileAt, tileNeighbor);
+            SetCost(hdeNeighbor, costDesc);
         }
 
         UpdateMovementUI();

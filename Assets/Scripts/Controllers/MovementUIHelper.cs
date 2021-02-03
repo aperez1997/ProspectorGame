@@ -5,8 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-// Holds UI and data for for each direction the player can go
-// consider breaking out the direction->cost aspect into another class? For pathfinding multiple moves
+/// <summary>
+/// Holds UI and data for for each direction the player can go.
+/// Maintains a dictionary of direction -> MovementUIData, which is a mix of direction, cost, and UI
+//  consider breaking out the direction->cost aspect into another class? For pathfinding multiple moves 
+/// </summary>
 public class MovementUIHelper
 {
     public MovementUIData[] data
@@ -20,58 +23,68 @@ public class MovementUIHelper
     {
         MovementUIData uIData;
 
-        uIData = new MovementUIData(HexDirection.East, 0, east);
-        dataDict.Add(uIData.hde, uIData);
+        uIData = new MovementUIData(HexDirection.East, CostDescription.Empty, east);
+        dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.SouthEast, 0, southEast);
-        dataDict.Add(uIData.hde, uIData);
+        uIData = new MovementUIData(HexDirection.SouthEast, CostDescription.Empty, southEast);
+        dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.SouthWest, 0, southWest);
-        dataDict.Add(uIData.hde, uIData);
+        uIData = new MovementUIData(HexDirection.SouthWest, CostDescription.Empty, southWest);
+        dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.West, 0, west);
-        dataDict.Add(uIData.hde, uIData);
+        uIData = new MovementUIData(HexDirection.West, CostDescription.Empty, west);
+        dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.NorthWest, 0, northWest);
-        dataDict.Add(uIData.hde, uIData);
+        uIData = new MovementUIData(HexDirection.NorthWest, CostDescription.Empty, northWest);
+        dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.NorthEast, 0, northEast);
-        dataDict.Add(uIData.hde, uIData);
+        uIData = new MovementUIData(HexDirection.NorthEast, CostDescription.Empty, northEast);
+        dataDict.Add(uIData.Hde, uIData);
     }
 
-    public int GetMovementCost(HexDirection hde)
+    public CostDescription GetMovementCostDescription(HexDirection hde)
     {
         bool rv = dataDict.TryGetValue(hde, out MovementUIData data);
-        if (rv){
-            return data.cost;
+        if (rv) {
+            return data.CostDesc;
         }
-        return -1;
+        return null;
     }
+
 
     public void SetMovementCost(HexDirection hde, int cost)
     {
         dataDict.TryGetValue(hde, out MovementUIData data);
-        data.cost = cost;       
+        data.Cost = cost;       
     }
 
-    public Button GetButtom(HexDirection hde)
+    public void SetMovementCost(HexDirection hde, CostDescription costDesc)
     {
         dataDict.TryGetValue(hde, out MovementUIData data);
-        return data.button;
+        data.Cost = costDesc.TotalCost;
+        data.CostDesc = costDesc;
+    }
+
+    public Button GetButton(HexDirection hde)
+    {
+        dataDict.TryGetValue(hde, out MovementUIData data);
+        return data.Button;
     }
 }
 
-// tODO: should probably be it's own file
+// TODO: should probably be it's own file
 public class MovementUIData
 {
-    public HexDirection hde;
-    public int cost;
-    public Button button;
+    public HexDirection Hde;
+    public int Cost;
+    public CostDescription CostDesc;     
+    public Button Button;
 
-    public MovementUIData(HexDirection hde, int cost, Button button)
+    public MovementUIData(HexDirection hde, CostDescription costDesc, Button button)
     {
-        this.hde = hde;
-        this.cost = cost;
-        this.button = button;
+        this.Hde = hde;
+        this.Cost = costDesc.TotalCost;
+        this.CostDesc = costDesc;
+        this.Button = button;
     }
 }
