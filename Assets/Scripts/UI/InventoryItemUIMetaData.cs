@@ -9,7 +9,7 @@ public class InventoryItemUIMetaData : MonoBehaviour
 
     public void SetFromInventoryItem(InventoryItem item)
     {
-        itemId = item.id;
-        amount = item.amount;
+        itemId = item.Id;
+        amount = item.Amount;
     }
 }

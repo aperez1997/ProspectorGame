@@ -21,15 +21,15 @@ public class PlayerStoreInventoryController : StoreInventoryController
 
         var button = GetActionButton(gameObject);
 
-        bool canSell = gameLogic.CanSell(item.id);
+        bool canSell = gameLogic.CanSell(item.Id);
         if (canSell) {
             // set price
-            int price = gameLogic.GetSellPrice(item.id);
+            int price = gameLogic.GetSellPrice(item.Id);
             SetPriceText(gameObject, price);
 
             // setup button
             button.onClick.AddListener(() => {
-                gameLogic.SellItem(item.id, price);
+                gameLogic.SellItem(item.Id, price);
             });
             SetButtonText(gameObject, "Sell");
         } else {

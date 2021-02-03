@@ -52,7 +52,7 @@ public class Inventory
         for (int i = 0; i < _itemList.Count; i++)
         {
             InventoryItem inventoryItem = _itemList[i];
-            if (inventoryItem.id == itemId && inventoryItem.amount >= count)
+            if (inventoryItem.Id == itemId && inventoryItem.Amount >= count)
             {
                 returnItem = inventoryItem;
                 return true;
@@ -115,17 +115,17 @@ public class Inventory
     /// <summary>Proper way to add an item</summary>
     public void AddItem(InventoryItem item)
     {
-        string id = item.id;
+        string id = item.Id;
         bool haveItem = HasItem(id, out InventoryItem foundItem);
-        int newAmount = item.amount;
+        int newAmount = item.Amount;
         if (item.Stackable && haveItem){
-            foundItem.amount += item.amount;
-            newAmount = foundItem.amount;
+            foundItem.Amount += item.Amount;
+            newAmount = foundItem.Amount;
         } else {
             _itemList.Add(item);
         }
 
-        var e = new InventoryChangedEventArgs(id, item.Name, item.amount, newAmount);
+        var e = new InventoryChangedEventArgs(id, item.Name, item.Amount, newAmount);
         OnItemListChanged?.Invoke(this, e);
     }
 
@@ -138,19 +138,19 @@ public class Inventory
     {
         bool have = HasItem(id, out InventoryItem foundItem, count);
         if (have) {
-            foundItem.amount -= count;
-            if (foundItem.amount == 0)
+            foundItem.Amount -= count;
+            if (foundItem.Amount == 0)
             {
                 // remove empty items
                 _itemList.Remove(foundItem);
             }
-            var e = new InventoryChangedEventArgs(id, foundItem.Name, -1 * count, foundItem.amount);
+            var e = new InventoryChangedEventArgs(id, foundItem.Name, -1 * count, foundItem.Amount);
             OnItemListChanged?.Invoke(this, e);
             return have;
         } else {
             if (foundItem is InventoryItem)
             {
-                Debug.Log("tried to remove " + count + " of id " + id.ToString() + " but there are only " + foundItem.amount +"!");
+                Debug.Log("tried to remove " + count + " of id " + id.ToString() + " but there are only " + foundItem.Amount +"!");
             } else
             {
                 Debug.Log("tried to remove " + count + " of id " + id.ToString() + " but there aren't any!");

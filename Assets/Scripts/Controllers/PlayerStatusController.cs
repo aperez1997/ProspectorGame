@@ -20,10 +20,15 @@ public class PlayerStatusController : ContainerDisplayController<PlayerStatusEff
         base.Start();
     }
 
+    // TODO: This is kinda view stuff... can we move it somewhere else?
     protected override void SetPrefabDetails(GameObject gameObject, PlayerStatusEffect pse)
     {
         ToolTipUIHelper helper = gameObject.GetComponent<ToolTipUIHelper>();
-        helper.text = pse.Name + "\n" + pse.Description + "\nDays left: " + pse.DaysLeft; 
+        helper.text = pse.Name
+            + "\n" + pse.Description
+            + "\n" + pse.AffectedStat.ToString() + " " + pse.AffectedAmountNice()
+            +  "\nDays left: " + pse.DaysLeft
+            ; 
 
         // find sprite
         Image image = gameObject.GetComponentInChildren<Image>();

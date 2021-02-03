@@ -52,4 +52,9 @@ public class PlayerStatusEffect
     {
         return "PSE[" + StatusEffect.ToString() + "d:"+DaysLeft + "]";
     }
+
+    public string AffectedAmountNice() {
+        var op = AffectAmount > 0 ? "+" : "";
+        return op + AffectAmount.ToString();
+    } 
 }

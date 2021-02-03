@@ -8,9 +8,9 @@ using UnityEngine;
 [Serializable]
 public class InventoryItem : ISerializationCallbackReceiver
 {
-    public string id;
+    public string Id;
 
-    public int amount;
+    public int Amount;
 
     // cached from itemData
     public ItemCategory Category { get; private set; }
@@ -19,6 +19,7 @@ public class InventoryItem : ISerializationCallbackReceiver
     public Sprite Sprite { get; private set; }
     public bool Stackable { get; private set; }
     public int Price { get; private set; }
+    public GameEvent[] GameEvents { get; private set; }
 
     // Weapon sub-type
     public ItemData AmmoItem { get; private set; }
@@ -26,14 +27,15 @@ public class InventoryItem : ISerializationCallbackReceiver
 
     public InventoryItem(string id, int amount)
     {
-        this.id = id;
-        this.amount = amount;
+        this.Id = id;
+        this.Amount = amount;
         LoadItemData();
     }
 
+    // This pattern is required because of SO sub-class properties
     private void LoadItemData()
     {
-        ItemData item = ItemDataLoader.LoadItemById(id);
+        ItemData item = ItemDataLoader.LoadItemById(Id);
         if (!(item is ItemData)) {
             //Debug.LogError("Could not find item " + id.ToString());
             return;
@@ -45,6 +47,7 @@ public class InventoryItem : ISerializationCallbackReceiver
         Sprite = item.sprite;
         Stackable = item.stackable;
         Price = item.price;
+        GameEvents = item.gameEvents;
 
         if (item is ItemDataWeapon weaponItem) {
             AmmoItem = weaponItem.Ammo;
@@ -52,13 +55,12 @@ public class InventoryItem : ISerializationCallbackReceiver
         }
     }
 
-
     public void OnBeforeSerialize() { }
 
     public void OnAfterDeserialize(){ LoadItemData(); }
 
     public override string ToString()
     {
-        return "I:"+id+":"+amount;
+        return "I:"+Id+":"+Amount;
     }
 }

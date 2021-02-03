@@ -51,7 +51,7 @@ abstract public class InventoryController : ContainerDisplayController<Inventory
         var itemAmountText = GetAmountText(gameObject);
         if (item.Stackable)
         {
-            itemAmountText.text = item.amount.ToString();
+            itemAmountText.text = item.Amount.ToString();
             itemAmountText.enabled = true;
         } else {
             itemAmountText.enabled = false;

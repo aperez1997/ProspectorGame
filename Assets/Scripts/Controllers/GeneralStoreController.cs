@@ -52,7 +52,7 @@ public class GeneralStoreController : StoreInventoryController
         var button = GetActionButton(gameObject);
         button.interactable = gameLogic.CanAfford(price);
         button.onClick.AddListener(() => {
-            gameLogic.BuyItem(item.id, price);
+            gameLogic.BuyItem(item.Id, price);
         });
         SetButtonText(gameObject, "Buy");
     }

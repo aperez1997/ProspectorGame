@@ -161,6 +161,9 @@ public class GameLogic
 
     // ACTIONS
 
+    /// <summary>
+    /// Eat a food (picked by lowest cost first), then pass the day
+    /// </summary>
     public bool Camp()
     {
         if (!IsAllowedOnPlayerTile(ActionType.Camp)) { return false; }
@@ -169,15 +172,51 @@ public class GameLogic
         InventoryItem foodToEat = food.FirstOrDefault();
 
         if (foodToEat is InventoryItem) {
-            Debug.Log("Eating some food");
-            Inventory.RemoveItem(foodToEat.id, 1);
+            EatFood(foodToEat);
         } else {
             Debug.Log("Health loss due to no food");
             Player.ReduceHealth();
         }
 
+        var rv = PassDay();
+        return rv;
+    }
+
+    /// <summary>
+    /// Eat some food, fire any related events
+    /// </summary>
+    public bool EatFood(InventoryItem foodToEat)
+    {
+        Debug.Log("Eating some food " + foodToEat.ToString());
+        Inventory.RemoveItem(foodToEat.Id, 1);
+
+        // check for events
+        foreach (var gameEvent in foodToEat.GameEvents) {
+            if (!(gameEvent is GameEvent)) {
+                continue;
+            }
+            Debug.Log("Considering event " + gameEvent.ToString());
+            if (RollDice(gameEvent.chance)) {
+                Debug.Log("Event fired!" + gameEvent.ToString());
+                if (gameEvent.statusEffectGiven is StatusEffect se) {
+                    Debug.Log("adding SE " + se.ToString());
+                    Player.Status.AddEffect(se);
+                }
+                // no more effects after the first
+                break;
+            }
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Pass a day of time
+    /// </summary>
+    public bool PassDay()
+    {
         // give back AP
         Player.ActionPoints = GetPlayerMaxActionPoints();
+
         // advance date
         GameStateMeta.AddDays(1);
 

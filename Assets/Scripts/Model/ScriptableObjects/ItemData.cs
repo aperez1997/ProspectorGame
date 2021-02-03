@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// SO for all items in the game
@@ -23,6 +24,8 @@ public class ItemData : ScriptableObject, IAssetLoaderItem
     public int price;
 
     public string GetKey() { return id; }
+
+    public GameEvent[] gameEvents;
 }
 
 /// <summary>
