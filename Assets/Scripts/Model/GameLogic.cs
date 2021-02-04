@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gravitons.UI.Modal;
 using UnityEngine;
 
 /// <summary>
@@ -197,11 +198,13 @@ public class GameLogic
         if (foodToEat is InventoryItem) {
             EatFood(foodToEat);
         } else {
-            Debug.Log("Health loss due to no food");
+            // TODO: This text should probably come from an SO
+            ShowModal("Health Loss", "You lost health because you didn't have anything to eat.");
             Player.ReduceHealth();
         }
 
         var rv = PassDay();
+
         return rv;
     }
 
@@ -487,6 +490,8 @@ public class GameLogic
             Debug.Log("Considering event " + gameEvent.ToString());
             if (RollDice(gameEvent.chance)) {
                 Debug.Log("Event fired!" + gameEvent.ToString());
+                ShowModal("Event: " + gameEvent.name, gameEvent.description);
+
                 if (gameEvent.statusEffectGiven is StatusEffect se) {
                     Debug.Log("adding SE " + se.ToString());
                     Player.Status.AddEffect(se);
@@ -577,5 +582,14 @@ public class GameLogic
         }
 
         return inventory;
+    }
+
+    // GUI
+
+    protected void ShowModal(string title, string body)
+    {
+        ModalManager.Show(title, body,
+            new[] { new ModalButton() { Text = "OK" } }
+            );
     }
 }
