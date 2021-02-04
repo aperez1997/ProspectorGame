@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,17 +11,19 @@ using UnityEngine;
 /// </summary>
 public class ScriptedObjectBinder : MonoBehaviour
 {
-    [Tooltip("MomevementData SO")]
-    public ActionData MovementData;
+    [Tooltip("ActionData SO for Move Action")]
+    public ActionData MoveData;
+    [Tooltip("ActionData SO for Forage Action")]
+    public ActionData ForageData;
 
-    // starting gear
-    [Tooltip("Starting buff")]
-    public StatusEffect seWellRested;
-    [Tooltip("starting gear")]
+    [SerializeField]
+    [Tooltip("starting equipment")]
+    public StartingGear StartingGear;
+
+    // Game Logic related
+    [Tooltip("needed for money checkss")]
     public ItemData itemMoney;
-    [Tooltip("starting gear")]
-    public ItemData itemRation;
-    [Tooltip("starting gear")]
+    [Tooltip("Panning check, should be changed to an item attribute or sub-class")]
     public ItemData itemGoldPan;
 
     // handouts
@@ -44,4 +47,25 @@ public class ScriptedObjectBinder : MonoBehaviour
             Destroy(gameObject);
         }
     }
+}
+
+/// <summary>
+/// Gear and Effects that the player starts with
+/// </summary>
+[Serializable]
+public class StartingGear
+{
+    public StartingGearItem[] Items;
+    public StatusEffect[] Effects;
+}
+
+/// <summary>
+/// An item that the player starts, along with the quantity
+/// Can't use InventoryItem because that has an ID instead of the SO
+/// </summary>
+[Serializable]
+public class StartingGearItem
+{
+    public ItemData Item;
+    public int quantity;
 }

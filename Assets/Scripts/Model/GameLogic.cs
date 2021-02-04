@@ -51,10 +51,14 @@ public class GameLogic
     {
         // Player starting EQ
         Debug.Log("Adding player starting EQ");
-        Player.Inventory.AddItem(soBinder.itemMoney, 50);
-        Player.Inventory.AddItem(soBinder.itemRation, 7);
-        Player.Inventory.AddItem(soBinder.itemGoldPan, 1);
-        Player.Status.AddEffect(soBinder.seWellRested);
+
+        var startingGear = soBinder.StartingGear;
+        foreach (var item in startingGear.Items) {
+            Player.Inventory.AddItem(item.Item, item.quantity);
+        }
+        foreach (var effect in startingGear.Effects) {
+            Player.Status.AddEffect(effect);
+        }
         Player.ActionPoints = GetPlayerMaxActionPoints();
 
         // reveal players location
@@ -129,7 +133,7 @@ public class GameLogic
     {
         // base cost
         var costs = new List<CostItem>();
-        costs.Add(new CostItem("Base cost", soBinder.MovementData.ActionPointCost));
+        costs.Add(new CostItem("Base cost", soBinder.MoveData.ActionPointCost));
 
         // cost of tile + features
         costs.Add(new CostItem(tileNeighbor.Type.ToString() + " Tile cost", tileNeighbor.MoveBaseCost));
@@ -178,7 +182,7 @@ public class GameLogic
         WorldMap.RevealTile(tileTo);
 
         // check for movement related events
-        HandlePossibleEvents(soBinder.MovementData.gameEvents);
+        HandlePossibleEvents(soBinder.MoveData.gameEvents);
 
         return true;
     }
@@ -276,7 +280,7 @@ public class GameLogic
         return items;
     }
 
-    public int GetForageCost(){ return 4; }
+    public int GetForageCost(){ return soBinder.ForageData.ActionPointCost; }
 
     public bool CanForage(){ return CanForage(out _); }
 
@@ -586,7 +590,7 @@ public class GameLogic
 
     // GUI
 
-    protected void ShowModal(string title, string body)
+    public void ShowModal(string title, string body)
     {
         ModalManager.Show(title, body,
             new[] { new ModalButton() { Text = "OK" } }

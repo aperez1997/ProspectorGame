@@ -29,7 +29,17 @@ public class MainMenuController : MonoBehaviour
     {
         Debug.Log("Creating new game");
         GameStateManager.CreateNewGame();
+
+        SceneManager.sceneLoaded += OnSceneLoaded_NewGame;
+
         LoadOverworld();
+    }
+
+    public void OnSceneLoaded_NewGame(Scene scene, LoadSceneMode mode)
+    {
+        // TODO: this text should come from an SO somewhere
+        GameStateManager.LogicInstance.ShowModal("Welcome", "Some txt would go here about you trying to make a fortune and get back to your wife.");
+        SceneManager.sceneLoaded -= OnSceneLoaded_NewGame;
     }
 
     public static void LoadOverworld()
