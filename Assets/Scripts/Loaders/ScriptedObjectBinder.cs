@@ -10,6 +10,9 @@ using UnityEngine;
 /// </summary>
 public class ScriptedObjectBinder : MonoBehaviour
 {
+    [Tooltip("MomevementData SO")]
+    public ActionData MovementData;
+
     // starting gear
     [Tooltip("Starting buff")]
     public StatusEffect seWellRested;

@@ -15,8 +15,8 @@ public class BiomeData : ScriptableObject, IAssetLoaderItem
 
     public Tile hexTile;
 
-    [Tooltip("Number of AP to move to this tile")]
-    public int moveBaseCost;
+    [Tooltip("Extra AP needed to move to this tile")]
+    public int moveCostModifier;
 
     [Tooltip("true if you can camp here")]
     public bool canCamp;

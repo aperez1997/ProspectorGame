@@ -44,7 +44,7 @@ public class WorldTile : ISerializationCallbackReceiver
     /// <summary>Sprite asset for the tile</summary>
     public Tile Tile { get { return BiomeData.hexTile; } }
     public bool CanCamp { get { return BiomeData.canCamp; } }
-    public int MoveBaseCost { get { return BiomeData.moveBaseCost; } }
+    public int MoveBaseCost { get { return BiomeData.moveCostModifier; } }
     private int ForagingBaseChance { get { return BiomeData.foragingBaseChance; } }
     private int HuntingBaseChance { get { return BiomeData.huntingBaseChance; } }
 

@@ -126,16 +126,23 @@ public class GameLogic
     /// </summary>
     public CostDescription GetMovementCost(WorldTile tileAt, WorldTile tileNeighbor)
     {
-        bool hasRoad = tileAt.HasRoad();
-
+        // base cost
         var costs = new List<CostItem>();
+        costs.Add(new CostItem("Base cost", soBinder.MovementData.ActionPointCost));
 
-        costs.Add(new CostItem("Base cost", tileNeighbor.MoveBaseCost));
-        var costNeighbor = tileNeighbor.MoveBaseCost;
+        // cost of tile + features
+        costs.Add(new CostItem(tileNeighbor.Type.ToString() + " Tile cost", tileNeighbor.MoveBaseCost));
+        bool hasRoad = tileAt.HasRoad();
         foreach (var feature in tileNeighbor.Features) {
             if (hasRoad || feature.type != TileFeatureType.Road) {
                 costs.Add(new CostItem(feature.name, feature.moveCostModifier));
             }
+        }
+
+        // cost of player effects
+        var psEffects = Player.Status.GetEffectsThatInfluenceStat(PlayerStat.MovementCost);
+        foreach (var effect in psEffects) {
+            costs.Add(new CostItem(effect.Name, effect.AffectAmount));
         }
 
         // enforce min-cost-1 if the tile is moveable (negative base cost means can't move)
@@ -168,6 +175,9 @@ public class GameLogic
 
         // reveal the tile we moved to
         WorldMap.RevealTile(tileTo);
+
+        // check for movement related events
+        HandlePossibleEvents(soBinder.MovementData.gameEvents);
 
         return true;
     }
@@ -204,21 +214,7 @@ public class GameLogic
         Inventory.RemoveItem(foodToEat.Id, 1);
 
         // check for events
-        foreach (var gameEvent in foodToEat.GameEvents) {
-            if (!(gameEvent is GameEvent)) {
-                continue;
-            }
-            Debug.Log("Considering event " + gameEvent.ToString());
-            if (RollDice(gameEvent.chance)) {
-                Debug.Log("Event fired!" + gameEvent.ToString());
-                if (gameEvent.statusEffectGiven is StatusEffect se) {
-                    Debug.Log("adding SE " + se.ToString());
-                    Player.Status.AddEffect(se);
-                }
-                // no more effects after the first
-                break;
-            }
-        }
+        HandlePossibleEvents(foodToEat.GameEvents);
         return true;
     }
 
@@ -455,7 +451,7 @@ public class GameLogic
     /// <param name="item">type of item if success</param>
     /// <param name="quantity">amount of item if success</param>
     /// <returns>success rv</returns>
-    private bool TakeActionForItem(int cost, int chance, ItemData item, int quantity = 1)
+    protected bool TakeActionForItem(int cost, int chance, ItemData item, int quantity = 1)
     {
         if (!Player.SpendActionPoints(cost)) { return false; }
 
@@ -472,11 +468,35 @@ public class GameLogic
     /// </summary>
     /// <param name="chance">int chance / 100 e.x. 25 = 25% chance</param>
     /// <returns></returns>
-    private bool RollDice(int chance)
+    protected bool RollDice(int chance)
     {
         int roll = UnityEngine.Random.Range(0, 99);
         bool success = chance >= roll;
         return success;
+    }
+
+    /// <summary>
+    /// Look at the list of possible events and see if any of them trigger
+    /// </summary>
+    protected GameEvent HandlePossibleEvents(GameEvent[] possibleEvents)
+    {
+        foreach (var gameEvent in possibleEvents) {
+            if (!(gameEvent is GameEvent)) {
+                continue;
+            }
+            Debug.Log("Considering event " + gameEvent.ToString());
+            if (RollDice(gameEvent.chance)) {
+                Debug.Log("Event fired!" + gameEvent.ToString());
+                if (gameEvent.statusEffectGiven is StatusEffect se) {
+                    Debug.Log("adding SE " + se.ToString());
+                    Player.Status.AddEffect(se);
+                    return gameEvent;
+                }
+                // no more effects after the first
+                break;
+            }
+        }
+        return null;
     }
 
     // SHOP

@@ -51,13 +51,6 @@ public class MovementUIHelper
         return null;
     }
 
-
-    public void SetMovementCost(HexDirection hde, int cost)
-    {
-        dataDict.TryGetValue(hde, out MovementUIData data);
-        data.Cost = cost;       
-    }
-
     public void SetMovementCost(HexDirection hde, CostDescription costDesc)
     {
         dataDict.TryGetValue(hde, out MovementUIData data);

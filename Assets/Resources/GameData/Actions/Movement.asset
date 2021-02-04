@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14638aa81d7f24eff92352a1b52cfc8a, type: 3}
-  m_Name: geFoodPoisoning
+  m_Script: {fileID: 11500000, guid: 5f7c6e141592e43519bbd06b2e99ed2b, type: 3}
+  m_Name: Movement
   m_EditorClassIdentifier: 
-  id: foodPoisoning
-  name: Food Poisoning
-  description: You ate bad food.
-  chance: 50
-  statusEffectGiven: {fileID: 11400000, guid: 9430fb54f87de4317830e97cd70ec04a, type: 2}
+  type: 0
+  ActionPointCost: 1
+  gameEvents:
+  - {fileID: 11400000, guid: 0a81fe24a9490458f97a6a508b8ff727, type: 2}

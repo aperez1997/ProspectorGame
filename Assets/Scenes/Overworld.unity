@@ -402,7 +402,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 211041523}
   m_HandleRect: {fileID: 211041522}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2535,12 +2535,12 @@ PrefabInstance:
     - target: {fileID: 6169420203847494817, guid: 61a742cda97454f4e91e55b0d97f0b63,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 7.598789
+      value: 7.598816
       objectReference: {fileID: 0}
     - target: {fileID: 6169420203847494817, guid: 61a742cda97454f4e91e55b0d97f0b63,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 40.2
+      value: 40.200012
       objectReference: {fileID: 0}
     - target: {fileID: 6169420203847494817, guid: 61a742cda97454f4e91e55b0d97f0b63,
         type: 3}
@@ -4327,7 +4327,7 @@ PrefabInstance:
     - target: {fileID: 6169420203847494817, guid: 61a742cda97454f4e91e55b0d97f0b63,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -22.901215
+      value: -22.901245
       objectReference: {fileID: 0}
     - target: {fileID: 6169420203847494817, guid: 61a742cda97454f4e91e55b0d97f0b63,
         type: 3}
@@ -6039,12 +6039,12 @@ PrefabInstance:
     - target: {fileID: 6169420203847494817, guid: 61a742cda97454f4e91e55b0d97f0b63,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 89.89879
+      value: 89.8988
       objectReference: {fileID: 0}
     - target: {fileID: 6169420203847494817, guid: 61a742cda97454f4e91e55b0d97f0b63,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.9999838
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6169420203847494817, guid: 61a742cda97454f4e91e55b0d97f0b63,
         type: 3}
@@ -6145,6 +6145,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 9e651ced60d494904870d388154b2b8a,
         type: 2}
+    - target: {fileID: 7413290648931334690, guid: b27b805d678d7de42ad775d77bd1d3ea,
+        type: 3}
+      propertyPath: MovementData
+      value: 
+      objectReference: {fileID: 11400000, guid: 6b65b0e9d4c974ae8a44986c0e3ad1cb,
+        type: 2}
+    - target: {fileID: 7413290648931334690, guid: b27b805d678d7de42ad775d77bd1d3ea,
+        type: 3}
+      propertyPath: foo
+      value: string
+      objectReference: {fileID: 0}
     - target: {fileID: 7413290648931334691, guid: b27b805d678d7de42ad775d77bd1d3ea,
         type: 3}
       propertyPath: m_LocalPosition.x

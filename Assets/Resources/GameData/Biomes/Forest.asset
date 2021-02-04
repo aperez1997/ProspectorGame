@@ -16,7 +16,7 @@ MonoBehaviour:
   name: Forest
   description: Lots of trees here!
   hexTile: {fileID: 11400000, guid: 89372a8eda8c78e4ab9778b277dd611e, type: 2}
-  moveBaseCost: 3
+  moveCostModifier: 2
   canCamp: 1
   foragingBaseChance: 33
   huntingBaseChance: 33

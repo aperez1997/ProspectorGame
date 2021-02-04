@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 35fa0dc05bb054098afec8c58455c653, type: 3}
-  m_Name: FoodPoisoning
+  m_Name: SprainedAnkle
   m_EditorClassIdentifier: 
-  Id: foodPoisoning
-  Name: Food Poisoning
-  Description: You are sick from eating tained food
-  Sprite: {fileID: 21300166, guid: 14aefffd3622c7347aad64f2bed35801, type: 3}
-  AffectedStat: 1
-  AffectAmount: -6
-  DurationDays: 2
+  Id: sprainedAnkle
+  Name: Sprained Ankle
+  Description: Your movement is slowed because of a minor ankle injury
+  Sprite: {fileID: 21300276, guid: 14aefffd3622c7347aad64f2bed35801, type: 3}
+  AffectedStat: 2
+  AffectAmount: 1
+  DurationDays: 3

@@ -16,7 +16,7 @@ MonoBehaviour:
   name: Water
   description: It's wet
   hexTile: {fileID: 11400000, guid: 7e7f67fdd393ac544a98bd24ff8f14d4, type: 2}
-  moveBaseCost: -1
+  moveCostModifier: -1
   canCamp: 0
   foragingBaseChance: 0
   huntingBaseChance: 0
