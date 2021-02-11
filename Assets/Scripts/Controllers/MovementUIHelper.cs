@@ -23,26 +23,26 @@ public class MovementUIHelper
     {
         MovementUIData uIData;
 
-        uIData = new MovementUIData(HexDirection.East, CostDescription.Empty, east);
+        uIData = new MovementUIData(HexDirection.East, SumDescription.Empty, east);
         dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.SouthEast, CostDescription.Empty, southEast);
+        uIData = new MovementUIData(HexDirection.SouthEast, SumDescription.Empty, southEast);
         dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.SouthWest, CostDescription.Empty, southWest);
+        uIData = new MovementUIData(HexDirection.SouthWest, SumDescription.Empty, southWest);
         dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.West, CostDescription.Empty, west);
+        uIData = new MovementUIData(HexDirection.West, SumDescription.Empty, west);
         dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.NorthWest, CostDescription.Empty, northWest);
+        uIData = new MovementUIData(HexDirection.NorthWest, SumDescription.Empty, northWest);
         dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.NorthEast, CostDescription.Empty, northEast);
+        uIData = new MovementUIData(HexDirection.NorthEast, SumDescription.Empty, northEast);
         dataDict.Add(uIData.Hde, uIData);
     }
 
-    public CostDescription GetMovementCostDescription(HexDirection hde)
+    public SumDescription GetMovementCostDescription(HexDirection hde)
     {
         bool rv = dataDict.TryGetValue(hde, out MovementUIData data);
         if (rv) {
@@ -51,10 +51,10 @@ public class MovementUIHelper
         return null;
     }
 
-    public void SetMovementCost(HexDirection hde, CostDescription costDesc)
+    public void SetMovementCost(HexDirection hde, SumDescription costDesc)
     {
         dataDict.TryGetValue(hde, out MovementUIData data);
-        data.Cost = costDesc.TotalCost;
+        data.Cost = costDesc.Sum;
         data.CostDesc = costDesc;
     }
 
@@ -70,13 +70,13 @@ public class MovementUIData
 {
     public HexDirection Hde;
     public int Cost;
-    public CostDescription CostDesc;     
+    public SumDescription CostDesc;     
     public Button Button;
 
-    public MovementUIData(HexDirection hde, CostDescription costDesc, Button button)
+    public MovementUIData(HexDirection hde, SumDescription costDesc, Button button)
     {
         this.Hde = hde;
-        this.Cost = costDesc.TotalCost;
+        this.Cost = costDesc.Sum;
         this.CostDesc = costDesc;
         this.Button = button;
     }

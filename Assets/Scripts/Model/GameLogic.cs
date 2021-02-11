@@ -59,7 +59,7 @@ public class GameLogic
         foreach (var effect in startingGear.Effects) {
             Player.Status.AddEffect(effect);
         }
-        Player.ActionPoints = GetPlayerMaxActionPoints();
+        Player.ActionPoints = GetPlayerMaxActionPointsSum().Sum;
 
         // reveal players location
         Debug.Log("Revealing player location...");
@@ -129,34 +129,34 @@ public class GameLogic
     /// <summary>
     /// Gets AP cost to move from tileAt to tileNeighbor
     /// </summary>
-    public CostDescription GetMovementCost(WorldTile tileAt, WorldTile tileNeighbor)
+    public SumDescription GetMovementCost(WorldTile tileAt, WorldTile tileNeighbor)
     {
         // base cost
-        var costs = new List<CostItem>();
-        costs.Add(new CostItem("Base cost", soBinder.MoveData.ActionPointCost));
+        var costs = new List<SumItem>();
+        costs.Add(new SumItem("Base cost", soBinder.MoveData.ActionPointCost));
 
         // cost of tile + features
-        costs.Add(new CostItem(tileNeighbor.Type.ToString() + " Tile cost", tileNeighbor.MoveBaseCost));
+        costs.Add(new SumItem(tileNeighbor.Type.ToString() + " Tile cost", tileNeighbor.MoveBaseCost));
         bool hasRoad = tileAt.HasRoad();
         foreach (var feature in tileNeighbor.Features) {
             if (hasRoad || feature.type != TileFeatureType.Road) {
-                costs.Add(new CostItem(feature.name, feature.moveCostModifier));
+                costs.Add(new SumItem(feature.name, feature.moveCostModifier));
             }
         }
 
         // cost of player effects
         var psEffects = Player.Status.GetEffectsThatInfluenceStat(PlayerStat.MovementCost);
         foreach (var effect in psEffects) {
-            costs.Add(new CostItem(effect.Name, effect.AffectAmount));
+            costs.Add(new SumItem(effect.Name, effect.AffectAmount));
         }
 
         // enforce min-cost-1 if the tile is moveable (negative base cost means can't move)
-        int totalCost = CostDescription.GetTotalCostFromCostItems(costs);
+        int totalCost = SumDescription.GetTotalCostFromItems(costs);
         if (totalCost <= 0 && tileNeighbor.MoveBaseCost > 0) {
             var minCostAdj = 1 - totalCost;
-            costs.Add(new CostItem("Min Cost adjustment", minCostAdj));
+            costs.Add(new SumItem("Min Cost adjustment", minCostAdj));
         }
-        return new CostDescription(costs);
+        return new SumDescription(costs);
     }
 
     /// <summary>
@@ -166,7 +166,7 @@ public class GameLogic
     {
         var tileTo = tileFrom.GetNeighborInDirection(direction);
         var costDesc = GetMovementCost(tileFrom, tileTo);
-        int cost = costDesc.TotalCost;
+        int cost = costDesc.Sum;
         if (!Player.HasEnoughActionPoints(cost)) {
             Debug.LogWarning("Cannot move because not enough AP");
             return false;
@@ -231,7 +231,7 @@ public class GameLogic
     public bool PassDay()
     {
         // give back AP
-        Player.ActionPoints = GetPlayerMaxActionPoints();
+        Player.ActionPoints = GetPlayerMaxActionPointsSum().Sum;
 
         // advance date
         GameStateMeta.AddDays(1);
@@ -250,19 +250,31 @@ public class GameLogic
         return true;
     }
 
-    public int GetPlayerMaxActionPoints()
+    public SumDescription GetPlayerMaxActionPointsSum()
     {
+        var MaxAPSum = new SumDescription();
+        MaxAPSum.AddItem("Max", Player.ActionPointsMax);
+
         // AP reduced by health loss.
         int healthLossAPRedux = -1 * (Player.MAX_HEALTH - Player.Health);
+        if (healthLossAPRedux != 0) {
+            MaxAPSum.AddItem("Health Loss", healthLossAPRedux);
+        }
 
         // effect loss
-        int totalEffectChange = Player.Status.GetTotalStatEffect(PlayerStat.ActionPoints);
+        var totalEffectChange = Player.Status.GetTotalStatEffectSum(PlayerStat.ActionPoints);
+        MaxAPSum.AddSumDescription(totalEffectChange);
 
         Debug.Log("AP Max:" + Player.ActionPointsMax + " effects:" + totalEffectChange + " health loss:" + healthLossAPRedux);
-        // don't go below 1
-        return Math.Max(1, Player.ActionPointsMax + totalEffectChange - healthLossAPRedux);
-    }
 
+        // don't go below 1
+        int totalCost = MaxAPSum.Sum;
+        if (totalCost <= 0) {
+            var minAPAdj = 1 - totalCost;
+            MaxAPSum.AddItem("Min AP adjustment", minAPAdj);
+        }
+        return MaxAPSum;
+    }
 
     /// <summary>
     /// Find all the player's food items, sorted by lowest price first

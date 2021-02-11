@@ -15,6 +15,7 @@ public class Movement_Controller : MonoBehaviour
 
     // UI
     public Text actionPointTxt;
+    private ToolTipUIHelper actionPointHelper;
     public Button rightBtn;
     public Button downRightBtn;
     public Button downLeftBtn;
@@ -26,12 +27,14 @@ public class Movement_Controller : MonoBehaviour
     private MovementUIHelper helper;
     private GameLogic gameLogic;
 
-    public CostDescription GetCost(HexDirection direction) { return helper.GetMovementCostDescription(direction); }
-    public void SetCost(HexDirection direction, CostDescription costDesc) { helper.SetMovementCost(direction, costDesc); }
+    public SumDescription GetCost(HexDirection direction) { return helper.GetMovementCostDescription(direction); }
+    public void SetCost(HexDirection direction, SumDescription costDesc) { helper.SetMovementCost(direction, costDesc); }
 
     // Start is called before the first frame update
     void Start()
     {
+        actionPointHelper = actionPointTxt.GetComponentInChildren<ToolTipUIHelper>();
+
         player = GameStateManager.LogicInstance.Player;
         player.OnActionPointsChanged += Player_OnActionPointsChanged;
         player.OnLocationChanged += Player_OnLocationChanged;
@@ -54,12 +57,6 @@ public class Movement_Controller : MonoBehaviour
     public void MoveNorthEast() { HandleMovement(HexDirection.NorthEast); }
     public void MoveNorthWest() { HandleMovement(HexDirection.NorthWest); }
 
-    // Update is called once per frame
-    void Awake()
-    {
-
-    }
-
     void UpdatePosition()
     {
         // move player transform to the world position that corresponds to their cell position
@@ -71,7 +68,9 @@ public class Movement_Controller : MonoBehaviour
     // Updates the movement button text and action point display
     void UpdateMovementUI()
     {
-        actionPointTxt.text = player.ActionPoints.ToString() + "/" + player.ActionPointsMax.ToString();
+        var sumDesc = gameLogic.GetPlayerMaxActionPointsSum();
+        actionPointTxt.text = player.ActionPoints.ToString() + "/" + sumDesc.Sum.ToString();
+        actionPointHelper.text = sumDesc.GetDescriptionText();
 
         foreach (MovementUIData data in helper.data)
         {
@@ -80,9 +79,9 @@ public class Movement_Controller : MonoBehaviour
     }
 
     // Updates a single movement button, also controlling enabled state
-    void UpdateButtonUI(Button button, CostDescription costDesc)
+    void UpdateButtonUI(Button button, SumDescription costDesc)
     {
-        var cost = costDesc.TotalCost;
+        var cost = costDesc.Sum;
         string costStr = cost.ToString();
         string toolTipStr = GetMovementCostDescriptionText(costDesc);
         bool enabled = true;
@@ -101,10 +100,9 @@ public class Movement_Controller : MonoBehaviour
     /// <summary>
     /// Get the full cost description for the given cost
     /// </summary>
-    public string GetMovementCostDescriptionText(CostDescription costDesc)
+    public string GetMovementCostDescriptionText(SumDescription costDesc)
     {
-        var strings = costDesc.CostItems.Select(item => item.Name + " " + item.Value.ToString());
-        return string.Join("\n", strings);
+        return costDesc.GetDescriptionText();
     }
 
     // Called to move in the given direction

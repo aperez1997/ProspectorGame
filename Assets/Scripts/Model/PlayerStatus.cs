@@ -86,13 +86,17 @@ public class PlayerStatus
         return psEffects.AsReadOnly();
     }
 
-    public int GetTotalStatEffect(PlayerStat stat)
+    public SumDescription GetTotalStatEffectSum(PlayerStat stat)
     {
-        int total = 0;
         var psEffects = GetEffectsThatInfluenceStat(stat);
-        foreach (var effect in psEffects) {
-            total += effect.AffectAmount;
+        if (psEffects.Count() <= 0) {
+            return SumDescription.Empty;
         }
-        return total;
+
+        var items = new List<SumItem>();
+        foreach (var effect in psEffects) {
+            items.Add(new SumItem(effect.Name, effect.AffectAmount));
+        }
+        return new SumDescription(items);
     }
 }

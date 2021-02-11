@@ -23,9 +23,9 @@ public class Player
         }
     }
     public event EventHandler<IntStatChangeEventArgs> OnHealthChanged;
-    
+
     // AP MAX
-    [field:SerializeField] public int ActionPointsMax { get; private set; }
+    [field: SerializeField] public int ActionPointsMax { get; private set; }
 
     // AP
     [SerializeField] private int _actionPoints;
