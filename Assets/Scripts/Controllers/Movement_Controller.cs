@@ -16,12 +16,12 @@ public class Movement_Controller : MonoBehaviour
     // UI
     public Text actionPointTxt;
     private ToolTipUIHelper actionPointHelper;
-    public Button rightBtn;
-    public Button downRightBtn;
-    public Button downLeftBtn;
-    public Button leftBtn;
-    public Button upLeftBtn;
-    public Button upRightBtn;
+    public GameObject rightBtn;
+    public GameObject downRightBtn;
+    public GameObject downLeftBtn;
+    public GameObject leftBtn;
+    public GameObject upLeftBtn;
+    public GameObject upRightBtn;
     public Camera Camera;
 
     private Player player;
@@ -84,7 +84,7 @@ public class Movement_Controller : MonoBehaviour
     }
 
     // Updates a single movement button, also controlling enabled state
-    void UpdateButtonUI(Button button, WorldTile worldTile, SumDescription costDesc)
+    void UpdateButtonUI(GameObject button, WorldTile worldTile, SumDescription costDesc)
     {
         var cost = costDesc.Sum;
         string costStr = cost.ToString();
@@ -99,7 +99,7 @@ public class Movement_Controller : MonoBehaviour
         }
         button.GetComponentInChildren<Text>().text = costStr;
         button.GetComponentInChildren<ToolTipUIHelper>().text = toolTipStr;
-        button.interactable = enabled;
+        button.GetComponentInChildren<Button>().interactable = enabled;
 
         //Debug.Log("setting button with cost " + costStr + " for tile " + worldTile.ToString());
 

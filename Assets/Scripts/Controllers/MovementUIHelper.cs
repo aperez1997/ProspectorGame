@@ -18,7 +18,7 @@ public class MovementUIHelper
 
     private Dictionary<HexDirection, MovementUIData> dataDict = new Dictionary<HexDirection, MovementUIData>();
 
-    public MovementUIHelper(Button east, Button southEast, Button southWest, Button west, Button northWest, Button northEast, WorldTile worldTile)
+    public MovementUIHelper(GameObject east, GameObject southEast, GameObject southWest, GameObject west, GameObject northWest, GameObject northEast, WorldTile worldTile)
     {
         MovementUIData uIData;
 
@@ -58,7 +58,7 @@ public class MovementUIHelper
         data.WorldTile = tileTo;
     }
 
-    public Button GetButton(HexDirection hde)
+    public GameObject GetButton(HexDirection hde)
     {
         dataDict.TryGetValue(hde, out MovementUIData data);
         return data.Button;
@@ -71,10 +71,10 @@ public class MovementUIData
     public HexDirection Hde;
     public int Cost;
     public SumDescription CostDesc;     
-    public Button Button;
+    public GameObject Button;
     public WorldTile WorldTile;
 
-    public MovementUIData(HexDirection hde, SumDescription costDesc, Button button, WorldTile tile)
+    public MovementUIData(HexDirection hde, SumDescription costDesc, GameObject button, WorldTile tile)
     {
         this.Hde = hde;
         this.Cost = costDesc.Sum;
