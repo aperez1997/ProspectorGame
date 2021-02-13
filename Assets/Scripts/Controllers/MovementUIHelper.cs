@@ -12,33 +12,32 @@ using UnityEngine.UI;
 /// </summary>
 public class MovementUIHelper
 {
-    public MovementUIData[] data
-    {
+    public MovementUIData[] data {
         get { return dataDict.Values.ToArray(); }
     }
 
     private Dictionary<HexDirection, MovementUIData> dataDict = new Dictionary<HexDirection, MovementUIData>();
 
-    public MovementUIHelper(Button east, Button southEast, Button southWest, Button west, Button northWest, Button northEast)
+    public MovementUIHelper(Button east, Button southEast, Button southWest, Button west, Button northWest, Button northEast, WorldTile worldTile)
     {
         MovementUIData uIData;
 
-        uIData = new MovementUIData(HexDirection.East, SumDescription.Empty, east);
+        uIData = new MovementUIData(HexDirection.East, SumDescription.Empty, east, worldTile.GetNeighborInDirection(HexDirection.East));
         dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.SouthEast, SumDescription.Empty, southEast);
+        uIData = new MovementUIData(HexDirection.SouthEast, SumDescription.Empty, southEast, worldTile.GetNeighborInDirection(HexDirection.SouthEast));
         dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.SouthWest, SumDescription.Empty, southWest);
+        uIData = new MovementUIData(HexDirection.SouthWest, SumDescription.Empty, southWest, worldTile.GetNeighborInDirection(HexDirection.SouthWest));
         dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.West, SumDescription.Empty, west);
+        uIData = new MovementUIData(HexDirection.West, SumDescription.Empty, west, worldTile.GetNeighborInDirection(HexDirection.West));
         dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.NorthWest, SumDescription.Empty, northWest);
+        uIData = new MovementUIData(HexDirection.NorthWest, SumDescription.Empty, northWest, worldTile.GetNeighborInDirection(HexDirection.NorthWest));
         dataDict.Add(uIData.Hde, uIData);
 
-        uIData = new MovementUIData(HexDirection.NorthEast, SumDescription.Empty, northEast);
+        uIData = new MovementUIData(HexDirection.NorthEast, SumDescription.Empty, northEast, worldTile.GetNeighborInDirection(HexDirection.NorthEast));
         dataDict.Add(uIData.Hde, uIData);
     }
 
@@ -51,11 +50,12 @@ public class MovementUIHelper
         return null;
     }
 
-    public void SetMovementCost(HexDirection hde, SumDescription costDesc)
+    public void SetMovementCost(HexDirection hde, WorldTile tileTo, SumDescription costDesc)
     {
         dataDict.TryGetValue(hde, out MovementUIData data);
         data.Cost = costDesc.Sum;
         data.CostDesc = costDesc;
+        data.WorldTile = tileTo;
     }
 
     public Button GetButton(HexDirection hde)
@@ -72,12 +72,14 @@ public class MovementUIData
     public int Cost;
     public SumDescription CostDesc;     
     public Button Button;
+    public WorldTile WorldTile;
 
-    public MovementUIData(HexDirection hde, SumDescription costDesc, Button button)
+    public MovementUIData(HexDirection hde, SumDescription costDesc, Button button, WorldTile tile)
     {
         this.Hde = hde;
         this.Cost = costDesc.Sum;
         this.CostDesc = costDesc;
         this.Button = button;
+        this.WorldTile = tile;
     }
 }

@@ -22,13 +22,18 @@ public class Movement_Controller : MonoBehaviour
     public Button leftBtn;
     public Button upLeftBtn;
     public Button upRightBtn;
+    public Camera Camera;
 
     private Player player;
     private MovementUIHelper helper;
     private GameLogic gameLogic;
 
     public SumDescription GetCost(HexDirection direction) { return helper.GetMovementCostDescription(direction); }
-    public void SetCost(HexDirection direction, SumDescription costDesc) { helper.SetMovementCost(direction, costDesc); }
+
+    public void SetCost(HexDirection direction, WorldTile tileTo, SumDescription costDesc)
+    {
+        helper.SetMovementCost(direction, tileTo, costDesc);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -42,9 +47,10 @@ public class Movement_Controller : MonoBehaviour
         gameLogic = GameStateManager.LogicInstance;
 
         //Debug.Log("Moving player to " + player.Location);
-        UpdatePosition();       
-        helper = new MovementUIHelper(rightBtn, downRightBtn, downLeftBtn, leftBtn, upLeftBtn, upRightBtn);
-        UpdateMovementCosts(HexDirection.None);
+        UpdatePosition();
+        var tileAt = LoadPlayerTile();
+        helper = new MovementUIHelper(rightBtn, downRightBtn, downLeftBtn, leftBtn, upLeftBtn, upRightBtn, tileAt);
+        UpdateMovementCosts(HexDirection.None); 
     }
 
     /** UI Functions go here */
@@ -72,14 +78,13 @@ public class Movement_Controller : MonoBehaviour
         actionPointTxt.text = player.ActionPoints.ToString() + "/" + sumDesc.Sum.ToString();
         actionPointHelper.text = sumDesc.GetDescriptionText();
 
-        foreach (MovementUIData data in helper.data)
-        {
-            UpdateButtonUI(data.Button, data.CostDesc);
+        foreach (MovementUIData data in helper.data) {
+            UpdateButtonUI(data.Button, data.WorldTile, data.CostDesc);
         }
     }
 
     // Updates a single movement button, also controlling enabled state
-    void UpdateButtonUI(Button button, SumDescription costDesc)
+    void UpdateButtonUI(Button button, WorldTile worldTile, SumDescription costDesc)
     {
         var cost = costDesc.Sum;
         string costStr = cost.ToString();
@@ -95,6 +100,12 @@ public class Movement_Controller : MonoBehaviour
         button.GetComponentInChildren<Text>().text = costStr;
         button.GetComponentInChildren<ToolTipUIHelper>().text = toolTipStr;
         button.interactable = enabled;
+
+        //Debug.Log("setting button with cost " + costStr + " for tile " + worldTile.ToString());
+
+        // move button to tile location
+        Vector3 worldPos = tilemap.CellToWorld(worldTile.CellLoc);
+        button.transform.position = Camera.WorldToScreenPoint(worldPos);
     }
 
     /// <summary>
@@ -129,10 +140,11 @@ public class Movement_Controller : MonoBehaviour
         {
             HexDirection hdeNeighbor = neighborPair.Key;
             WorldTile tileNeighbor = neighborPair.Value;
-            //Debug.Log("Found neighbor " + hdeNeighbor + "=" + tileNeighbor);
+
 
             var costDesc = gameLogic.GetMovementCost(tileAt, tileNeighbor);
-            SetCost(hdeNeighbor, costDesc);
+            Debug.Log("Found neighbor " + hdeNeighbor + "=" + tileNeighbor + " cost = " + costDesc.Sum);
+            SetCost(hdeNeighbor, tileNeighbor, costDesc);
         }
 
         UpdateMovementUI();
