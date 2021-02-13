@@ -79,13 +79,14 @@ public class Movement_Controller : MonoBehaviour
         actionPointHelper.text = sumDesc.GetDescriptionText();
 
         foreach (MovementUIData data in helper.data) {
-            UpdateButtonUI(data.Button, data.WorldTile, data.CostDesc);
+            UpdateButtonUI(data);
         }
     }
 
     // Updates a single movement button, also controlling enabled state
-    void UpdateButtonUI(GameObject button, WorldTile worldTile, SumDescription costDesc)
+    void UpdateButtonUI(MovementUIData data)
     {
+        var costDesc = data.CostDesc;
         var cost = costDesc.Sum;
         string costStr = cost.ToString();
         string toolTipStr = GetMovementCostDescriptionText(costDesc);
@@ -97,14 +98,17 @@ public class Movement_Controller : MonoBehaviour
         } else if (!player.HasEnoughActionPoints(cost)) {
             enabled = false;
         }
+        var button = data.Button;
         button.GetComponentInChildren<Text>().text = costStr;
-        button.GetComponentInChildren<ToolTipUIHelper>().text = toolTipStr;
+        var simpleTooltip = button.GetComponentInChildren<SimpleTooltip>();
+        simpleTooltip.infoLeft = toolTipStr;
+        simpleTooltip.infoRight = data.Hde.ToString();
         button.GetComponentInChildren<Button>().interactable = enabled;
 
         //Debug.Log("setting button with cost " + costStr + " for tile " + worldTile.ToString());
 
         // move button to tile location
-        Vector3 worldPos = tilemap.CellToWorld(worldTile.CellLoc);
+        Vector3 worldPos = tilemap.CellToWorld(data.WorldTile.CellLoc);
         button.transform.position = Camera.WorldToScreenPoint(worldPos);
     }
 
