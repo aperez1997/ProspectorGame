@@ -323,7 +323,7 @@ public class GameLogic
         // look for the best working weapon (has ammo)
         bestWeapon = GetBestWorkingWeapon();
         if (bestWeapon is InventoryItem actualWeapon) {
-            chance += actualWeapon.HuntingModifier ?? 0;
+            chance += actualWeapon.GetActionModifier(ActionType.Hunt);
         } else {
             // no weapon = no chance
             chance = 0;
@@ -347,9 +347,9 @@ public class GameLogic
 
         // if we caught something or used ammo anyway, deduct ammo
         if (rv || usedAmmoAnyway) {
-            if (bestWeapon is InventoryItem && bestWeapon.AmmoItem is ItemData ammoItem) {
+            if (bestWeapon is InventoryItem && bestWeapon.ItemData is ItemDataWeapon weaponItem) {
                 Debug.Log("Removed ammo because " + (rv ? "success" : "failed but used ammo"));
-                Inventory.RemoveItem(ammoItem);
+                Inventory.RemoveItem(weaponItem.Ammo);
             } else {
                 var debug = bestWeapon == null ? "null weapon" : bestWeapon.ToString();
                 Debug.LogWarning("Hunted but weapon is missing or missing ammo? " + debug);
@@ -366,9 +366,14 @@ public class GameLogic
     public bool CanPanForGold(out int chance)
     {
         chance = 0; // set in case hasPan is false
-        // TODO: use a tool sub-class
-        bool hasPan = Inventory.HasItem(soBinder.itemGoldPan);
-        return hasPan && IsAllowedOnTileAndHaveAP(ActionType.PanForGold, GetPanForGoldCost(), out chance);
+        InventoryItem bestGoldPan = Inventory.GetBestToolWithCapability(ActionType.PanForGold, out int modifier);
+        if (bestGoldPan is InventoryItem) {
+            var rv = IsAllowedOnTileAndHaveAP(ActionType.PanForGold, GetPanForGoldCost(), out int baseChance);
+            chance = baseChance + modifier;
+            return rv;
+
+        }
+        return false;
     }
 
     public bool PanForGold()
@@ -415,6 +420,10 @@ public class GameLogic
         }
     }
 
+    /// <summary>
+    /// Gets the best weapon that is working (has ammo)
+    /// This is here instead of inventory because of the "working" part
+    /// </summary>
     public InventoryItem GetBestWorkingWeapon()
     {
         var weapons = Inventory.GetItemsByCategory(ItemCategory.Weapons);
@@ -423,7 +432,7 @@ public class GameLogic
                              where Inventory.HasAmmoForWeapon(weapon)
                              select weapon;
         // use linq to sort by hunting modifier (asc)
-        workingWeapons.OrderBy(item => item.HuntingModifier);
+        workingWeapons.OrderBy(item => item.GetActionModifier(ActionType.Hunt));
         return workingWeapons.LastOrDefault();
     }
 

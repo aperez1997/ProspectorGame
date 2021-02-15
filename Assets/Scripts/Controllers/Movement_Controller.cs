@@ -147,7 +147,7 @@ public class Movement_Controller : MonoBehaviour
 
 
             var costDesc = gameLogic.GetMovementCost(tileAt, tileNeighbor);
-            Debug.Log("Found neighbor " + hdeNeighbor + "=" + tileNeighbor + " cost = " + costDesc.Sum);
+            //Debug.Log("Found neighbor " + hdeNeighbor + "=" + tileNeighbor + " cost = " + costDesc.Sum);
             SetCost(hdeNeighbor, tileNeighbor, costDesc);
         }
 

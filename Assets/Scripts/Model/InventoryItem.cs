@@ -6,58 +6,58 @@ using UnityEngine;
 /// links players inventory to underlying scripted objects
 /// </summary>
 [Serializable]
-public class InventoryItem : ISerializationCallbackReceiver
+public class InventoryItem
 {
     public string Id;
 
     public int Amount;
 
-    // cached from itemData
-    public ItemCategory Category { get; private set; }
-    public string Name { get; private set; }
-    public string Description { get; private set; }
-    public Sprite Sprite { get; private set; }
-    public bool Stackable { get; private set; }
-    public int Price { get; private set; }
-    public GameEvent[] GameEvents { get; private set; }
-
-    // Weapon sub-type
-    public ItemData AmmoItem { get; private set; }
-    public int? HuntingModifier { get; private set; }
-
     public InventoryItem(string id, int amount)
     {
         this.Id = id;
         this.Amount = amount;
-        LoadItemData();
     }
 
-    // This pattern is required because of SO sub-class properties
-    private void LoadItemData()
+    // use this to get any SO sub-class specific properties
+    private ItemData _itemData;
+    public ItemData ItemData {
+        get {
+            if (_itemData is null) {
+                var data = ItemDataLoader.LoadItemById(Id);
+                if (!(data is ItemData)) {
+                    throw new Exception("No item data for id " + Id);
+                }
+                _itemData = data;
+            }
+            return _itemData;
+        }
+    }
+
+    /// <summary>
+    /// Get the modifier associated with the given action type
+    /// Applies to tools only, anything else will return 0
+    /// This shorthand is provided because tool lookups are common
+    /// </summary>
+    public int GetActionModifier(ActionType action)
     {
-        ItemData item = ItemDataLoader.LoadItemById(Id);
-        if (!(item is ItemData)) {
-            //Debug.LogError("Could not find item " + id.ToString());
-            return;
+        if (ItemData is ItemDataTool itemDataTool) {
+            if (itemDataTool.HasAbility(action, out int toolModifier)) {
+                return toolModifier;
+            }
+        } else {
+            Debug.LogWarning("Trying to get action modifier [" + action.ToString() + "] for a non-tool " + ToString());
         }
-
-        Category = item.category;
-        Name = item.name;
-        Description = item.description;
-        Sprite = item.sprite;
-        Stackable = item.stackable;
-        Price = item.price;
-        GameEvents = item.gameEvents;
-
-        if (item is ItemDataWeapon weaponItem) {
-            AmmoItem = weaponItem.Ammo;
-            HuntingModifier = weaponItem.HuntingModifier;
-        }
+        return 0;
     }
 
-    public void OnBeforeSerialize() { }
-
-    public void OnAfterDeserialize(){ LoadItemData(); }
+    // cached from itemData
+    public ItemCategory Category { get { return ItemData.category; } }
+    public string Name { get { return ItemData.name; } }
+    public string Description { get { return ItemData.description; } }
+    public Sprite Sprite { get { return ItemData.sprite; } }
+    public bool Stackable { get { return ItemData.stackable; } }
+    public int Price { get { return ItemData.price; } }
+    public GameEvent[] GameEvents { get { return ItemData.gameEvents; } }
 
     public override string ToString()
     {

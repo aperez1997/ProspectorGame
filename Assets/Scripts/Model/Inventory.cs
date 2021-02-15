@@ -20,6 +20,72 @@ public class Inventory
         _itemList = new List<InventoryItem>();
     }
 
+    /// <summary>Shortcut to add item by itemData</summary>
+    public void AddItem(ItemData data, int amount)
+    {
+        AddItem(data.id, amount);
+    }
+
+    /// <summary>Shortcut to add item, if you only care about id+amount</summary>
+    public void AddItem(string id, int amount)
+    {
+        var item = new InventoryItem(id, amount);
+        AddItem(item);
+    }
+
+    /// <summary>Proper way to add an item</summary>
+    public void AddItem(InventoryItem item)
+    {
+        string id = item.Id;
+        bool haveItem = HasItem(id, out InventoryItem foundItem);
+        int newAmount = item.Amount;
+        if (item.Stackable && haveItem) {
+            foundItem.Amount += item.Amount;
+            newAmount = foundItem.Amount;
+        } else {
+            _itemList.Add(item);
+        }
+
+        var e = new InventoryChangedEventArgs(id, item.Name, item.Amount, newAmount);
+        OnItemListChanged?.Invoke(this, e);
+    }
+
+    /// <summary>
+    /// Remove count of item
+    /// </summary>
+    /// <returns>True if the inventory had the items and they were removed</returns>
+    public bool RemoveItem(ItemData itemData, int count = 1)
+    {
+        return RemoveItem(itemData.id, count);
+    }
+
+    /// <summary>
+    /// Remove count of items with the given id
+    /// </summary>
+    /// <returns>True if the inventory had the items and they were removed</returns>
+    public bool RemoveItem(string id, int count = 1)
+    {
+        bool have = HasItem(id, out InventoryItem foundItem, count);
+        if (have) {
+            foundItem.Amount -= count;
+            if (foundItem.Amount == 0) {
+                // remove empty items
+                _itemList.Remove(foundItem);
+            }
+            var e = new InventoryChangedEventArgs(id, foundItem.Name, -1 * count, foundItem.Amount);
+            OnItemListChanged?.Invoke(this, e);
+            return have;
+        } else {
+            if (foundItem is InventoryItem) {
+                Debug.Log("tried to remove " + count + " of id " + id.ToString() + " but there are only " + foundItem.Amount + "!");
+            } else {
+                Debug.Log("tried to remove " + count + " of id " + id.ToString() + " but there aren't any!");
+            }
+
+            return false;
+        }
+    }
+
     /** 
      *  <summary>returns true if inventory has the given item</summary>
      *  <param name="itemData">item to check for</param>
@@ -74,6 +140,36 @@ public class Inventory
         return false;
     }
 
+    /// <summary>
+    /// True if the Inventory contains an item capable of doing the given action
+    /// </summary>
+    public bool HasToolWithCapability(ActionType action, out InventoryItem bestItem)
+    {
+        bestItem = GetBestToolWithCapability(action);
+        return bestItem is InventoryItem;
+    }
+
+    /// <summary>
+    /// True if the inventory contains ammo for the given weapon
+    /// </summary>
+    public bool HasAmmoForWeapon(InventoryItem weaponItem)
+    {
+        if (!(weaponItem.ItemData is ItemDataWeapon itemDataWeapon)) {
+            Debug.LogWarning("Tried to look for ammo for a non-weapon " + weaponItem.ToString());
+            return false;
+        }
+
+        var ammoItem = itemDataWeapon.Ammo;
+        if (!(ammoItem is ItemData)){
+            Debug.LogWarning("Tried to look for ammo for a weapon without ammoId " + weaponItem.ToString());
+            return false;
+        }
+        return HasItem(ammoItem);
+    }
+
+    /// <summary>
+    /// Get all itesm that have the given category
+    /// </summary>
     public List<InventoryItem> GetItemsByCategory(ItemCategory category)
     {
         var foundItems = new List<InventoryItem>();
@@ -86,78 +182,36 @@ public class Inventory
         return foundItems;
     }
 
-    public bool HasAmmoForWeapon(InventoryItem item)
+    /// <summary>
+    /// Get the best tool that can do the given action, if any.
+    /// </summary>
+    public InventoryItem GetBestToolWithCapability(ActionType action)
     {
-        if (item.Category != ItemCategory.Weapons) {
-            Debug.LogWarning("Tried to look for ammo for a non-wweapon " + item.ToString());
-            return false;
-        } else if (!(item.AmmoItem is ItemData)) {
-            Debug.LogWarning("Tried to look for ammo for a weapon without ammoId " + item.ToString());
-            return false;
-        }
-        var ammoItem = item.AmmoItem;
-        return HasItem(ammoItem);
+        return GetBestToolWithCapability(action, out _);
     }
 
-    /// <summary>Shortcut to add item by itemData</summary>
-    public void AddItem(ItemData data, int amount)
+    /// <summary>
+    /// Get the best tool that can do the given action, if any.
+    /// Return that tool's modifier in pbr field
+    /// </summary>
+    public InventoryItem GetBestToolWithCapability(ActionType action, out int bestToolModifier)
     {
-        AddItem(data.id, amount);
-    }
-
-    /// <summary>Shortcut to add item, if you only care about id+amount</summary>
-    public void AddItem(string id, int amount)
-    {
-        var item = new InventoryItem(id, amount);
-        AddItem(item);
-    }
-
-    /// <summary>Proper way to add an item</summary>
-    public void AddItem(InventoryItem item)
-    {
-        string id = item.Id;
-        bool haveItem = HasItem(id, out InventoryItem foundItem);
-        int newAmount = item.Amount;
-        if (item.Stackable && haveItem){
-            foundItem.Amount += item.Amount;
-            newAmount = foundItem.Amount;
-        } else {
-            _itemList.Add(item);
-        }
-
-        var e = new InventoryChangedEventArgs(id, item.Name, item.Amount, newAmount);
-        OnItemListChanged?.Invoke(this, e);
-    }
-
-    public bool RemoveItem(ItemData itemData, int count = 1)
-    {
-        return RemoveItem(itemData.id, count);
-    }
-
-    public bool RemoveItem(string id, int count = 1)
-    {
-        bool have = HasItem(id, out InventoryItem foundItem, count);
-        if (have) {
-            foundItem.Amount -= count;
-            if (foundItem.Amount == 0)
-            {
-                // remove empty items
-                _itemList.Remove(foundItem);
+        InventoryItem bestTool = null;
+        bestToolModifier = 0;
+        var tools = GetItemsByCategory(ItemCategory.Tools);
+        foreach (var tool in tools) {
+            if (!(tool.ItemData is ItemDataTool itemDataTool)) {
+                continue;
             }
-            var e = new InventoryChangedEventArgs(id, foundItem.Name, -1 * count, foundItem.Amount);
-            OnItemListChanged?.Invoke(this, e);
-            return have;
-        } else {
-            if (foundItem is InventoryItem)
-            {
-                Debug.Log("tried to remove " + count + " of id " + id.ToString() + " but there are only " + foundItem.Amount +"!");
-            } else
-            {
-                Debug.Log("tried to remove " + count + " of id " + id.ToString() + " but there aren't any!");
+            if (!itemDataTool.HasAbility(action, out int toolModifier)) {
+                continue;
             }
-
-            return false;
+            if (toolModifier > bestToolModifier) {
+                bestTool = tool;
+                bestToolModifier = toolModifier;
+            }
         }
+        return bestTool;
     }
 
     public override string ToString()
