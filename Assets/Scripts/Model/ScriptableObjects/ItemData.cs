@@ -31,4 +31,4 @@ public class ItemData : ScriptableObject, IAssetLoaderItem
 /// <summary>
 /// Category of item. Used for store filtering
 /// </summary>
-public enum ItemCategory { None, Food, Tools, Weapons, Ammo, Resources }
+public enum ItemCategory { None, Food, Tools, Weapons, Ammo, Resources, Carcass }

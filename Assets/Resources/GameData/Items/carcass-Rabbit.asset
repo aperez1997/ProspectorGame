@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17ca93513218f4fccbd22ebfa3ed73b0, type: 3}
+  m_Name: carcass-Rabbit
+  m_EditorClassIdentifier: 
+  id: carcassRabbit
+  name: Rabbit Carcass
+  description: Carcass of a rabbit. Can be skinned.
+  sprite: {fileID: 21300242, guid: 14aefffd3622c7347aad64f2bed35801, type: 3}
+  stackable: 0
+  price: 0
+  gameEvents: []
+  Output:
+  - {fileID: 11400000, guid: 9e651ced60d494904870d388154b2b8a, type: 2}
+  - {fileID: 11400000, guid: 9e651ced60d494904870d388154b2b8a, type: 2}

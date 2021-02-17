@@ -67,23 +67,50 @@ public class Inventory
     {
         bool have = HasItem(id, out InventoryItem foundItem, count);
         if (have) {
-            foundItem.Amount -= count;
-            if (foundItem.Amount == 0) {
-                // remove empty items
-                _itemList.Remove(foundItem);
-            }
-            var e = new InventoryChangedEventArgs(id, foundItem.Name, -1 * count, foundItem.Amount);
-            OnItemListChanged?.Invoke(this, e);
-            return have;
+            return RemoveItem(foundItem, count);
         } else {
             if (foundItem is InventoryItem) {
-                Debug.Log("tried to remove " + count + " of id " + id.ToString() + " but there are only " + foundItem.Amount + "!");
+                Debug.Log("tried to remove " + count + " of item " + foundItem.ToString() + " but there aren't enough");
             } else {
                 Debug.Log("tried to remove " + count + " of id " + id.ToString() + " but there aren't any!");
             }
 
             return false;
         }
+    }
+
+    /// <summary>
+    ///  Remove count of the given inventoryItem
+    /// </summary>
+    public bool RemoveItem(InventoryItem inventoryItem, int count = 1)
+    {
+        if (!HasItem(inventoryItem.ItemData, count)) {
+            Debug.Log("tried to remove " + count + " of item " + inventoryItem.ToString() + " but there aren't enough");
+            return false;
+        }
+        return _RemoveItem(inventoryItem, count);
+    }
+
+    /// <summary>
+    /// Remove item without checks, because presumably they were done already
+    /// </summary>
+    private bool _RemoveItem(InventoryItem foundItem, int count = 1)
+    { 
+        if (foundItem.Stackable){
+            foundItem.Amount -= count;
+            if (foundItem.Amount == 0) {
+                // remove empty items
+                _itemList.Remove(foundItem);
+            }
+        } else {
+            if (count > 1) {
+                Debug.LogError("Trying to remove " + count + " cnt of unstackable item " + foundItem);
+            }
+            _itemList.Remove(foundItem);
+        }
+        var e = new InventoryChangedEventArgs(foundItem.Id, foundItem.Name, -1 * count, foundItem.Amount);
+        OnItemListChanged?.Invoke(this, e);
+        return true;
     }
 
     /** 
@@ -197,7 +224,7 @@ public class Inventory
     public InventoryItem GetBestToolWithCapability(ActionType action, out int bestToolModifier)
     {
         InventoryItem bestTool = null;
-        bestToolModifier = 0;
+        bestToolModifier = -99999;
         var tools = GetItemsByCategory(ItemCategory.Tools);
         foreach (var tool in tools) {
             if (!(tool.ItemData is ItemDataTool itemDataTool)) {

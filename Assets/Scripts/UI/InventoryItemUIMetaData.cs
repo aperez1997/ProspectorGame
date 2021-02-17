@@ -1,7 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// This is set into the UI prefab for inventory items.
+/// It allows us to identify what item it represents when there's an event later
+/// </summary>
 public class InventoryItemUIMetaData : MonoBehaviour
 {
     public string itemId;

@@ -100,24 +100,12 @@ public class PlayerController : MonoBehaviour
 
     void UpdateActionChanceText(TextMeshProUGUI chanceText, int chance)
     {
-        if (chance > 0) {
-            chanceText.gameObject.SetActive(true);
-            chanceText.text = chance.ToString() + "%";
-            var color = Color.red;
-            if (chance > 66) {
-                color = Color.green;
-            } else if (chance > 33) {
-                color = Color.yellow;
-            }
-            chanceText.color = color;
-        } else {
-            chanceText.gameObject.SetActive(false);
-        }
+        GUIUtils.UpdateActionButtonChance(chanceText, chance);
     }
 
     void UpdateActionCostText(TextMeshProUGUI costText, bool allowed, int cost)
     {
-        costText.text = allowed ? cost.ToString() + " AP" : String.Empty;
+        GUIUtils.UpdateActionButtonCost(costText, allowed, cost);
     }
 
     protected WorldTile LoadPlayerTile()

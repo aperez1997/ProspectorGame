@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Linq;
+using System.Collections.Generic;
 
 /// <summary>
 /// Loads ItemData ScriptableObjects
@@ -25,6 +26,27 @@ public class ItemDataLoader : AssetLoader<ItemData>
     public static ItemData LoadItemById(string id)
     {
         return Instance.LoadByKey(id);
+    }
+
+    public static ItemData[] GetItemsByCategoryStatic(ItemCategory itemCategory)
+    {
+        return Instance.GetItemsByCategory(itemCategory);
+    }
+
+    /// <summary>
+    /// Get all items with the given category
+    /// TODO: this is not very efficient. Should probably cache this info on init
+    /// </summary>
+    public ItemData[] GetItemsByCategory(ItemCategory itemCategory)
+    {
+        var output = new List<ItemData>();
+        foreach (var tuple in itemDict) {
+            var value = tuple.Value;
+            if (value.category == itemCategory) {
+                output.Add(value);
+            }
+        }
+        return output.ToArray();
     }
 
     protected override string GetPath(){ return "GameData/Items"; }

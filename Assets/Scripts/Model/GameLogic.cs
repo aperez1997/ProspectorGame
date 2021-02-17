@@ -341,7 +341,12 @@ public class GameLogic
         var weaponStr = bestWeapon == null ? "NULL!" : bestWeapon.ToString();
         Debug.Log("Hunting with " + weaponStr);
 
-        bool rv = TakeActionForItem(cost, chance, soBinder.itemForagedFood, 1);
+        // get all carcasses and pick one randomly
+        var caracasses = ItemDataLoader.GetItemsByCategoryStatic(ItemCategory.Carcass);
+        var random = new System.Random();
+        var reward = caracasses[random.Next(caracasses.Length)];
+
+        bool rv = TakeActionForItem(cost, chance, reward, 1);
         // chance to lose ammo even if you don't catch something
         bool usedAmmoAnyway = RollDice(25);
 
@@ -357,6 +362,50 @@ public class GameLogic
         }
 
         return rv;
+    }
+
+    public bool CanSkin(InventoryItem item, out bool isApplicable)
+    {
+        // item must be a carcass
+        isApplicable = false;
+        if (item.Category != ItemCategory.Carcass || !(item.ItemData is ItemDataCarcass)) { return false; }
+        isApplicable = true;
+
+        // require skinning tool
+        InventoryItem bestSkinningTool = Inventory.GetBestToolWithCapability(ActionType.Skinning);
+        if (!(bestSkinningTool is InventoryItem)) { return false; }
+
+        // check player for AP
+        if (!Player.HasEnoughActionPoints(GetSkinningCost())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public int GetSkinningCost() { return 1; }
+
+    /// <summary>
+    /// Skin a carcass to gain it's output items
+    /// </summary>
+    public bool Skin(InventoryItem item)
+    {
+        int cost = GetSkinningCost();
+        if (!CanSkin(item, out _)) { return false; }
+        if (!Player.SpendActionPoints(cost)) { return false; }
+
+        // safe to assume if CanSkin passed
+        var carcassData = (ItemDataCarcass) item.ItemData;
+
+        // add the rewards
+        foreach (var reward in carcassData.Output) {
+            Inventory.AddItem(reward, 1);
+        }
+
+        // remove the carcass
+        Inventory.RemoveItem(item);
+
+        return true;
     }
 
     public int GetPanForGoldCost() { return 2; }

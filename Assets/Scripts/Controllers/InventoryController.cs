@@ -13,7 +13,7 @@ abstract public class InventoryController : ContainerDisplayController<Inventory
 {
     private Inventory inventory;
     protected Inventory Inventory {
-        get { return inventory;  }  
+        get { return inventory; }
         set {
             if (inventory is Inventory) {
                 inventory.OnItemListChanged -= Inventory_OnItemListChanged;
@@ -49,8 +49,7 @@ abstract public class InventoryController : ContainerDisplayController<Inventory
 
         // find amount text and set
         var itemAmountText = GetAmountText(gameObject);
-        if (item.Stackable)
-        {
+        if (item.Stackable) {
             itemAmountText.text = item.Amount.ToString();
             itemAmountText.enabled = true;
         } else {
@@ -58,7 +57,7 @@ abstract public class InventoryController : ContainerDisplayController<Inventory
         }
 
         // for tooltips
-        ToolTipUIHelper helper = gameObject.GetComponent<ToolTipUIHelper>();
+        var helper = gameObject.GetComponent<ToolTipUIHelper>();
         helper.text = item.Description;
 
         gameObject.SetActive(true);
