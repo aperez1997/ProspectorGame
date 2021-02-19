@@ -403,8 +403,9 @@ public class GameLogic
         var carcassData = (ItemDataCarcass) item.ItemData;
 
         // add the rewards
-        foreach (var reward in carcassData.Output) {
-            Inventory.AddItem(reward.Item, reward.quantity);
+        foreach (var rewardQtyRange in carcassData.Output) {
+            var qtyActual = GetActualQuantity(carcassData, rewardQtyRange);
+            Inventory.AddItem(rewardQtyRange.Item, qtyActual);
         }
 
         // remove the carcass
@@ -454,7 +455,8 @@ public class GameLogic
 
         // add the rewards
         foreach (var cookedItemQty in foodData.CookedItems) {
-            Inventory.AddItem(cookedItemQty.FoodItem, cookedItemQty.Quantity);
+            var qtyActual = GetActualQuantity(foodData, cookedItemQty);
+            Inventory.AddItem(cookedItemQty.FoodItem, qtyActual);
         }
 
         // remove the raw item
@@ -607,6 +609,24 @@ public class GameLogic
             Inventory.AddItem(item, quantity);
         }
         return success;
+    }
+
+    /// <summary>
+    /// Turns a Quantity range into an actual quantity by looking at min/max
+    /// ItemData passed is the item that has the quantityRange set in it, not the item that is given
+    /// </summary>
+    protected int GetActualQuantity(ItemData itemData, IQuantityRange range)
+    {
+        var qtyActual = range.GetQuantityMin();
+        var qtyMax = range.GetQuantityMax();
+        if (qtyMax > qtyActual) {
+            qtyActual = UnityEngine.Random.Range(qtyActual, qtyMax);
+        } else if (qtyActual <= 0) {
+            // save from poorly configured data where the min is zero but the max is not set
+            Debug.LogWarning("Item " + itemData.ToString() + " has bad min qty" + qtyActual);
+            qtyActual = 1;
+        }
+        return qtyActual;
     }
 
     /// <summary>

@@ -21,4 +21,5 @@ MonoBehaviour:
   gameEvents: []
   CookedItems:
   - FoodItem: {fileID: 11400000, guid: c68a36ad4af8f4317a3fbee52a9c9c6b, type: 2}
-    Quantity: 1
+    QuantityMin: 1
+    QuantityMax: 0

@@ -21,6 +21,8 @@ MonoBehaviour:
   gameEvents: []
   Output:
   - Item: {fileID: 11400000, guid: eb71f55c86b104de18a4c9f6c30f7b7c, type: 2}
-    quantity: 1
+    QuantityMin: 1
+    QuantityMax: 2
   - Item: {fileID: 11400000, guid: e88811050334a49d79cb1e120da56d46, type: 2}
-    quantity: 1
+    QuantityMin: 1
+    QuantityMax: 0

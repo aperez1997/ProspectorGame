@@ -10,16 +10,23 @@ public class ItemDataFood : ItemData
 {
     public override ItemCategory category { get { return ItemCategory.Food; } }
 
-    [Tooltip("Items that are given to player when cooked, if any")]
-    public FoodItemQuantity[] CookedItems;
+    [Tooltip("Food Items that are given to player when cooked, if any")]
+    public FoodItemQuantityRange[] CookedItems;
 }
 
 /// <summary>
-/// Food item and quantity
+/// Food item and range of quantity
 /// </summary>
 [System.Serializable]
-public class FoodItemQuantity
+public class FoodItemQuantityRange : IQuantityRange
 {
+    [Tooltip("The food item")]
     public ItemDataFood FoodItem;
-    public int Quantity;
+    [Tooltip("Required min qty. Can be zero if the max is set")]
+    public int QuantityMin;
+    [Tooltip("Optional max qty. If set and larger than min, a random value in between will be given")]
+    public int QuantityMax;
+
+    public int GetQuantityMin() { return QuantityMin; }
+    public int GetQuantityMax() { return QuantityMax; }
 }
