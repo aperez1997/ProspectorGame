@@ -364,45 +364,100 @@ public class GameLogic
         return rv;
     }
 
-    public bool CanSkin(InventoryItem item, out bool isApplicable)
+    public ActionCheckItem CanSkin(InventoryItem item)
     {
+        var cost = GetSkinningCost();
+        var check = new ActionCheckItem(cost);
+
         // item must be a carcass
-        isApplicable = false;
-        if (item.Category != ItemCategory.Carcass || !(item.ItemData is ItemDataCarcass)) { return false; }
-        isApplicable = true;
-
-        // require skinning tool
-        InventoryItem bestSkinningTool = Inventory.GetBestToolWithCapability(ActionType.Skinning);
-        if (!(bestSkinningTool is InventoryItem)) { return false; }
-
-        // check player for AP
-        if (!Player.HasEnoughActionPoints(GetSkinningCost())) {
-            return false;
+        if (item.Category != ItemCategory.Carcass || !(item.ItemData is ItemDataCarcass)) {
+            return check.NotApplicableToItem();
         }
 
-        return true;
+        // require skinning tool
+        InventoryItem bestSkinningTool = Inventory.GetBestToolWithCapability(ActionType.Skin);
+        if (!(bestSkinningTool is InventoryItem)) {
+            return check.CantForReason("You need a knife.");
+        }
+
+        // check player for AP
+        if (!Player.HasEnoughActionPoints(cost.Sum)) {
+            return check.NotEnoughAP();
+        }
+
+        return check;
     }
 
-    public int GetSkinningCost() { return 1; }
+    public SumDescription GetSkinningCost() { return GetActionCost(soBinder.SkinningData); }
 
     /// <summary>
     /// Skin a carcass to gain it's output items
     /// </summary>
     public bool Skin(InventoryItem item)
     {
-        int cost = GetSkinningCost();
-        if (!CanSkin(item, out _)) { return false; }
-        if (!Player.SpendActionPoints(cost)) { return false; }
+        var check = CanSkin(item);
+        if (!check.IsAble) { return false; }
+        if (!Player.SpendActionPoints(check.Cost.Sum)) { return false; }
 
         // safe to assume if CanSkin passed
         var carcassData = (ItemDataCarcass) item.ItemData;
 
         // add the rewards
         foreach (var reward in carcassData.Output) {
-            Inventory.AddItem(reward, 1);
+            Inventory.AddItem(reward.Item, reward.quantity);
         }
 
         // remove the carcass
+        Inventory.RemoveItem(item);
+
+        return true;
+    }
+
+    /// <summary>
+    /// Returns if the item can be cooked
+    /// </summary>
+    public ActionCheckItem CanCook(InventoryItem item)
+    {
+        var cost = GetCookingCost();
+
+        // item must be a food with cooked items 
+        if (item.Category != ItemCategory.Food || !(item.ItemData is ItemDataFood itemDataFood) || itemDataFood.CookedItems.Length <= 0) {
+            return ActionCheckItem.NotApplicableToItem(cost);
+        }
+
+        // TODO: should need a campfire or something
+
+        // check player for AP
+        if (!Player.HasEnoughActionPoints(cost.Sum)) {
+            return ActionCheckItem.NotEnoughAP(cost);
+        }
+
+        return ActionCheckItem.IsAbleTo(cost);
+    }
+
+    public SumDescription GetCookingCost()
+    {
+        return GetActionCost(soBinder.CookData);
+    }
+
+    /// <summary>
+    /// Skin a carcass to gain it's output items
+    /// </summary>
+    public bool Cook(InventoryItem item)
+    {
+        var actionCheck = CanCook(item);
+        if (!actionCheck.IsAble) { return false; }
+        if (!Player.SpendActionPoints(actionCheck.Cost.Sum)) { return false; }
+
+        // safe to assume if CanCook passed
+        var foodData = (ItemDataFood)item.ItemData;
+
+        // add the rewards
+        foreach (var cookedItemQty in foodData.CookedItems) {
+            Inventory.AddItem(cookedItemQty.FoodItem, cookedItemQty.Quantity);
+        }
+
+        // remove the raw item
         Inventory.RemoveItem(item);
 
         return true;
@@ -431,6 +486,20 @@ public class GameLogic
         if (!CanPanForGold(out int chance)) { return false; }
 
         return TakeActionForItem(cost, chance, soBinder.itemGoldNugget, 1);
+    }
+
+    /// <summary>
+    /// Get cost for ActionData
+    /// </summary>
+    protected SumDescription GetActionCost(ActionData data)
+    {
+        var cost = new SumDescription("Base", data.ActionPointCost);
+        return cost;
+    }
+
+    public bool IsAllowedOnTileAndHaveAP(ActionType type, SumDescription cost, out int chance)
+    {
+        return IsAllowedOnTileAndHaveAP(type, cost.Sum, out chance);
     }
 
     public bool IsAllowedOnTileAndHaveAP(ActionType type, int cost, out int chance)

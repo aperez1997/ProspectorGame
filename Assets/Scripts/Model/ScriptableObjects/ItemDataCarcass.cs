@@ -12,5 +12,5 @@ public class ItemDataCarcass : ItemDataResource
     public override ItemCategory category { get { return ItemCategory.Carcass; } }
 
     [Tooltip("Items that are given to player when the carcass is skinned using a knife")]
-    public ItemData[] Output;
+    public ItemDataQuantity[] Output;
 }

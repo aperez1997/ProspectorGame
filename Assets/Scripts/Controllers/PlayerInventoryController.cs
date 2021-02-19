@@ -11,7 +11,10 @@ public class PlayerInventoryController : InventoryController
 
     // buttons
     public Button SkinningBtn;
-    public TextMeshProUGUI SkinningCost;
+    public TextMeshProUGUI SkinningCostText;
+
+    public Button CookBtn;
+    public TextMeshProUGUI CookCostText;
 
     // private
     private InventoryItem currentItem;
@@ -68,18 +71,17 @@ public class PlayerInventoryController : InventoryController
     }
 
     public void UpdateInfoPanelUI()
-    { 
+    {
         InfoPanel.GetComponentInChildren<TextMeshProUGUI>().text = currentItem.Name
             + "\n" + currentItem.Description;
 
-        var canSkin = gameLogic.CanSkin(currentItem, out bool isApplicable);
-        if (isApplicable) {
-            GUIUtils.UpdateActionButtonCost(SkinningCost, isApplicable, gameLogic.GetSkinningCost());
-            SkinningBtn.interactable = canSkin;
-            SkinningBtn.gameObject.SetActive(true);
-        } else {
-            SkinningBtn.gameObject.SetActive(false);
-        }
+        // skin button
+        var canSkin = gameLogic.CanSkin(currentItem);
+        SetActionButton(canSkin, SkinningBtn, SkinningCostText);
+
+        // cook button
+        var canCook = gameLogic.CanCook(currentItem);
+        SetActionButton(canCook, CookBtn, CookCostText);
     }
 
     public void ActionSkin()
@@ -87,5 +89,23 @@ public class PlayerInventoryController : InventoryController
         gameLogic.Skin(currentItem);
         // close up because we probably got rid of the item we were skinning
         CloseInfoPanel();
+    }
+
+    public void ActionCook()
+    {
+        gameLogic.Cook(currentItem);
+        // close up because we probably got rid of the item we cooked
+        CloseInfoPanel();
+    }
+
+    protected void SetActionButton(ActionCheckItem check, Button button, TextMeshProUGUI text)
+    {
+        if (check.IsApplicableToItem) {
+            GUIUtils.UpdateActionButtonCost(text, check.IsApplicableToItem, check.Cost.Sum);
+            button.interactable = check.IsAble;
+            button.gameObject.SetActive(true);
+        } else {
+            button.gameObject.SetActive(false);
+        }
     }
 }

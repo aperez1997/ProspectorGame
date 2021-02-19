@@ -19,6 +19,4 @@ MonoBehaviour:
   stackable: 0
   price: 8
   gameEvents: []
-  Capabilities:
-  - ActionType: 5
-    modifier: 5
+  Abilities: []

@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79f233665e5124979a527da5ac880b29, type: 3}
-  m_Name: food-Ration
+  m_Name: food-MeatRaw
   m_EditorClassIdentifier: 
-  id: ration
-  name: Ration
-  description: A simple ration. Nourishes the player for 1 day in the wild.
-  sprite: {fileID: 21300048, guid: 14aefffd3622c7347aad64f2bed35801, type: 3}
-  stackable: 1
-  price: 5
+  id: meat-raw
+  name: Raw Meat
+  description: Meat that has not been cooked. Eat at your own risk.
+  sprite: {fileID: 21300000, guid: 4161117e8fa464aa291929d5d96a1186, type: 3}
+  stackable: 0
+  price: -1
   gameEvents: []
-  CookedItems: []
+  CookedItems:
+  - FoodItem: {fileID: 11400000, guid: c68a36ad4af8f4317a3fbee52a9c9c6b, type: 2}
+    Quantity: 1

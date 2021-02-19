@@ -9,13 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c17697c636d1473fafe054c4be9ce85, type: 3}
-  m_Name: ammo-Arrows
+  m_Script: {fileID: 11500000, guid: 5f7c6e141592e43519bbd06b2e99ed2b, type: 3}
+  m_Name: Cook
   m_EditorClassIdentifier: 
-  id: arrows
-  name: Arrows
-  description: Used with a Bow.
-  sprite: {fileID: 21300130, guid: 14aefffd3622c7347aad64f2bed35801, type: 3}
-  stackable: 1
-  price: 1
+  type: 7
+  ActionPointCost: 1
   gameEvents: []

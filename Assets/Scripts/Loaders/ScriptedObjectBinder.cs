@@ -15,13 +15,17 @@ public class ScriptedObjectBinder : MonoBehaviour
     public ActionData MoveData;
     [Tooltip("ActionData SO for Forage Action")]
     public ActionData ForageData;
+    [Tooltip("ActionData SO for Skin Action")]
+    public ActionData SkinningData;
+    [Tooltip("ActionData SO for Cook Action")]
+    public ActionData CookData;
 
     [SerializeField]
     [Tooltip("starting equipment")]
     public StartingGear StartingGear;
 
     // Game Logic related
-    [Tooltip("needed for money checkss")]
+    [Tooltip("needed for money checks")]
     public ItemData itemMoney;
     [Tooltip("Panning check, should be changed to an item attribute or sub-class")]
     public ItemData itemGoldPan;
@@ -55,7 +59,7 @@ public class ScriptedObjectBinder : MonoBehaviour
 [Serializable]
 public class StartingGear
 {
-    public StartingGearItem[] Items;
+    public ItemDataQuantity[] Items;
     public StatusEffect[] Effects;
 }
 
@@ -64,7 +68,7 @@ public class StartingGear
 /// Can't use InventoryItem because that has an ID instead of the SO
 /// </summary>
 [Serializable]
-public class StartingGearItem
+public class ItemDataQuantity
 {
     public ItemData Item;
     public int quantity;

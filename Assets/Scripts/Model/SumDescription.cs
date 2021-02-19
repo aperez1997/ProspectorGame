@@ -24,6 +24,15 @@ public class SumDescription
         init(items);
     }
 
+    /// <summary>
+    /// Create with a single item
+    /// </summary>
+    public SumDescription(string name, int value)
+    {
+        var items = new SumItem[] { new SumItem(name, value) };
+        init(items);
+    }
+
     public SumDescription(List<SumItem> items)
     {
         init(items.ToArray());

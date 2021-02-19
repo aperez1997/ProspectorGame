@@ -17,8 +17,8 @@ MonoBehaviour:
   description: Carcass of a rabbit. Can be skinned.
   sprite: {fileID: 21300242, guid: 14aefffd3622c7347aad64f2bed35801, type: 3}
   stackable: 0
-  price: 0
+  price: -1
   gameEvents: []
   Output:
-  - {fileID: 11400000, guid: 9e651ced60d494904870d388154b2b8a, type: 2}
-  - {fileID: 11400000, guid: 9e651ced60d494904870d388154b2b8a, type: 2}
+  - Item: {fileID: 11400000, guid: eb71f55c86b104de18a4c9f6c30f7b7c, type: 2}
+    quantity: 1

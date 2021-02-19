@@ -36,4 +36,15 @@ public class GUIUtils
             chanceText.gameObject.SetActive(false);
         }
     }
+
+    public string GetMoneyDisplay(int amount)
+    {
+        var dollars = amount / 100;
+        var cents = amount % 100;
+        var output = "$" + dollars;
+        if (cents > 0) {
+            output += "." + cents;
+        }
+        return output;
+    }
 }

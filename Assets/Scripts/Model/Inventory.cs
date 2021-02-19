@@ -29,8 +29,17 @@ public class Inventory
     /// <summary>Shortcut to add item, if you only care about id+amount</summary>
     public void AddItem(string id, int amount)
     {
-        var item = new InventoryItem(id, amount);
-        AddItem(item);
+        var data = ItemDataLoader.LoadItemById(id);
+        if (data.stackable) {
+            var item = new InventoryItem(id, amount);
+            AddItem(item);
+        } else {
+            // non-stackable have to add one at a time
+            for (int i = 0; i < amount; i++) {
+                var item = new InventoryItem(id, 1);
+                AddItem(item);
+            }
+        }
     }
 
     /// <summary>Proper way to add an item</summary>
