@@ -17,6 +17,6 @@ MonoBehaviour:
   description: Used to pan for gold
   sprite: {fileID: 21300000, guid: 4e146f59009f04d48b2c7166102b69c5, type: 3}
   stackable: 0
-  price: 8
+  price: 800
   gameEvents: []
   Abilities: []

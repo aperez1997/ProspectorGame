@@ -64,12 +64,18 @@ public class StartingGear
 }
 
 /// <summary>
-/// An item that the player starts, along with the quantity
-/// Can't use InventoryItem because that has an ID instead of the SO
+/// An itemData plus quantity
+/// Can't use InventoryItem instead of this, because that has an ID instead of the SO
+/// and we want to bind properly
 /// </summary>
 [Serializable]
 public class ItemDataQuantity
 {
     public ItemData Item;
     public int quantity;
+
+    public override string ToString()
+    {
+        return "ItemData[" + Item.ToString() + ":"+ quantity +"]";
+    }
 }

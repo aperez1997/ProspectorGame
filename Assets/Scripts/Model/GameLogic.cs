@@ -54,6 +54,7 @@ public class GameLogic
 
         var startingGear = soBinder.StartingGear;
         foreach (var item in startingGear.Items) {
+            Debug.Log("Adding item " + item.ToString());
             Player.Inventory.AddItem(item.Item, item.quantity);
         }
         foreach (var effect in startingGear.Effects) {

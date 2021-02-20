@@ -14,7 +14,6 @@ public class GeneralStoreController : StoreInventoryController
 {
     private Player player;
 
-
     protected override string GetItemContainerName() { return "Store Container"; }
 
     protected override void Start()
@@ -22,11 +21,11 @@ public class GeneralStoreController : StoreInventoryController
         // for loading this scene from editor
         GameStateManager.DebugLoadState();
 
-        Inventory = GameStateManager.LogicInstance.GetStoreInventory();
+        this.Inventory = GameStateManager.LogicInstance.GetStoreInventory();
 
         // subscribe to money change event
-        player = GameStateManager.LogicInstance.Player;
-        player.Inventory.OnItemListChanged += Player_OnMoneyChanged;
+        this.player = GameStateManager.LogicInstance.Player;
+        this.player.Inventory.OnItemListChanged += Player_OnMoneyChanged;
 
         base.Start();
     }
@@ -36,25 +35,25 @@ public class GeneralStoreController : StoreInventoryController
         SceneController.UnloadAdditiveScene();
     }
 
-    protected override void SetPrefabDetails(GameObject gameObject, InventoryItem item)
+    protected override void SetPrefabDetails(GameObject goItem, InventoryItem item)
     {
-        SetInventoryStorePrefab_Static(gameObject, item);
+        base.SetPrefabDetails(goItem, item);
 
         // hide item amount
-        var itemAmountText = GetAmountText(gameObject);
+        var itemAmountText = GetAmountText(goItem);
         itemAmountText.enabled = false;
 
         // set price
         int price = item.Price;
-        SetPriceText(gameObject, price);
+        SetPriceText(goItem, price);
 
         // setup button
-        var button = GetActionButton(gameObject);
+        var button = GetActionButton(goItem);
         button.interactable = gameLogic.CanAfford(price);
         button.onClick.AddListener(() => {
             gameLogic.BuyItem(item.Id, price);
         });
-        SetButtonText(gameObject, "Buy");
+        SetButtonText(goItem, "Buy");
     }
 
     private void Player_OnMoneyChanged(object sender, EventArgs e)

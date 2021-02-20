@@ -16,38 +16,33 @@ abstract public class StoreInventoryController : InventoryController
     protected override void Start()
     {
         // get these from singleton. Is this the right way?
-        gameLogic = GameStateManager.LogicInstance;
+        this.gameLogic = GameStateManager.LogicInstance;
 
         base.Start();
     }
 
-    public static void SetInventoryStorePrefab_Static(GameObject gameObject, InventoryItem item)
+    public static TextMeshProUGUI GetPriceText(GameObject goItem)
     {
-        InventoryController.SetInventoryPrefab_Static(gameObject, item);
+        return Utils.FindInChildren(goItem, "Price").GetComponent<TextMeshProUGUI>();
     }
 
-    public static TextMeshProUGUI GetPriceText(GameObject gameObject)
+    public static void SetPriceText(GameObject goItem, int cost)
     {
-        return Utils.FindInChildren(gameObject, "Price").GetComponent<TextMeshProUGUI>();
+        GetPriceText(goItem).text = cost > 0 ? GetMoneyString(cost) : string.Empty;
     }
 
-    public static void SetPriceText(GameObject gameObject, int cost)
+    public static Button GetActionButton(GameObject goItem)
     {
-        GetPriceText(gameObject).text = cost > 0 ? "$" + cost.ToString() : string.Empty;
+        return goItem.GetComponentInChildren<Button>();
     }
 
-    public static Button GetActionButton(GameObject gameObject)
+    public static TextMeshProUGUI GetButtonText(GameObject goItem)
     {
-        return gameObject.GetComponentInChildren<Button>();
+        return GetActionButton(goItem).GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    public static TextMeshProUGUI GetButtonText(GameObject gameObject)
+    public static void SetButtonText(GameObject goItem, string buttonText)
     {
-        return GetActionButton(gameObject).GetComponentInChildren<TextMeshProUGUI>();
-    }
-
-    public static void SetButtonText(GameObject gameObject, string buttonText)
-    {
-        GetButtonText(gameObject).text = buttonText;
+        GetButtonText(goItem).text = buttonText;
     }
 }

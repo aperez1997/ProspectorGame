@@ -10,34 +10,33 @@ public class PlayerStoreInventoryController : StoreInventoryController
     protected override void Start()
     {
         // get these from singleton. Is this the right way?
-        Inventory = GameStateManager.LogicInstance.Inventory;
+        this.Inventory = GameStateManager.LogicInstance.Inventory;
 
         base.Start();
     }
 
-    protected override void SetPrefabDetails(GameObject gameObject, InventoryItem item)
+    protected override void SetPrefabDetails(GameObject goItem, InventoryItem item)
     {
-        SetInventoryStorePrefab_Static(gameObject, item);
+        base.SetPrefabDetails(goItem, item);
 
-        var button = GetActionButton(gameObject);
+        var button = GetActionButton(goItem);
 
-        bool canSell = gameLogic.CanSell(item.Id);
+        bool canSell = this.gameLogic.CanSell(item.Id);
         if (canSell) {
             // set price
-            int price = gameLogic.GetSellPrice(item.Id);
-            SetPriceText(gameObject, price);
+            int price = this.gameLogic.GetSellPrice(item.Id);
+            SetPriceText(goItem, price);
 
             // setup button
             button.onClick.AddListener(() => {
-                gameLogic.SellItem(item.Id, price);
+                this.gameLogic.SellItem(item.Id, price);
             });
-            SetButtonText(gameObject, "Sell");
+            SetButtonText(goItem, "Sell");
         } else {
             // hide price
-            GetPriceText(gameObject).enabled = false;
+            GetPriceText(goItem).enabled = false;
             // hide button
             button.gameObject.SetActive(false);
         }
-
     }
 }

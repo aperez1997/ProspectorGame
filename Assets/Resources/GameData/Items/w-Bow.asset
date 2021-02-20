@@ -15,9 +15,9 @@ MonoBehaviour:
   id: bow
   name: Bow
   description: Used for hunting. Requires arrows.
-  sprite: {fileID: 21300000, guid: b37abd6a6e26fcb47bd01d0d50906e2e, type: 3}
+  sprite: {fileID: 21300000, guid: a39d37ea40d924136a1cd0d4cbfb39ad, type: 3}
   stackable: 0
-  price: 25
+  price: 2500
   gameEvents: []
   Abilities:
   - ActionType: 4

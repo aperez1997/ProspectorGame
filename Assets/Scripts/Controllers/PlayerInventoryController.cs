@@ -23,24 +23,24 @@ public class PlayerInventoryController : InventoryController
     protected override void Start()
     {
         // get these from singleton. Is this the right way?
-        gameLogic = GameStateManager.LogicInstance;
-        Inventory = gameLogic.Inventory;
+        this.gameLogic = GameStateManager.LogicInstance;
+        this.Inventory = gameLogic.Inventory;
 
         base.Start();
 
-        InfoPanel.SetActive(false);
+        this.InfoPanel.SetActive(false);
     }
 
-    protected override void SetPrefabDetails(GameObject gameObject, InventoryItem item)
+    protected override void SetPrefabDetails(GameObject goItem, InventoryItem item)
     {
-        base.SetPrefabDetails(gameObject, item);
+        base.SetPrefabDetails(goItem, item);
 
         // disable tooltip helper since we're using the info panel instead
-        var helper = gameObject.GetComponent<ToolTipUIHelper>();
+        var helper = goItem.GetComponent<ToolTipUIHelper>();
         helper.enabled = false;
 
         // toggle infoPanel on click
-        var button = gameObject.AddComponent<Button>();
+        var button = goItem.AddComponent<Button>();
         void onclick()
         {
             ToggleInfoPanel(item);
@@ -50,7 +50,7 @@ public class PlayerInventoryController : InventoryController
 
     protected void ToggleInfoPanel(InventoryItem item)
     {
-        if (currentItem == item) {
+        if (this.currentItem == item) {
             CloseInfoPanel();
         } else {
             OpenInfoPanel(item);
@@ -59,46 +59,46 @@ public class PlayerInventoryController : InventoryController
 
     protected void OpenInfoPanel(InventoryItem item)
     {
-        currentItem = item;
-        InfoPanel.SetActive(true);
+        this.currentItem = item;
+        this.InfoPanel.SetActive(true);
         UpdateInfoPanelUI();
     }
 
     public void CloseInfoPanel()
     {
-        currentItem = null;
-        InfoPanel.SetActive(false);
+        this.currentItem = null;
+        this.InfoPanel.SetActive(false);
     }
 
     public void UpdateInfoPanelUI()
     {
-        InfoPanel.GetComponentInChildren<TextMeshProUGUI>().text = currentItem.Name
-            + "\n" + currentItem.Description;
+        this.InfoPanel.GetComponentInChildren<TextMeshProUGUI>().text = this.currentItem.Name
+            + "\n" + this.currentItem.Description;
 
         // skin button
-        var canSkin = gameLogic.CanSkin(currentItem);
-        SetActionButton(canSkin, SkinningBtn, SkinningCostText);
+        var canSkin = this.gameLogic.CanSkin(this.currentItem);
+        SetActionButton(canSkin, this.SkinningBtn, this.SkinningCostText);
 
         // cook button
-        var canCook = gameLogic.CanCook(currentItem);
-        SetActionButton(canCook, CookBtn, CookCostText);
+        var canCook = this.gameLogic.CanCook(this.currentItem);
+        SetActionButton(canCook, this.CookBtn, this.CookCostText);
     }
 
     public void ActionSkin()
     {
-        gameLogic.Skin(currentItem);
+        this.gameLogic.Skin(this.currentItem);
         // close up because we probably got rid of the item we were skinning
         CloseInfoPanel();
     }
 
     public void ActionCook()
     {
-        gameLogic.Cook(currentItem);
+        this.gameLogic.Cook(this.currentItem);
         // close up because we probably got rid of the item we cooked
         CloseInfoPanel();
     }
 
-    protected void SetActionButton(ActionCheckItem check, Button button, TextMeshProUGUI text)
+    protected static void SetActionButton(ActionCheckItem check, Button button, TextMeshProUGUI text)
     {
         if (check.IsApplicableToItem) {
             GUIUtils.UpdateActionButtonCost(text, check.IsApplicableToItem, check.Cost.Sum);

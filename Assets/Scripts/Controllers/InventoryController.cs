@@ -25,42 +25,64 @@ abstract public class InventoryController : ContainerDisplayController<Inventory
 
     protected override ReadOnlyCollection<InventoryItem> GetItemList()
     {
-        return inventory.ItemList;
+        return this.inventory.ItemList;
     }
 
     protected override void SetPrefabDetails(GameObject goItem, InventoryItem item)
     {
-        SetInventoryPrefab_Static(goItem, item);
-    }
-
-    public static void SetInventoryPrefab_Static(GameObject gameObject, InventoryItem item)
-    {
         // MetaData
-        var metaData = gameObject.GetComponent<InventoryItemUIMetaData>();
+        var metaData = goItem.GetComponent<InventoryItemUIMetaData>();
         metaData.SetFromInventoryItem(item);
 
         // find sprit
-        Image image = gameObject.GetComponentInChildren<Image>();
+        Image image = goItem.GetComponentInChildren<Image>();
         image.sprite = item.Sprite;
         image.enabled = true;
 
-        var nameText = Utils.FindInChildren(gameObject, "Text Name").GetComponent<TextMeshProUGUI>();
+        var nameText = Utils.FindInChildren(goItem, "Text Name").GetComponent<TextMeshProUGUI>();
         nameText.text = item.Name;
 
         // find amount text and set
-        var itemAmountText = GetAmountText(gameObject);
+        var itemAmountText = GetAmountText(goItem);
         if (item.Stackable) {
-            itemAmountText.text = item.Amount.ToString();
+            itemAmountText.text = GetItemAmountString(item);
             itemAmountText.enabled = true;
         } else {
             itemAmountText.enabled = false;
         }
 
         // for tooltips
-        var helper = gameObject.GetComponent<ToolTipUIHelper>();
+        var helper = goItem.GetComponent<ToolTipUIHelper>();
         helper.text = item.Description;
 
-        gameObject.SetActive(true);
+        goItem.SetActive(true);
+    }
+
+    protected static string GetItemAmountString(InventoryItem item)
+    {
+        var style = QuantityStyle.None;
+
+        string output = item.Amount.ToString();
+        if (item.ItemData is ItemDataResource itemDataResource) {
+            style = itemDataResource.quantityStyle;
+        }
+
+        switch (style) {
+            case QuantityStyle.Money:
+                output = GetMoneyString(item.Amount);
+                break;
+        }
+
+        return output;
+    }
+
+    protected static string GetMoneyString(int amount)
+    {
+        int dollars = amount / 100;
+        int cents = amount % 100;
+        string output = dollars.ToString();
+        if (cents > 0) { output += "." + cents; }
+        return "$" + output;
     }
 
     public static TextMeshProUGUI GetAmountText(GameObject goItem)
@@ -73,10 +95,10 @@ abstract public class InventoryController : ContainerDisplayController<Inventory
     /// </summary>
     protected Transform FindInventoryItemTransform(string itemId)
     {
-        foreach (Transform child in ItemContainer)
+        foreach (Transform child in this.ItemContainer)
         {
             // skip the template
-            if (child == ItemTemplate.transform) { continue; }
+            if (child == this.ItemTemplate.transform) { continue; }
             var metaData = child.GetComponent<InventoryItemUIMetaData>();
             if (metaData.itemId == itemId)
             {
@@ -102,6 +124,6 @@ abstract public class InventoryController : ContainerDisplayController<Inventory
     {
         // if we don't do this, it will still get called and cause errors
         // because the gameObjects will be gone
-        inventory.OnItemListChanged -= Inventory_OnItemListChanged;
+        this.inventory.OnItemListChanged -= Inventory_OnItemListChanged;
     }
 }

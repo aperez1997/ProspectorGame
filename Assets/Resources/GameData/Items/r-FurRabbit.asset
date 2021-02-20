@@ -17,5 +17,6 @@ MonoBehaviour:
   description: The fur of a rabbit. You can sell it.
   sprite: {fileID: 21300238, guid: 14aefffd3622c7347aad64f2bed35801, type: 3}
   stackable: 1
-  price: 1
+  price: 100
   gameEvents: []
+  quantityStyle: 0
