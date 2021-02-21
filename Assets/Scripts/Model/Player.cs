@@ -8,21 +8,49 @@ using UnityEngine;
 [Serializable]
 public class Player
 {
-    public const int MAX_HEALTH = 4;
-    public const int MAX_AP = 12;
-
     // Health
+    [field: SerializeField] public int HealthMax { get; private set; }
+
     [SerializeField] private int _health;
     public int Health
     {
         get { return _health; }
-        private set {
+        set {
             var delta = value - _health;
             _health = value;
             OnHealthChanged?.Invoke(this, new IntStatChangeEventArgs(delta, _health));
         }
     }
     public event EventHandler<IntStatChangeEventArgs> OnHealthChanged;
+
+    /// <summary>
+    /// The percent of current health vs max
+    /// </summary>
+    public double HealthPercent {
+        get { return (double)Health / (double)HealthMax; }
+    }
+
+    // nourishment
+    [field: SerializeField] public int NourishmentMax { get; private set; }
+
+    [SerializeField] private int _nourishment;
+    public int Nourishment {
+        get { return _nourishment; }
+        set {
+            var delta = value - _nourishment;
+            _nourishment = value;
+            OnNourishmentChanged?.Invoke(this, new IntStatChangeEventArgs(delta, _nourishment));
+        }
+    }
+    public event EventHandler<IntStatChangeEventArgs> OnNourishmentChanged;
+
+    /// <summary>
+    /// The percent of current nourishment vs max
+    /// </summary>
+    public double NourishmentPercent {
+        get { return (double) Nourishment / (double) NourishmentMax; }
+    }
+
 
     // AP MAX
     [field: SerializeField] public int ActionPointsMax { get; private set; }
@@ -50,10 +78,13 @@ public class Player
     // Effects
     [field: SerializeField] public PlayerStatus Status { get; private set; }
 
-    public Player()
+    public Player(int maxHealth, int nourishmentMax, int maxActionPoints)
     {
-        Health = MAX_HEALTH;
-        ActionPointsMax = MAX_AP;
+        HealthMax = maxHealth;
+        Health = maxHealth;
+        NourishmentMax = nourishmentMax;
+        Nourishment = nourishmentMax;
+        ActionPointsMax = maxActionPoints;
         Inventory = new Inventory();                 
         Location = new CellPositionStruct(0, 0, 0, HexDirection.None);
         Status = new PlayerStatus();
@@ -80,12 +111,6 @@ public class Player
     public Vector3Int GetCellPosition()
     {
         return Location.ToVector3Int();
-    }
-
-    public bool ReduceHealth(int amount = 1)
-    {
-        Health -= amount;
-        return true;
     }
 
     public override string ToString()

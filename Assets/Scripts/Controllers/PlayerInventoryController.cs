@@ -16,6 +16,9 @@ public class PlayerInventoryController : InventoryController
     public Button CookBtn;
     public TextMeshProUGUI CookCostText;
 
+    public Button EatBtn;
+    public TextMeshProUGUI EatCostText;
+
     // private
     private InventoryItem currentItem;
     private GameLogic gameLogic;
@@ -82,6 +85,10 @@ public class PlayerInventoryController : InventoryController
         // cook button
         var canCook = this.gameLogic.CanCook(this.currentItem);
         SetActionButton(canCook, this.CookBtn, this.CookCostText);
+
+        // eat button
+        var canEat = this.gameLogic.CanEat(this.currentItem);
+        SetActionButton(canEat, this.EatBtn, this.EatCostText);
     }
 
     public void ActionSkin()
@@ -95,6 +102,13 @@ public class PlayerInventoryController : InventoryController
     {
         this.gameLogic.Cook(this.currentItem);
         // close up because we probably got rid of the item we cooked
+        CloseInfoPanel();
+    }
+
+    public void ActionEat()
+    {
+        this.gameLogic.EatFood(this.currentItem);
+        // close up because we probably got rid of the item we ate
         CloseInfoPanel();
     }
 

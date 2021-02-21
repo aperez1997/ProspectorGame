@@ -14,8 +14,6 @@ public class Movement_Controller : MonoBehaviour
     public Tilemap tilemap;
 
     // UI
-    public Text actionPointTxt;
-    private ToolTipUIHelper actionPointHelper;
     public GameObject rightBtn;
     public GameObject downRightBtn;
     public GameObject downLeftBtn;
@@ -38,10 +36,10 @@ public class Movement_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        actionPointHelper = actionPointTxt.GetComponentInChildren<ToolTipUIHelper>();
-
         player = GameStateManager.LogicInstance.Player;
-        player.OnActionPointsChanged += Player_OnActionPointsChanged;
+        player.OnHealthChanged += Player_OnStatChanged;
+        player.OnNourishmentChanged += Player_OnStatChanged;
+        player.OnActionPointsChanged += Player_OnStatChanged;
         player.OnLocationChanged += Player_OnLocationChanged;
 
         gameLogic = GameStateManager.LogicInstance;
@@ -74,10 +72,6 @@ public class Movement_Controller : MonoBehaviour
     // Updates the movement button text and action point display
     void UpdateMovementUI()
     {
-        var sumDesc = gameLogic.GetPlayerMaxActionPointsSum();
-        actionPointTxt.text = player.ActionPoints.ToString() + "/" + sumDesc.Sum.ToString();
-        actionPointHelper.text = sumDesc.GetDescriptionText();
-
         foreach (MovementUIData data in helper.data) {
             UpdateButtonUI(data);
         }
@@ -117,7 +111,7 @@ public class Movement_Controller : MonoBehaviour
     /// </summary>
     public string GetMovementCostDescriptionText(SumDescription costDesc)
     {
-        return costDesc.GetDescriptionText();
+        return GUIUtils.GetSumDescriptionDisplayString(costDesc);
     }
 
     // Called to move in the given direction
@@ -164,15 +158,16 @@ public class Movement_Controller : MonoBehaviour
         UpdatePosition();
     }
 
-    private void Player_OnActionPointsChanged(object sender, IntStatChangeEventArgs e)
+    private void Player_OnStatChanged(object sender, EventArgs e)
     {
         UpdateMovementUI();
-        PopUpTextDriverV1.CreateStatChangePopUp(actionPointTxt.transform, e.Delta);
     }
 
     private void OnDestroy()
     {
-        player.OnActionPointsChanged -= Player_OnActionPointsChanged;
+        player.OnHealthChanged -= Player_OnStatChanged;
+        player.OnNourishmentChanged -= Player_OnStatChanged;
+        player.OnActionPointsChanged -= Player_OnStatChanged;
         player.OnLocationChanged -= Player_OnLocationChanged;
     }
 }

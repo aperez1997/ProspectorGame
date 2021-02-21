@@ -37,6 +37,16 @@ public class GUIUtils
         }
     }
 
+    public static string GetSumDescriptionDisplayString(SumDescription sumDescription)
+    {
+        return sumDescription.GetDescriptionText("\n");
+    }
+
+    /// <summary>
+    /// Gets the string to display the given amount of money 
+    /// </summary>
+    /// <param name="amount">Number of cents</param>
+    /// <returns>formatted string</returns>
     public string GetMoneyDisplay(int amount)
     {
         var dollars = amount / 100;

@@ -15,11 +15,14 @@ public class PlayerController : MonoBehaviour
     private GameLogic gameLogic;
 
     // TopBar UI
-    public Text healthPointTxt;
+    public TextMeshProUGUI HealthPointTxt;
+    public TextMeshProUGUI NourishmentTxt;
+    public TextMeshProUGUI ActionPointTxt;
+    public SimpleTooltip ActionPointHelper;
     public TextMeshProUGUI DateText;
 
     // Actions UI
-    public Button CampBtn;
+    public Button SleepBtn;
 
     public Button TownBtn;
 
@@ -38,26 +41,44 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameLogic = GameStateManager.LogicInstance;
-        player = GameStateManager.LogicInstance.Player;
-        inventory = player.Inventory;
+        this.gameLogic = GameStateManager.LogicInstance;
+        this.player = GameStateManager.LogicInstance.Player;
+        this.inventory = this.player.Inventory;
 
-        player.OnHealthChanged += Player_OnHealthChanged;
-        player.OnLocationChanged += Player_OnLocationOrAPChanged;
-        player.OnActionPointsChanged += Player_OnLocationOrAPChanged;
-        inventory.OnItemListChanged += Inventory_OnItemListChanged;
+        this.player.OnHealthChanged += Player_OnHealthChanged;
+        this.player.OnNourishmentChanged += Player_OnNourishmentChanged;
+        this.player.OnActionPointsChanged += Player_OnAPChanged;
+        this.player.OnLocationChanged += Player_OnLocationChanged;
+        this.inventory.OnItemListChanged += Inventory_OnItemListChanged;
 
-        gameStateMeta = GameStateManager.LogicInstance.GameStateMeta;
-        gameStateMeta.OnGameDateChanged += GameStateMeta_OnDateChanged;
+        this.gameStateMeta = GameStateManager.LogicInstance.GameStateMeta;
+        this.gameStateMeta.OnGameDateChanged += GameStateMeta_OnDateChanged;
 
         UpdateHealthUI();
+        UpdateNourishmentUI();
+        UpdateAPUI();
         UpdateActionsUI();
         UpdateDateUI();
     }
 
     void UpdateHealthUI()
     {
-        healthPointTxt.text = player.Health.ToString() + "/" + Player.MAX_HEALTH.ToString();
+        HealthPointTxt.text = this.player.Health.ToString()
+            + "/" + this.player.HealthMax.ToString();
+    }
+
+    void UpdateNourishmentUI()
+    {
+        NourishmentTxt.text = this.player.Nourishment.ToString()
+            + "/" + this.player.NourishmentMax.ToString();
+    }
+
+    void UpdateAPUI()
+    {
+        var sumDesc = this.gameLogic.GetPlayerMaxActionPointsSum();
+        this.ActionPointTxt.text = this.player.ActionPoints.ToString()
+            + "/" + sumDesc.Sum.ToString();
+        this.ActionPointHelper.infoLeft = GUIUtils.GetSumDescriptionDisplayString(sumDesc);
     }
 
     void UpdateDateUI()
@@ -68,13 +89,13 @@ public class PlayerController : MonoBehaviour
         var dayOfMonth = date.Day.ToString();
         var yearStr = date.Year.ToString();
 
-        DateText.text = string.Format("{0,3} {1} {2}, {3}", dayOfWeek, month, dayOfMonth, yearStr);
+        this.DateText.text = string.Format("{0,3} {1} {2}, {3}", dayOfWeek, month, dayOfMonth, yearStr);
     }
 
     void UpdateActionsUI()
     {
         WorldTile tileAt = LoadPlayerTile();
-        CampBtn.interactable = tileAt.CanCamp;
+        SleepBtn.interactable = tileAt.CanCamp;
 
         // Town
         TownBtn.interactable = tileAt.HasFeature(TileFeatureType.Town);
@@ -113,9 +134,9 @@ public class PlayerController : MonoBehaviour
         return GameStateManager.LogicInstance.GetTileForPlayerLocation();
     }
 
-    public void ActionCamp()
+    public void ActionSleep()
     {
-        gameLogic.Camp();
+        gameLogic.Sleep();
     }
 
     public void ActionForage()
@@ -144,10 +165,24 @@ public class PlayerController : MonoBehaviour
     private void Player_OnHealthChanged(object sender, IntStatChangeEventArgs e)
     {
         UpdateHealthUI();
-        PopUpTextDriverV1.CreateStatChangePopUp(healthPointTxt.transform, e.Delta);
+        PopUpTextDriverV1.CreateStatChangePopUp(HealthPointTxt.transform, e.Delta);
     }
 
-    private void Player_OnLocationOrAPChanged(object sender, EventArgs e)
+    private void Player_OnNourishmentChanged(object sender, IntStatChangeEventArgs e)
+    {
+        UpdateNourishmentUI();
+        PopUpTextDriverV1.CreateStatChangePopUp(NourishmentTxt.transform, e.Delta);
+    }
+
+    private void Player_OnAPChanged(object sender, IntStatChangeEventArgs e)
+    {
+        UpdateAPUI();
+        PopUpTextDriverV1.CreateStatChangePopUp(ActionPointTxt.transform, e.Delta);
+
+        UpdateActionsUI();
+    }
+
+    private void Player_OnLocationChanged(object sender, EventArgs e)
     {
         UpdateActionsUI();
     }
@@ -167,8 +202,9 @@ public class PlayerController : MonoBehaviour
     {
         // cleanup or bad things can happen
         player.OnHealthChanged -= Player_OnHealthChanged;
-        player.OnLocationChanged -= Player_OnLocationOrAPChanged;
-        player.OnActionPointsChanged -= Player_OnLocationOrAPChanged;
+        player.OnNourishmentChanged -= Player_OnNourishmentChanged;
+        player.OnActionPointsChanged -= Player_OnAPChanged;
+        player.OnLocationChanged -= Player_OnLocationChanged;
         inventory.OnItemListChanged -= Inventory_OnItemListChanged;
 
         gameStateMeta.OnGameDateChanged -= GameStateMeta_OnDateChanged;

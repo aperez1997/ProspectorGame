@@ -10,8 +10,16 @@ public class ItemDataFood : ItemData
 {
     public override ItemCategory category { get { return ItemCategory.Food; } }
 
+    [Tooltip("Amount of nourishment given to player when eaten")]
+    public int Nourishment;
+
     [Tooltip("Food Items that are given to player when cooked, if any")]
     public FoodItemQuantityRange[] CookedItems;
+
+    public void Reset()
+    {
+        Nourishment = 1;
+    }
 }
 
 /// <summary>

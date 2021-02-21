@@ -500,7 +500,12 @@ PrefabInstance:
     - target: {fileID: 788758054939627842, guid: f81b984dad98c614da84d8d35f46ef9f,
         type: 3}
       propertyPath: m_Name
-      value: pfInvetoryItem-Store Variant
+      value: pfInventoryItem-Store Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 788758054998624199, guid: f81b984dad98c614da84d8d35f46ef9f,
+        type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3957783175868412282, guid: f81b984dad98c614da84d8d35f46ef9f,
         type: 3}

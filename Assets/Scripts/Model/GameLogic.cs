@@ -20,6 +20,8 @@ public class GameLogic
 
     private readonly ScriptedObjectBinder soBinder;
 
+    const int NourishmentCostPerDay = 4;
+
     /// <summary>
     /// Used when creating a new game, as the gamestate will be created.
     /// </summary>
@@ -28,7 +30,8 @@ public class GameLogic
         soBinder = ScriptedObjectBinder;
 
         Debug.Log("Creating player...");
-        Player player = new Player();
+        // TODO: These consts should come from SO Binder
+        Player player = new Player(10, 20, 12);
 
         List<WorldTile> TileList = CreateRandomWorldMap();
         var WorldMap = new WorldMap(TileList);
@@ -193,37 +196,13 @@ public class GameLogic
     /// <summary>
     /// Eat a food (picked by lowest cost first), then pass the day
     /// </summary>
-    public bool Camp()
+    public bool Sleep()
     {
         if (!IsAllowedOnPlayerTile(ActionType.Camp)) { return false; }
-
-        var food = GetAllPlayerFood();
-        InventoryItem foodToEat = food.FirstOrDefault();
-
-        if (foodToEat is InventoryItem) {
-            EatFood(foodToEat);
-        } else {
-            // TODO: This text should probably come from an SO
-            ShowModal("Health Loss", "You lost health because you didn't have anything to eat.");
-            Player.ReduceHealth();
-        }
 
         var rv = PassDay();
 
         return rv;
-    }
-
-    /// <summary>
-    /// Eat some food, fire any related events
-    /// </summary>
-    public bool EatFood(InventoryItem foodToEat)
-    {
-        Debug.Log("Eating some food " + foodToEat.ToString());
-        Inventory.RemoveItem(foodToEat.Id, 1);
-
-        // check for events
-        HandlePossibleEvents(foodToEat.GameEvents);
-        return true;
     }
 
     /// <summary>
@@ -233,6 +212,15 @@ public class GameLogic
     {
         // give back AP
         Player.ActionPoints = GetPlayerMaxActionPointsSum().Sum;
+
+        // Lose health if nourishment is very low
+        if (this.Player.NourishmentPercent <= 0.2) {
+            // TODO: These values should come from ActionData or SO Binder
+            this.Player.Health -= 1;
+        }
+
+        // reduce nourishment TODO: the amount should probably come from an ActionData
+        this.Player.Nourishment -= NourishmentCostPerDay;
 
         // advance date
         GameStateMeta.AddDays(1);
@@ -254,10 +242,10 @@ public class GameLogic
     public SumDescription GetPlayerMaxActionPointsSum()
     {
         var MaxAPSum = new SumDescription();
-        MaxAPSum.AddItem("Max", Player.ActionPointsMax);
+        MaxAPSum.AddItem("Base", Player.ActionPointsMax);
 
         // AP reduced by health loss.
-        int healthLossAPRedux = -1 * (Player.MAX_HEALTH - Player.Health);
+        int healthLossAPRedux = (int) Math.Round(-0.5 * Player.ActionPointsMax * (1 - Player.HealthPercent));
         if (healthLossAPRedux != 0) {
             MaxAPSum.AddItem("Health Loss", healthLossAPRedux);
         }
@@ -266,7 +254,7 @@ public class GameLogic
         var totalEffectChange = Player.Status.GetTotalStatEffectSum(PlayerStat.ActionPoints);
         MaxAPSum.AddSumDescription(totalEffectChange);
 
-        Debug.Log("AP Max:" + Player.ActionPointsMax + " effects:" + totalEffectChange + " health loss:" + healthLossAPRedux);
+        Debug.Log("AP Max:" + Player.ActionPointsMax + " effects:" + totalEffectChange.ToString() + " health loss:" + healthLossAPRedux);
 
         // don't go below 1
         int totalCost = MaxAPSum.Sum;
@@ -364,6 +352,34 @@ public class GameLogic
 
         return rv;
     }
+
+    /// PANNING
+    public int GetPanForGoldCost() { return 2; }
+
+    public bool CanPanForGold() { return CanPanForGold(out _); }
+
+    public bool CanPanForGold(out int chance)
+    {
+        chance = 0; // set in case hasPan is false
+        InventoryItem bestGoldPan = Inventory.GetBestToolWithCapability(ActionType.PanForGold, out int modifier);
+        if (bestGoldPan is InventoryItem) {
+            var rv = IsAllowedOnTileAndHaveAP(ActionType.PanForGold, GetPanForGoldCost(), out int baseChance);
+            chance = baseChance + modifier;
+            return rv;
+
+        }
+        return false;
+    }
+
+    public bool PanForGold()
+    {
+        int cost = GetPanForGoldCost();
+        if (!CanPanForGold(out int chance)) { return false; }
+
+        return TakeActionForItem(cost, chance, soBinder.itemGoldNugget, 1);
+    }
+
+    /***************** ITEM ACTIONS *****************/
 
     public ActionCheckItem CanSkin(InventoryItem item)
     {
@@ -466,29 +482,55 @@ public class GameLogic
         return true;
     }
 
-    public int GetPanForGoldCost() { return 2; }
-
-    public bool CanPanForGold() { return CanPanForGold(out _); }
-
-    public bool CanPanForGold(out int chance)
+    public SumDescription GetEatCost()
     {
-        chance = 0; // set in case hasPan is false
-        InventoryItem bestGoldPan = Inventory.GetBestToolWithCapability(ActionType.PanForGold, out int modifier);
-        if (bestGoldPan is InventoryItem) {
-            var rv = IsAllowedOnTileAndHaveAP(ActionType.PanForGold, GetPanForGoldCost(), out int baseChance);
-            chance = baseChance + modifier;
-            return rv;
-
-        }
-        return false;
+        // eating is always free
+        return SumDescription.Empty;
     }
 
-    public bool PanForGold()
+    public ActionCheckItem CanEat(InventoryItem item)
     {
-        int cost = GetPanForGoldCost();
-        if (!CanPanForGold(out int chance)) { return false; }
+        var cost = GetEatCost();
+        var check = new ActionCheckItem(cost);
 
-        return TakeActionForItem(cost, chance, soBinder.itemGoldNugget, 1);
+        // item must be food
+        if (item.Category != ItemCategory.Food || !(item.ItemData is ItemDataFood)) {
+            return check.NotApplicableToItem();
+        }
+
+        // check player is not too full
+        if (this.Player.Nourishment >= this.Player.NourishmentMax) {
+            return check.CantForReason("You are too full");
+        }
+
+        // check player for AP
+        if (!Player.HasEnoughActionPoints(cost.Sum)) {
+            return check.NotEnoughAP();
+        }
+
+        return check;
+    }
+
+    /// <summary>
+    /// Eat some food, fire any related events
+    /// </summary>
+    public bool EatFood(InventoryItem foodToEat)
+    {
+        var check = CanEat(foodToEat);
+        if (!check.IsAble) { return false; }
+
+        Debug.Log("Eating some food " + foodToEat.ToString());
+
+
+        // give nutrition
+        var foodItemData = (ItemDataFood) foodToEat.ItemData;
+        Player.Nourishment += foodItemData.Nourishment;
+
+        Inventory.RemoveItem(foodToEat.Id, 1);
+
+        // check for events
+        HandlePossibleEvents(foodToEat.GameEvents);
+        return true;
     }
 
     /// <summary>

@@ -20,3 +20,5 @@ MonoBehaviour:
   price: -1
   gameEvents:
   - {fileID: 11400000, guid: 6c6c7d0d979a44398a6139da51de6fa9, type: 2}
+  Nourishment: 2
+  CookedItems: []

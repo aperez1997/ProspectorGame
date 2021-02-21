@@ -66,12 +66,16 @@ public class SumDescription
 
     /// <summary>
     /// Get the full description for the given sum
-    /// TODO: should live in the UI code somewhere
     /// </summary>
-    public string GetDescriptionText()
+    public string GetDescriptionText(string delimiter = ",")
     {
         var strings = _sumItems.Select(item => item.Name + " " + item.Value.ToString());
-        return string.Join("\n", strings);
+        return string.Join(delimiter, strings);
+    }
+
+    public override string ToString()
+    {
+        return "Sum[" + GetDescriptionText(",") + "]";
     }
 
     public static int GetTotalCostFromItems(SumItem[] items)

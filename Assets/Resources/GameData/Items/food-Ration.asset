@@ -19,4 +19,5 @@ MonoBehaviour:
   stackable: 1
   price: 500
   gameEvents: []
+  Nourishment: 4
   CookedItems: []
