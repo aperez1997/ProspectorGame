@@ -17,7 +17,7 @@ MonoBehaviour:
   description: It cuts things
   sprite: {fileID: 21300000, guid: 5de9c0fe6f5e845f5994747111188b25, type: 3}
   stackable: 0
-  price: 10
+  price: 1000
   gameEvents: []
   Abilities:
   - ActionType: 6

@@ -18,9 +18,8 @@ public class PopUpTextDriverV1 : MonoBehaviour
         return popUpTextV1;
     }
 
-    public static PopUpTextV1 CreateFailurePopUp(Transform parentTransform)
+    public static PopUpTextV1 CreateFailurePopUp(Transform parentTransform, string text = "Failed!")
     {
-        var text = "Failed!";
         PopUpTextV1 popUpTextV1 = CreatePopUp(parentTransform, text);
         popUpTextV1.SetFailureColor();
         return popUpTextV1;

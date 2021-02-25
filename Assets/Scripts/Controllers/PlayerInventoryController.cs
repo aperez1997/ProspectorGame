@@ -1,6 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 /// <summary>
 /// Controller for displaying the Player's inventory
 /// </summary>
@@ -10,13 +11,13 @@ public class PlayerInventoryController : InventoryController
     public GameObject InfoPanel;
 
     // buttons
-    public Button SkinningBtn;
+    public TonyButton SkinningBtn;
     public TextMeshProUGUI SkinningCostText;
 
-    public Button CookBtn;
+    public TonyButton CookBtn;
     public TextMeshProUGUI CookCostText;
 
-    public Button EatBtn;
+    public TonyButton EatBtn;
     public TextMeshProUGUI EatCostText;
 
     // private
@@ -32,6 +33,11 @@ public class PlayerInventoryController : InventoryController
         base.Start();
 
         this.InfoPanel.SetActive(false);
+
+        // set clicks
+        SkinningBtn.onClick.AddListener(ActionSkin);
+        CookBtn.onClick.AddListener(ActionCook);
+        EatBtn.onClick.AddListener(ActionEat);
     }
 
     protected override void SetPrefabDetails(GameObject goItem, InventoryItem item)
@@ -80,22 +86,29 @@ public class PlayerInventoryController : InventoryController
 
         // skin button
         var canSkin = this.gameLogic.CanSkin(this.currentItem);
-        SetActionButton(canSkin, this.SkinningBtn, this.SkinningCostText);
+        SetActionButtonState(canSkin, this.SkinningBtn, this.SkinningCostText);
 
         // cook button
         var canCook = this.gameLogic.CanCook(this.currentItem);
-        SetActionButton(canCook, this.CookBtn, this.CookCostText);
+        SetActionButtonState(canCook, this.CookBtn, this.CookCostText);
 
         // eat button
         var canEat = this.gameLogic.CanEat(this.currentItem);
-        SetActionButton(canEat, this.EatBtn, this.EatCostText);
+        SetActionButtonState(canEat, this.EatBtn, this.EatCostText);
     }
 
     public void ActionSkin()
     {
-        this.gameLogic.Skin(this.currentItem);
-        // close up because we probably got rid of the item we were skinning
-        CloseInfoPanel();
+        // I want to switch to this pattern, but need a "actionResult" class instead of using check.
+        // otherwise we have no way to communicate what happened (if that's necessary)
+        var check = this.gameLogic.Skin(this.currentItem);
+        if (check.IsAble) {
+            // close up because we probably got rid of the item we were skinning
+            CloseInfoPanel();
+        } else {
+            // TODO: move this behavior into GUI Utils once everything is settled
+            PopUpTextDriverV1.CreateFailurePopUp(this.SkinningBtn.transform, check.Reason);
+        }
     }
 
     public void ActionCook()
@@ -112,14 +125,11 @@ public class PlayerInventoryController : InventoryController
         CloseInfoPanel();
     }
 
-    protected static void SetActionButton(ActionCheckItem check, Button button, TextMeshProUGUI text)
+    /// <summary>
+    /// Set action button state based on check
+    /// </summary>
+    protected static void SetActionButtonState(ActionCheckItem check, TonyButton button, TextMeshProUGUI text)
     {
-        if (check.IsApplicableToItem) {
-            GUIUtils.UpdateActionButtonCost(text, check.IsApplicableToItem, check.Cost.Sum);
-            button.interactable = check.IsAble;
-            button.gameObject.SetActive(true);
-        } else {
-            button.gameObject.SetActive(false);
-        }
+        GUIUtils.UpdateItemActionButtonState(button, text, check);
     }
 }

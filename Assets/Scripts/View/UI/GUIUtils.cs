@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Utilities for the user interface
@@ -37,6 +36,31 @@ public class GUIUtils
         }
     }
 
+    /// <summary>
+    /// Set state of an action button for items. This is based on the check
+    /// </summary>
+    public static void UpdateItemActionButtonState(TonyButton button, TextMeshProUGUI textCost, ActionCheckItem check)
+    {
+        if (check.IsApplicableToItem) {
+            // update the cost
+            GUIUtils.UpdateActionButtonCost(textCost, true, check.Cost.Sum);
+
+            if (check.IsAble) {
+                button.interactable = true;
+            } else {
+                button.SetInteractableButDisabled();
+            }
+
+            button.gameObject.SetActive(true);
+        } else {
+            // if not applicable, hide it
+            button.gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// Get then display string for the given sumDescription object
+    /// </summary>
     public static string GetSumDescriptionDisplayString(SumDescription sumDescription)
     {
         return sumDescription.GetDescriptionText("\n");

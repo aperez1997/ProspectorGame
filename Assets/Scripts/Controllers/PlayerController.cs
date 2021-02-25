@@ -22,19 +22,19 @@ public class PlayerController : MonoBehaviour
     public TextMeshProUGUI DateText;
 
     // Actions UI
-    public Button SleepBtn;
+    public TonyButton SleepBtn;
 
-    public Button TownBtn;
+    public TonyButton TownBtn;
 
-    public Button ForageBtn;
+    public TonyButton ForageBtn;
     public TextMeshProUGUI ForageCost;
     public TextMeshProUGUI ForageChance;
 
-    public Button HuntBtn;
+    public TonyButton HuntBtn;
     public TextMeshProUGUI HuntCost;
     public TextMeshProUGUI HuntChance;
 
-    public Button PanForGoldBtn;
+    public TonyButton PanForGoldBtn;
     public TextMeshProUGUI PanForGoldCost;
     public TextMeshProUGUI PanForGoldChance;
 
@@ -59,6 +59,13 @@ public class PlayerController : MonoBehaviour
         UpdateAPUI();
         UpdateActionsUI();
         UpdateDateUI();
+
+        // add clicks
+        SleepBtn.onClick.AddListener(ActionSleep);
+        TownBtn.onClick.AddListener(ActionVisitGeneralStore);
+        ForageBtn.onClick.AddListener(ActionForage);
+        HuntBtn.onClick.AddListener(ActionHunt);
+        PanForGoldBtn.onClick.AddListener(ActionPanForGold);
     }
 
     void UpdateHealthUI()

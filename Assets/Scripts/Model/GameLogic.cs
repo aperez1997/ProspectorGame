@@ -410,11 +410,11 @@ public class GameLogic
     /// <summary>
     /// Skin a carcass to gain it's output items
     /// </summary>
-    public bool Skin(InventoryItem item)
+    public ActionCheckItem Skin(InventoryItem item)
     {
         var check = CanSkin(item);
-        if (!check.IsAble) { return false; }
-        if (!Player.SpendActionPoints(check.Cost.Sum)) { return false; }
+        if (!check.IsAble) { return check; }
+        if (!Player.SpendActionPoints(check.Cost.Sum)) { return check.NotEnoughAP(); }
 
         // safe to assume if CanSkin passed
         var carcassData = (ItemDataCarcass) item.ItemData;
@@ -428,7 +428,7 @@ public class GameLogic
         // remove the carcass
         Inventory.RemoveItem(item);
 
-        return true;
+        return check;
     }
 
     /// <summary>

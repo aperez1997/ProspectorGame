@@ -48,7 +48,15 @@ public class Movement_Controller : MonoBehaviour
         UpdatePosition();
         var tileAt = LoadPlayerTile();
         helper = new MovementUIHelper(rightBtn, downRightBtn, downLeftBtn, leftBtn, upLeftBtn, upRightBtn, tileAt);
-        UpdateMovementCosts(HexDirection.None); 
+        UpdateMovementCosts(HexDirection.None);
+
+        // add clicks
+        rightBtn.GetComponent<Button>().onClick.AddListener(MoveEast);
+        downRightBtn.GetComponent<Button>().onClick.AddListener(MoveSouthEast);
+        downLeftBtn.GetComponent<Button>().onClick.AddListener(MoveSouthWest);
+        leftBtn.GetComponent<Button>().onClick.AddListener(MoveWest);
+        upLeftBtn.GetComponent<Button>().onClick.AddListener(MoveNorthWest);
+        upRightBtn.GetComponent<Button>().onClick.AddListener(MoveNorthEast);
     }
 
     /** UI Functions go here */
