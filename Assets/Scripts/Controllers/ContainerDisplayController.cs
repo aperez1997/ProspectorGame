@@ -52,7 +52,7 @@ abstract public class ContainerDisplayController<ItemType> : MonoBehaviour
     /// <summary>
     /// Update the UI based on the current items from GetItemList()
     /// </summary>
-    public void UpdateUI()
+    public virtual void UpdateUI()
     {
         // remove old display
         foreach (Transform child in ItemContainer) {

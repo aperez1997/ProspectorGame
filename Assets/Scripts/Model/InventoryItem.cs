@@ -6,7 +6,7 @@ using UnityEngine;
 /// links players inventory to underlying scripted objects
 /// </summary>
 [Serializable]
-public class InventoryItem
+public class InventoryItem : IHasGameEvents
 {
     public string Id;
 
@@ -58,6 +58,7 @@ public class InventoryItem
     public bool Stackable { get { return ItemData.stackable; } }
     public int Price { get { return ItemData.price; } }
     public GameEvent[] GameEvents { get { return ItemData.gameEvents; } }
+    public GameEvent[] GetGameEvents() { return GameEvents; }
 
     public override string ToString()
     {

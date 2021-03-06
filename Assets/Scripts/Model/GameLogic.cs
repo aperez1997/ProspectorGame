@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Gravitons.UI.Modal;
 using UnityEngine;
@@ -381,10 +382,10 @@ public class GameLogic
 
     /***************** ITEM ACTIONS *****************/
 
-    public ActionCheckItem CanSkin(InventoryItem item)
+    public ItemActionCheck CanSkin(InventoryItem item)
     {
         var cost = GetSkinningCost();
-        var check = new ActionCheckItem(cost);
+        var check = new ItemActionCheck(cost);
 
         // item must be a carcass
         if (item.Category != ItemCategory.Carcass || !(item.ItemData is ItemDataCarcass)) {
@@ -410,14 +411,24 @@ public class GameLogic
     /// <summary>
     /// Skin a carcass to gain it's output items
     /// </summary>
-    public ActionCheckItem Skin(InventoryItem item)
+    public ItemActionResult Skin(InventoryItem item)
     {
+
         var check = CanSkin(item);
-        if (!check.IsAble) { return check; }
-        if (!Player.SpendActionPoints(check.Cost.Sum)) { return check.NotEnoughAP(); }
+        var result = new ItemActionResult(check);
+        if (!check.IsAble) { return result; }
+        if (!Player.SpendActionPoints(check.Cost.Sum)) { return result.NotEnoughAP(); }
 
         // safe to assume if CanSkin passed
         var carcassData = (ItemDataCarcass) item.ItemData;
+
+        // check for events on the item
+        var thing = HandlePossibleEvents(item);
+        // don't do more than one event
+        if (!(thing is GameEvent)) {
+            // check for event on skinning data
+            HandlePossibleEvents(soBinder.SkinningData);
+        }
 
         // add the rewards
         foreach (var rewardQtyRange in carcassData.Output) {
@@ -428,29 +439,29 @@ public class GameLogic
         // remove the carcass
         Inventory.RemoveItem(item);
 
-        return check;
+        return result;
     }
 
     /// <summary>
     /// Returns if the item can be cooked
     /// </summary>
-    public ActionCheckItem CanCook(InventoryItem item)
+    public ItemActionCheck CanCook(InventoryItem item)
     {
         var cost = GetCookingCost();
 
         // item must be a food with cooked items 
         if (item.Category != ItemCategory.Food || !(item.ItemData is ItemDataFood itemDataFood) || itemDataFood.CookedItems.Length <= 0) {
-            return ActionCheckItem.NotApplicableToItem(cost);
+            return ItemActionCheck.NotApplicableToItem(cost);
         }
 
         // TODO: should need a campfire or something
 
         // check player for AP
         if (!Player.HasEnoughActionPoints(cost.Sum)) {
-            return ActionCheckItem.NotEnoughAP(cost);
+            return ItemActionCheck.NotEnoughAP(cost);
         }
 
-        return ActionCheckItem.IsAbleTo(cost);
+        return ItemActionCheck.IsAbleTo(cost);
     }
 
     public SumDescription GetCookingCost()
@@ -461,11 +472,12 @@ public class GameLogic
     /// <summary>
     /// Skin a carcass to gain it's output items
     /// </summary>
-    public bool Cook(InventoryItem item)
+    public ItemActionResult Cook(InventoryItem item)
     {
         var actionCheck = CanCook(item);
-        if (!actionCheck.IsAble) { return false; }
-        if (!Player.SpendActionPoints(actionCheck.Cost.Sum)) { return false; }
+        var result = new ItemActionResult(actionCheck);
+        if (!result.IsAble) { return result; }
+        if (!Player.SpendActionPoints(actionCheck.Cost.Sum)) { return result.NotEnoughAP(); }
 
         // safe to assume if CanCook passed
         var foodData = (ItemDataFood)item.ItemData;
@@ -479,19 +491,23 @@ public class GameLogic
         // remove the raw item
         Inventory.RemoveItem(item);
 
-        return true;
+        // check possible events
+        HandlePossibleEvents(soBinder.CookData);
+
+        return result;
     }
 
     public SumDescription GetEatCost()
     {
         // eating is always free
+        // TODO: should come from actionData
         return SumDescription.Empty;
     }
 
-    public ActionCheckItem CanEat(InventoryItem item)
+    public ItemActionCheck CanEat(InventoryItem item)
     {
         var cost = GetEatCost();
-        var check = new ActionCheckItem(cost);
+        var check = new ItemActionCheck(cost);
 
         // item must be food
         if (item.Category != ItemCategory.Food || !(item.ItemData is ItemDataFood)) {
@@ -514,13 +530,13 @@ public class GameLogic
     /// <summary>
     /// Eat some food, fire any related events
     /// </summary>
-    public bool EatFood(InventoryItem foodToEat)
+    public ItemActionResult EatFood(InventoryItem foodToEat)
     {
         var check = CanEat(foodToEat);
-        if (!check.IsAble) { return false; }
+        var result = new ItemActionResult(check);
+        if (!result.IsAble) { return result; }
 
         Debug.Log("Eating some food " + foodToEat.ToString());
-
 
         // give nutrition
         var foodItemData = (ItemDataFood) foodToEat.ItemData;
@@ -528,10 +544,14 @@ public class GameLogic
 
         Inventory.RemoveItem(foodToEat.Id, 1);
 
-        // check for events
-        HandlePossibleEvents(foodToEat.GameEvents);
-        return true;
+        // check for events TODO: what about events from eating actionData?
+        HandlePossibleEvents(foodToEat);
+        return result;
     }
+
+    /******************************************************************
+     * Misc action helpers
+     ******************************************************************/
 
     /// <summary>
     /// Get cost for ActionData
@@ -682,6 +702,14 @@ public class GameLogic
         int roll = UnityEngine.Random.Range(0, 99);
         bool success = chance >= roll;
         return success;
+    }
+
+    /// <summary>
+    /// Shortcut that uses actionData events
+    /// </summary>
+    protected GameEvent HandlePossibleEvents(IHasGameEvents hasEvents)
+    {
+        return HandlePossibleEvents(hasEvents.GetGameEvents());
     }
 
     /// <summary>

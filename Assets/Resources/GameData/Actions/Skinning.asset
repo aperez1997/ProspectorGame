@@ -15,3 +15,4 @@ MonoBehaviour:
   type: 6
   ActionPointCost: 1
   gameEvents: []
+  actionName: Skin

@@ -11,6 +11,11 @@ public class TonyButton : Button
     public void SetInteractableButDisabled()
     {
         this.interactable = true;
+        SetDisabled();
+    }
+
+    public void SetDisabled()
+    {
         this.DoStateTransition(SelectionState.Disabled, true);
     }
 }

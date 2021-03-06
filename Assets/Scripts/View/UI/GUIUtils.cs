@@ -39,8 +39,9 @@ public class GUIUtils
     /// <summary>
     /// Set state of an action button for items. This is based on the check
     /// </summary>
-    public static void UpdateItemActionButtonState(TonyButton button, TextMeshProUGUI textCost, ActionCheckItem check)
+    public static void UpdateItemActionButtonState(TonyButton button, TextMeshProUGUI textCost, ItemActionCheck check)
     {
+        Debug.Log(check is ItemActionCheck ? "check " + check.ToString() : "null");
         if (check.IsApplicableToItem) {
             // update the cost
             GUIUtils.UpdateActionButtonCost(textCost, true, check.Cost.Sum);
